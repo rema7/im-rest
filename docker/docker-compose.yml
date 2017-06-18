@@ -1,0 +1,38 @@
+version: '2'
+services:
+  db:
+    image: postgres:9.5
+    environment:
+      POSTGRES_PASSWORD: 'db_pwd'
+      POSTGRES_USER: 'db_user'
+      PGDATA: '/data/pgdata'
+      POSTGRES_DB: 'r7ed_docker'
+    volumes:
+      - ./dbdata:/data/pgdata
+    ports:
+      - "6000:5432"
+  todo_backend:
+    environment:
+      DB_CONNECTION: postgresql+psycopg2://db_user:db_pwd@db/im_docker
+    build: ./backend
+    ports: 
+      - "9000:8000"
+      - "2222:22"
+    volumes:
+      - ../.:/app
+    depends_on:
+      - db
+  todo_frontend:
+    build: ./frontend
+    ports:
+      - "9010:8010"
+    volumes:
+      - ../frontend:/app
+  nginx:
+    build: ./nginx
+    ports:
+      - "8889:8889"
+    depends_on:
+      - todo_backend
+      - todo_frontend
+

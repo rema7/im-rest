@@ -1,0 +1,9 @@
+.publish-button {
+    max-width: 108px;
+
+    &:focus,
+    &:active {
+        outline: none;
+        box-shadow: none;
+    }
+}

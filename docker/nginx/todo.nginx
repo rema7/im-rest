@@ -1,0 +1,20 @@
+upstream web_api {  
+  ip_hash;
+  server todo_backend:8000;
+}
+upstream web_static {
+  ip_hash;
+  server todo_frontend:8010;
+}
+server {
+    proxy_connect_timeout 300s;
+    proxy_read_timeout 300s;
+
+    listen 8889;
+    location / {
+        proxy_pass http://web_static/;
+    }
+    location /api {
+        proxy_pass http://web_api/;
+    }
+}

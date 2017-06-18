@@ -1,0 +1,10 @@
+falcon
+gunicorn
+invoke
+psycopg2
+SQLAlchemy
+speaklater
+
+yoyo-migrations
+requests
+jsonschema

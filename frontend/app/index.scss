@@ -1,0 +1,22 @@
+.body {
+    margin: 21px 21px 12px;
+    font-family: CustomSansSerif,'Lucida Grande',Arial,sans-serif;
+    font-style: normal;
+    line-height: 34px;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+[contenteditable] {
+    &:focus {
+        outline: none;
+    }
+}
