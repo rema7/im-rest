@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
-import { Todo } from 'containers'
+import { Auth } from 'components'
 import { fetchSettings } from 'actions/Settings'
 
 import styles from './MainWrapper.scss'
@@ -25,7 +25,7 @@ export class MainWrapper extends React.Component {
         return (
             <div className={classNames(styles.body)}>
                 <div className={classNames('container-fluid')}>
-                    <Todo/>
+                    <Auth/>
                 </div>
             </div>
         )

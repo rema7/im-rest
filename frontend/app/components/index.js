@@ -1,3 +1,4 @@
+export Auth from 'components/Auth/Auth'
 export Todo from 'components/Todo/Todo'
 export TodoItem from 'components/TodoItem/TodoItem'
 export TodoItemHeader from 'components/TodoItemHeader/TodoItemHeader'
