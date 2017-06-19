@@ -1,4 +1,3 @@
-from copy import deepcopy
 import datetime
 import uuid
 
@@ -8,7 +7,7 @@ from db.models import (
     AuthCode,
     User
 )
-from api.logic import generate_auth_code
+from api.logic import generate_auth_code, encode_jwt
 from api.helpers import (
     validate_schema,
     raise_400
@@ -68,7 +67,9 @@ class AuthResource:
                 raise_400("Invalid code")
 
         return {
-            'result': 'success'
+            'result': encode_jwt({
+                'uid': row.user_id
+            })
         }
 
     def on_post(self, req, resp):

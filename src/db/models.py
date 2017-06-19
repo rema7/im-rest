@@ -56,3 +56,20 @@ class AuthCode(Base):
             'code': self.code,
             'valid_to': self.valid_to
         }
+
+
+# class AuthCode(Base):
+#     __tablename__ = 'auth_code'
+
+#     token = Column(String, nullable=False, primary_key=True)
+#     user_id = Column(BigInteger, nullable=False, primary_key=True)
+#     code = Column(String, nullable=False)
+#     valid_to = Column(TIMESTAMP, default=datetime.utcnow, nullable=False)
+
+#     def as_dict(self):
+#         return {
+#             'token': self.token,
+#             'code': self.code,
+#             'valid_to': self.valid_to
+#         }
+

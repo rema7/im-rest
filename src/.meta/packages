@@ -4,6 +4,7 @@ invoke
 psycopg2
 SQLAlchemy
 speaklater
+PyJWT
 
 yoyo-migrations
 requests

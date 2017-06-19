@@ -11,7 +11,7 @@ services:
       - ./dbdata:/data/pgdata
     ports:
       - "6000:5432"
-  todo_backend:
+  im_rest_backend:
     environment:
       DB_CONNECTION: postgresql+psycopg2://db_user:db_pwd@db/im_docker
     build: ./backend
@@ -22,7 +22,7 @@ services:
       - ../.:/app
     depends_on:
       - db
-  todo_frontend:
+  im_rest_frontend:
     build: ./frontend
     ports:
       - "9010:8010"
@@ -33,6 +33,6 @@ services:
     ports:
       - "8889:8889"
     depends_on:
-      - todo_backend
-      - todo_frontend
+      - im_rest_backend
+      - im_rest_frontend
 
