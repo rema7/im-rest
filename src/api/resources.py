@@ -1,6 +1,8 @@
 import datetime
 import uuid
 
+from validate_email import validate_email
+
 import settings as app_settings
 from db.session import open_db_session
 from db.models import (
@@ -22,6 +24,9 @@ class LoginResource:
         return datetime.datetime.utcnow() < date
 
     def post_body(self, email):
+        if validate_email(email) is not True:
+            raise_400("Invalid email {}".format(email))
+
         with open_db_session() as session:
             user = session.query(User).filter(User.email == email).first()
             if user is None:
@@ -67,7 +72,7 @@ class AuthResource:
                 raise_400("Invalid code")
 
         return {
-            'result': encode_jwt({
+            'jwt': encode_jwt({
                 'uid': row.user_id
             })
         }

@@ -1,21 +1,19 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+// import { connect } from 'react-redux'
 import classNames from 'classnames'
 
 import { Auth } from 'components'
-import { fetchSettings } from 'actions/Settings'
+import { Login } from 'containers'
 
 import styles from './MainWrapper.scss'
 
 
 const propTypes = {
-    fetchSettings: React.PropTypes.func.isRequired,
-    defaultTotal: React.PropTypes.number,
 }
 
 export class MainWrapper extends React.Component {
     componentDidMount() {
-        this.props.fetchSettings()
         this.state = {
 
         }
@@ -25,6 +23,7 @@ export class MainWrapper extends React.Component {
         return (
             <div className={classNames(styles.body)}>
                 <div className={classNames('container-fluid')}>
+                    <Login/>
                     <Auth/>
                 </div>
             </div>
@@ -34,15 +33,16 @@ export class MainWrapper extends React.Component {
 
 MainWrapper.propTypes = propTypes
 MainWrapper.contextTypes = {
-    router: React.PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
 }
 
-const mapStateToProps = (state) => {
-    return {
-        maxTextLength: state.settings.values.defaultTotal,
-    }
-}
+// const mapStateToProps = (state) => {
+//     return {
+//         maxTextLength: state.settings.values.defaultTotal,
+//     }
+// }
 
-const mapDispatchToProps = { fetchSettings }
+// const mapDispatchToProps = { fetchSettings }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainWrapper)
+// export default connect(mapStateToProps, mapDispatchToProps)(MainWrapper)
+export default MainWrapper

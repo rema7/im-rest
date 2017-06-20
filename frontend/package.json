@@ -1,7 +1,7 @@
 {
-  "name": "r7ed",
+  "name": "im",
   "version": "0.0.1",
-  "description": "Rema7 Editor",
+  "description": "Instant Messager",
   "main": "app/index.js",
   "scripts": {
     "dev": "webpack --progress --watch --env.useNotifier",

@@ -1,12 +1,10 @@
 import { combineReducers } from 'redux'
 
-import { todo } from 'reducers/Todo'
-import { todoItem } from 'reducers/TodoItem'
-import { settings } from 'reducers/Settings'
+import { auth } from 'reducers/Auth'
+import { login } from 'reducers/Login'
 
 export default combineReducers({
-    todo,
-    todoItem,
-    settings,
+    login,
+    auth,
 })
 

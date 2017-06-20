@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: 'db_pwd'
       POSTGRES_USER: 'db_user'
       PGDATA: '/data/pgdata'
-      POSTGRES_DB: 'r7ed_docker'
+      POSTGRES_DB: 'im_rest_docker'
     volumes:
       - ./dbdata:/data/pgdata
     ports:
@@ -25,7 +25,7 @@ services:
   im_rest_frontend:
     build: ./frontend
     ports:
-      - "9010:8010"
+      - "9010:9010"
     volumes:
       - ../frontend:/app
   nginx:

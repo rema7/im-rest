@@ -1,6 +1,3 @@
 export Auth from 'components/Auth/Auth'
-export Todo from 'components/Todo/Todo'
-export TodoItem from 'components/TodoItem/TodoItem'
-export TodoItemHeader from 'components/TodoItemHeader/TodoItemHeader'
-export TodoRow from 'components/TodoRow/TodoRow'
+export Login from 'components/Login/Login'
 export Loader from 'components/Loader/Loader'

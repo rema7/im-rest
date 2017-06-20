@@ -151,7 +151,7 @@ export default (env = {}) => {
                 publicRoot,
             ],
             host: '0.0.0.0',
-            port: '8010',
+            port: '9010',
             noInfo: true,
             disableHostCheck: true,
             historyApiFallback: true,

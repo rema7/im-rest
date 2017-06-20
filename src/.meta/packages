@@ -5,6 +5,7 @@ psycopg2
 SQLAlchemy
 speaklater
 PyJWT
+validate_email
 
 yoyo-migrations
 requests
