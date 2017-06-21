@@ -12,13 +12,14 @@ const propTypes = {
 }
 
 
-class Login extends React.Component {
+class LoginPage extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
             email: '',
             code: 0,
+            jwt: 'no jwt',
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -26,7 +27,29 @@ class Login extends React.Component {
         this.handleAuth = this.handleAuth.bind(this)
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.code !== null) {
+            this.setState({
+                code: nextProps.code,
+            })
+        }
+        if (nextProps.jwt !== null) {
+            this.setState({
+                jwt: nextProps.jwt,
+            })
+
+            localStorage.setItem('jwt', nextProps.jwt)
+        }
+
+    }
+
     componentWillMount() {
+        // let jwt = localStorage.getItem('jwt')
+        // if (jwt) {
+        //     this.setState({
+        //         jwt: jwt,
+        //     })
+        // }
     }
     
     handleChange(event) {
@@ -61,7 +84,7 @@ class Login extends React.Component {
                     Token: {this.props.token}
                 </div>
                 <div>
-                    JWT: {this.props.jwt}
+                    JWT: {this.state.jwt}
                 </div>
                 <div className="container">
                     <h3>Login</h3>
@@ -96,6 +119,6 @@ class Login extends React.Component {
     }
 }
 
-Login.propTypes = propTypes
+LoginPage.propTypes = propTypes
 
-export default Login
+export default LoginPage

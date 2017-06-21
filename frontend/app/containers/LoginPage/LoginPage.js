@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 
 import { login } from 'actions/Login'
 import { auth } from 'actions/Auth'
-import { Login } from 'components'
+import { LoginPage } from 'components'
 
 const mapStateToProps = (state) => {
     return {
@@ -14,4 +14,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { login, auth }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)
