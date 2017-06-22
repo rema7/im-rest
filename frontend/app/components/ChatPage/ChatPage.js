@@ -18,10 +18,12 @@ class ChatPage extends React.Component {
     componentWillMount() {
     }
     
+    
     render() {
         return (
             <div>
                 <h1>Chat Page</h1>
+                <button onClick={()=>{localStorage.removeItem('jwt')}}>Logout</button>
             </div>
         )
     }

@@ -28,12 +28,12 @@ class LoginPage extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.code !== null) {
+        if (nextProps.code) {
             this.setState({
                 code: nextProps.code,
             })
         }
-        if (nextProps.jwt !== null) {
+        if (nextProps.jwt) {
             this.setState({
                 jwt: nextProps.jwt,
             })
@@ -44,12 +44,6 @@ class LoginPage extends React.Component {
     }
 
     componentWillMount() {
-        // let jwt = localStorage.getItem('jwt')
-        // if (jwt) {
-        //     this.setState({
-        //         jwt: jwt,
-        //     })
-        // }
     }
     
     handleChange(event) {
@@ -68,8 +62,8 @@ class LoginPage extends React.Component {
 
     handleAuth() {
         this.props.auth({
-            token : 'b39c8e2009a74fc7997bc78d5191a510',
-            code : '4877',
+            token : this.props.token,
+            code : this.props.code,
         })
     }
 
