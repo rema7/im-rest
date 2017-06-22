@@ -8,7 +8,7 @@ const propTypes = {
     jwt: PropTypes.string,
 
     login: PropTypes.func.isRequired,
-    auth: PropTypes.func.isRequired,
+    sendCode: PropTypes.func.isRequired,
 }
 
 
@@ -40,7 +40,6 @@ class LoginPage extends React.Component {
 
             localStorage.setItem('jwt', nextProps.jwt)
         }
-
     }
 
     componentWillMount() {
@@ -61,7 +60,7 @@ class LoginPage extends React.Component {
     }
 
     handleAuth() {
-        this.props.auth({
+        this.props.sendCode({
             token : this.props.token,
             code : this.props.code,
         })

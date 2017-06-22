@@ -57,6 +57,11 @@ class AuthCode(Base):
             'valid_to': self.valid_to
         }
 
+class Token(Base):
+    __tablename__ = 'user_token'
+
+    user_id = Column(BigInteger, nullable=False)
+    jwt = Column(String, nullable=False)
 
 # class AuthCode(Base):
 #     __tablename__ = 'auth_code'

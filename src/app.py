@@ -18,6 +18,6 @@ app = falcon.API(middleware=[
 ])
 
 app.add_route('/login', LoginResource())
-app.add_route('/auth', AuthResource())
+app.add_route('/auth/code', AuthResource())
 app.add_route('/settings', SettingsResource())
 app.set_error_serializer(error_serializer)

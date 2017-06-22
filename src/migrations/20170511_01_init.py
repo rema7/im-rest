@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS auth_code (
     code INTEGER not null,
     valid_to timestamp not null
 );
-
 '''
 
 DROP_TABLE = '''
