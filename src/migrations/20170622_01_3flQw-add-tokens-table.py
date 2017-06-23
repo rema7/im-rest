@@ -8,8 +8,9 @@ __depends__ = {'20170511_01_init'}
 
 CREATE_TABLE = '''
 CREATE TABLE IF NOT EXISTS user_token (
+    user_id bigint not null,
     jwt varchar not null,
-    user_id bigint not null
+    PRIMARY KEY (user_id)
 );
 '''
 

@@ -50,7 +50,7 @@ class LoginResource:
 
             result = {
                 'code': code.code,
-                'token': code.token
+                'auth_key': code.token
             }
             session.commit()
         return result
@@ -65,14 +65,14 @@ class LoginResource:
 
 
 class AuthResource:
-    def post_body(self, token, code):
+    def post_body(self, auth_key, code):
         with open_db_session() as session:
-            row = session.query(AuthCode).filter(AuthCode.token == token, AuthCode.code == code).first()
+            row = session.query(AuthCode).filter(AuthCode.token == auth_key, AuthCode.code == code).first()
             if row is None:
                 raise_400("Invalid code")
 
         return {
-            'jwt': encode_jwt({
+            'token': encode_jwt({
                 'uid': row.user_id
             })
         }
@@ -82,7 +82,7 @@ class AuthResource:
         validate_schema(body, auth_post)
 
         resp.body = self.post_body(
-            token=body['token'],
+            auth_key=body['auth_key'],
             code=body['code']
         )
 

@@ -13,8 +13,7 @@ import {
 const initialState = {
     errorMessage: null,
     loading: false,
-    jwt: null,
-    authenticated: false,
+    token: null,
     result: {},
     url: {
         login: '/api/login',
@@ -35,8 +34,7 @@ export const login = (state = initialState, action = {}) => {
                 ...state,
                 errorMessage: null,
                 loading: false,
-                jwt: snakeToCamel(action.data.jwt),
-                authenticated: true,
+                token: snakeToCamel(action.data.token),
             }
         case LOGIN_RESPONSE_OK:
             return {
@@ -51,8 +49,7 @@ export const login = (state = initialState, action = {}) => {
                 errorMessage: action.errorMessage,
                 loading: false,
                 result: {},
-                jwt: null,
-                authenticated: false,
+                token: null,
             }
         case LOGIN_LOGOUT:
             return {
@@ -60,8 +57,7 @@ export const login = (state = initialState, action = {}) => {
                 errorMessage: null,
                 loading: true,
                 result: {},
-                jwt: null,
-                authenticated: false,
+                token: null,
             }
         default:
             return state

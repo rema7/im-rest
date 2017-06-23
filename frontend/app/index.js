@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose } from 'redux'
 
-import { MainWrapper, TodoItem } from 'containers'
+import { ChatPage } from 'containers'
 import middlewares from 'middlewares'
 import rootReducer from 'reducers'
 import {
@@ -30,8 +30,7 @@ const app = (store) => (
         <Router history={history}>
             <div className={classNames(styles['body'])}>
                 <Switch>
-                    <Route exact path="/" component={MainWrapper}/>
-                    <Route path="/todo/:id" component={TodoItem}/>
+                    <Route exact path="/" component={ChatPage}/>
                     <Redirect to="/"/>
                 </Switch>
             </div>

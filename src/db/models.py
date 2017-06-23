@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, BigInteger, String, TIMESTAMP
+from sqlalchemy import Column, BigInteger, String, TIMESTAMP, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -60,8 +60,8 @@ class AuthCode(Base):
 class Token(Base):
     __tablename__ = 'user_token'
 
-    user_id = Column(BigInteger, nullable=False)
-    jwt = Column(String, nullable=False)
+    user_id = Column(BigInteger, nullable=False, primary_key=True)
+    token = Column(String, nullable=False)
 
 # class AuthCode(Base):
 #     __tablename__ = 'auth_code'

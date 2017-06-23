@@ -5,7 +5,7 @@ import { ChatPage } from 'components'
 
 const mapStateToProps = (state) => {
     return {
-        jwt: state.login.jwt,
+        token: state.login.token,
     }
 }
 

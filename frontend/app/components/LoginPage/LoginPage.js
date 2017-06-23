@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 
 const propTypes = {
     code: PropTypes.number,
+    authKey: PropTypes.string,
     token: PropTypes.string,
-    jwt: PropTypes.string,
 
     login: PropTypes.func.isRequired,
     sendCode: PropTypes.func.isRequired,
@@ -19,7 +19,7 @@ class LoginPage extends React.Component {
         this.state = {
             email: '',
             code: 0,
-            jwt: 'no jwt',
+            token: 'no jwt',
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -33,12 +33,12 @@ class LoginPage extends React.Component {
                 code: nextProps.code,
             })
         }
-        if (nextProps.jwt) {
+        if (nextProps.token) {
             this.setState({
-                jwt: nextProps.jwt,
+                token: nextProps.token,
             })
 
-            localStorage.setItem('jwt', nextProps.jwt)
+            localStorage.setItem('token', nextProps.token)
         }
     }
 
@@ -61,7 +61,7 @@ class LoginPage extends React.Component {
 
     handleAuth() {
         this.props.sendCode({
-            token : this.props.token,
+            authKey : this.props.authKey,
             code : this.props.code,
         })
     }
@@ -74,10 +74,10 @@ class LoginPage extends React.Component {
                     Code: {this.props.code}
                 </div>
                 <div>
-                    Token: {this.props.token}
+                    Token: {this.props.authKey}
                 </div>
                 <div>
-                    JWT: {this.state.jwt}
+                    JWT: {this.state.token}
                 </div>
                 <div className="container">
                     <h3>Login</h3>

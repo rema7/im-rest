@@ -8,7 +8,7 @@ __depends__ = {}
 
 CREATE_TABLE = '''
 CREATE TABLE IF NOT EXISTS "user" (
-    id SERIAL,
+    id SERIAL PRIMARY KEY,
     email varchar not null,
     created_at timestamp not null,
     updated_at timestamp not null

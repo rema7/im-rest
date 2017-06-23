@@ -22,6 +22,7 @@ services:
       - ../.:/app
     depends_on:
       - db
+    command: ["./wait-for-it.sh", "db:6000"]
   im_rest_frontend:
     build: ./frontend
     ports:
@@ -29,7 +30,7 @@ services:
     volumes:
       - ../frontend:/app
     depends_on:
-      - db
+      - im_rest_backend
   nginx:
     build: ./nginx
     ports:
