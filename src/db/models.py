@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, BigInteger, String, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, BigInteger, String, TIMESTAMP, JSON
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -57,24 +57,10 @@ class AuthCode(Base):
             'valid_to': self.valid_to
         }
 
-class Token(Base):
+
+class UserToken(Base):
     __tablename__ = 'user_token'
 
     user_id = Column(BigInteger, nullable=False, primary_key=True)
     token = Column(String, nullable=False)
-
-# class AuthCode(Base):
-#     __tablename__ = 'auth_code'
-
-#     token = Column(String, nullable=False, primary_key=True)
-#     user_id = Column(BigInteger, nullable=False, primary_key=True)
-#     code = Column(String, nullable=False)
-#     valid_to = Column(TIMESTAMP, default=datetime.utcnow, nullable=False)
-
-#     def as_dict(self):
-#         return {
-#             'token': self.token,
-#             'code': self.code,
-#             'valid_to': self.valid_to
-#         }
-
+    info = Column(JSON, nullable=False, default='{}')

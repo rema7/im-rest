@@ -53,7 +53,6 @@ confidence=
 disable=missing-docstring,
     empty-docstring,
     invalid-name,
-    invalid-constant-name,
     useless-super-delegation,
     arguments-differ,
     abstract-method,
@@ -375,7 +374,7 @@ valid-metaclass-classmethod-first-arg=mcs
 [DESIGN]
 
 # Maximum number of arguments for function / method
-max-args=5
+max-args=10
 
 # Maximum number of attributes for a class (see R0902).
 max-attributes=7

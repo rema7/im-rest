@@ -28,7 +28,9 @@ class ChatPage extends React.Component {
     }
 
     componentDidMount() {
-        this.nameInput.focus()
+        if (this.state.token) {
+            this.nameInput.focus()
+        }
         this.props.wsConnect()
     }
     
