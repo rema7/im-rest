@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 
 import {LoginPage, ChatPage} from 'containers'
 
+import classNames from 'classnames'
+import styles from './MainPage.scss'
+
 const propTypes = {
     session: PropTypes.string,
 }
@@ -21,7 +24,7 @@ class MainPage extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className={classNames(styles['main-page'])}>
                <h1>app</h1>
                {this.renderPage()}
             </div>

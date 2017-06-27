@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import classNames from 'classnames'
+import styles from './ChatPage.scss'
+
 const propTypes = {
     session: PropTypes.string,
     messages: React.PropTypes.array.isRequired,  
@@ -29,9 +32,7 @@ class ChatPage extends React.Component {
     }
 
     componentDidMount() {
-        if (this.state.token) {
-            this.nameInput.focus()
-        }
+        this.nameInput.focus()
         this.props.wsConnect()
     }
     
@@ -68,11 +69,11 @@ class ChatPage extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className={classNames(styles['chat'])}>
                 <h1>Chat Page ws:{this.props.ws.connecting ? 'Connecting' : this.props.ws.connected ? 'Connected': 'Not connected'}</h1>
                 <button onClick={this.logout}>Logout</button>
-                <div>
-                    <div>
+                <div className="wrapper">
+                    <div className="message">
                         {this.props.messages.map((value) => {
                             return (
                                 <div>
@@ -81,16 +82,21 @@ class ChatPage extends React.Component {
                             )
                         })}
                     </div>
-                    <div>
-                        <input
-                            name="message"
-                            type="text"
-                            value={this.state.message}
-                            onChange={this.handleMessageChange}
-                            onKeyPress={this.handleInputKeyPress}
-                            ref={(input) => { this.nameInput = input }} 
-                        />
-                        <button onClick={this.sendMessage}>Send</button>
+                    <div className="toolbar">
+                        <div className="input-group">
+                            <input className="form-control"
+                                name="message"
+                                type="text"
+                                value={this.state.message}
+                                onChange={this.handleMessageChange}
+                                onKeyPress={this.handleInputKeyPress}
+                                ref={(input) => { this.nameInput = input }} 
+                            />
+                            <span className="input-group-btn">
+                                <button className="btn btn-secondary" type="button" onClick={this.sendMessage}>Send</button>
+                            </span>
+                        </div>
+
                     </div>
                 </div>
             </div>
