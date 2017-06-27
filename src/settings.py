@@ -8,7 +8,7 @@ LOG_LEVEL = 'ERROR'
 DB_CONNECTION = 'postgresql+psycopg2://localhost/im'
 
 try:
-    from settings_local import *
+    from settings_local import *  # noqa
 except ModuleNotFoundError:
     pass
 
@@ -18,7 +18,9 @@ DB_CONNECTION_YOYO = DB_CONNECTION.replace('+psycopg2', '')
 
 OFFSET = 100
 
-AUTH_CODE_VALID = 5
+AUTH_CODE_VALID_DURATION = 300
+
+SESSION_DURATION = 3600
 
 LOGGING = {
     'version': 1,

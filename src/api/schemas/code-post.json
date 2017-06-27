@@ -3,11 +3,15 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "token": {
+    "auth_key": {
       "type": "string"
+    },
+    "code": {
+      "type": "integer"
     }
   },
   "required": [
-      "token"
+      "auth_key",
+      "code"
   ]
 }

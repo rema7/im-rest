@@ -6,7 +6,8 @@ from api.serializer import error_serializer
 from api.resources import (
     SettingsResource,
     AuthResource,
-    LoginResource
+    LoginResource,
+    SessionResource,
 )
 from middlewares import ContentEncodingMiddleware
 import settings as app_settings
@@ -19,5 +20,6 @@ app = falcon.API(middleware=[
 
 app.add_route('/login', LoginResource())
 app.add_route('/auth/code', AuthResource())
+app.add_route('/auth', SessionResource())
 app.add_route('/settings', SettingsResource())
 app.set_error_serializer(error_serializer)

@@ -1,7 +1,7 @@
-import datetime
 import uuid
 
 from validate_email import validate_email
+from helpers import date
 
 import settings as app_settings
 from db.session import open_db_session
@@ -9,22 +9,30 @@ from db.models import (
     AuthCode,
     User,
     UserToken,
+    Session,
 )
-from api.logic import generate_auth_code, generate_token
+from api.logic import (
+    generate_auth_code,
+    generate_token,
+    generate_session_id,
+)
 from api.helpers import (
     validate_schema,
     raise_400,
 )
 
+code_post = open("api/schemas/code-post.json").read()
 auth_post = open("api/schemas/auth-post.json").read()
 email_post = open("api/schemas/login-post.json").read()
 
 
 class LoginResource:
-    def vaildate_auth_code(self, date):
-        return datetime.datetime.utcnow() < date
+    @staticmethod
+    def vaildate_auth_code(date):
+        return date.is_valid(date)
 
-    def post_body(self, email):
+    @staticmethod
+    def post_body(email):
         if validate_email(email) is not True:
             raise_400("Invalid email {}".format(email))
 
@@ -37,9 +45,10 @@ class LoginResource:
                 session.add(user)
                 session.flush()
 
-            code = session.query(AuthCode).filter(AuthCode.user_id == user.id).first()
+            code = session.query(AuthCode).filter(
+                AuthCode.user_id == user.id).first()
             if code is None:
-                valid_to = datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+                valid_to = date.valid_to(app_settings.AUTH_CODE_VALID_DURATION)
                 code = AuthCode(
                     token=uuid.uuid4().hex,
                     user_id=user.id,
@@ -66,32 +75,70 @@ class LoginResource:
 
 
 class AuthResource:
-    def post_body(self, auth_key, code):
+    @staticmethod
+    def post_body(auth_key, code):
         with open_db_session() as session:
-            authCode = session.query(AuthCode).filter(AuthCode.token == auth_key, AuthCode.code == code).first()
-            if authCode is None:
+            auth_code = session.query(AuthCode).filter(
+                AuthCode.token == auth_key, AuthCode.code == code)
+            row = auth_code.first()
+            if row is None:
                 raise_400("Invalid code")
-
             token = generate_token()
-            userToken = UserToken(
-                user_id=authCode.user_id,
+            user_token = UserToken(
+                user_id=row.user_id,
                 token=token,
             )
-
-            session.add(userToken)
+            new_session = generate_session_id()
+            user_session = Session(
+                user_id=row.user_id,
+                session=new_session,
+                valid_to=date.valid_to(app_settings.SESSION_DURATION)
+            )
+            auth_code.delete()
+            session.add(user_token)
+            session.add(user_session)
             session.commit()
-            print(token)
         return {
-            'token': generate_token(),
+            'token': token,
+            'session': new_session,
         }
+
+    def on_post(self, req, resp):
+        body = req.context['body']
+        validate_schema(body, code_post)
+
+        resp.body = self.post_body(
+            auth_key=body['auth_key'],
+            code=body['code']
+        )
+
+
+class SessionResource:
+    @staticmethod
+    def post_body(token):
+        with open_db_session() as session:
+            token = session.query(UserToken).filter(UserToken.token == token).first()
+            if not token:
+                raise_400('Invalid token')
+
+            new_session = generate_session_id()
+            user_session = Session(
+                user_id=token.user_id,
+                session=new_session,
+                valid_to=date.valid_to(app_settings.SESSION_DURATION)
+            )
+            session.add(user_session)
+            session.commit()
+            return {
+                'session': new_session,
+            }
 
     def on_post(self, req, resp):
         body = req.context['body']
         validate_schema(body, auth_post)
 
         resp.body = self.post_body(
-            auth_key=body['auth_key'],
-            code=body['code']
+            token=body['token'],
         )
 
 

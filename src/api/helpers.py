@@ -15,6 +15,13 @@ def raise_http_error(status, title, description):
     )
 
 
+def raise_401(title, description=None):
+    raise falcon.HTTPForbidden(
+        title=title,
+        description=description
+    )
+
+
 def raise_400(message):
     raise_http_error(status=falcon.HTTP_400, title=BAD_REQUEST, description=message)
 

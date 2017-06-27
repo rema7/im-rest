@@ -3,28 +3,47 @@ import PropTypes from 'prop-types'
 
 
 const propTypes = {
+    loading: PropTypes.bool.isRequired,
     code: PropTypes.number,
     authKey: PropTypes.string,
     token: PropTypes.string,
+    session: PropTypes.string,
 
     login: PropTypes.func.isRequired,
     sendCode: PropTypes.func.isRequired,
+    auth: PropTypes.func.isRequired,
+    authorised: PropTypes.func.isRequired,
 }
 
 
-class LoginPage extends React.Component {
+class LoginPage extends React.PureComponent {
     constructor(props) {
         super(props)
 
+        let token = localStorage.getItem('token')
+        let session = localStorage.getItem('session')
         this.state = {
             email: '',
             code: 0,
-            token: 'no jwt',
+            token: token,
+            session: session,
         }
 
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleAuth = this.handleAuth.bind(this)
+    }
+
+    componentWillMount() {
+        if (this.state.token) {
+            if (this.state.session) {
+                this.props.authorised(this.state.session)
+            } else {
+                this.props.auth({
+                    token: this.state.token,
+                })
+            }
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -40,11 +59,16 @@ class LoginPage extends React.Component {
 
             localStorage.setItem('token', nextProps.token)
         }
+        if (nextProps.session) {
+            this.setState({
+                session: nextProps.session,
+            })
+
+            localStorage.setItem('session', nextProps.session)
+        }
+
     }
 
-    componentWillMount() {
-    }
-    
     handleChange(event) {
         const target = event.target
         const value = target.value
