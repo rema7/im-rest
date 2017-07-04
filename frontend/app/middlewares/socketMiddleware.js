@@ -2,17 +2,18 @@ import * as actions from 'actions/Client'
 
 const socketMiddleware = (() => {
     let socket = null
+    let sessionKey = null
 
     /* eslint-disable no-unused-vars */
-    const onOpen = (ws,store, token) => (evt) => {
+    const onOpen = (ws, store, sessionKey) => (evt) => {
         store.dispatch(actions.connected())
     }
 
-    const onClose = (ws,store) => (evt) => {
+    const onClose = (ws, store) => (evt) => {
         store.dispatch(actions.disconnected())
     }
 
-    const onMessage = (ws,store) => (evt) => {
+    const onMessage = (ws, store) => (evt) => {
         const msg = JSON.parse(evt.data)
         switch(msg.type) {
             case 'CHAT_MESSAGE':
@@ -25,7 +26,7 @@ const socketMiddleware = (() => {
         }
     }
 
-    const onError = (ws,store) => (err) => {
+    const onError = (ws, store) => (err) => {
         console.log(`Error ${JSON.stringify(err)}`)
         store.dispatch(actions.connectionError('Connection error'))
     }
@@ -39,11 +40,12 @@ const socketMiddleware = (() => {
 
                 store.dispatch(actions.connecting())
 
+                sessionKey = action.sessionKey
                 socket = new WebSocket(action.url)
-                socket.onmessage = onMessage(socket,store)
-                socket.onclose = onClose(socket,store)
-                socket.onopen = onOpen(socket,store,action.token)
-                socket.onerror = onError(socket,store)
+                socket.onmessage = onMessage(socket, store)
+                socket.onclose = onClose(socket, store)
+                socket.onopen = onOpen(socket, store, action.sessionKey)
+                socket.onerror = onError(socket, store)
 
                 break
             case actions.CLIENT_DISCONNECT:
@@ -56,7 +58,10 @@ const socketMiddleware = (() => {
                 break
 
             case actions.CLIENT_SEND_MESSAGE:
-                socket.send(JSON.stringify(action.message))
+                socket.send(JSON.stringify({
+                    sessionKey: sessionKey,
+                    message: action.message,
+                }))
                 break
 
             default:

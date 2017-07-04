@@ -8,10 +8,11 @@ export const CLIENT_MESSAGE_RECEIVED = 'CLIENT_MESSAGE_RECEIVED'
 export const CLIENT_DISCONNECTED = 'CLIENT_DISCONNECTED'
 
 
-export function reconnect(url) {
+export function reconnect(url, sessionKey) {
     return {
         type: CLIENT_CONNECT,
         url,
+        sessionKey,
     }
 }
 
@@ -61,13 +62,13 @@ export function disconnected() {
     }
 }
 
-export function wsConnect() {
+export function wsConnect(sessionKey) {
     return (dispatch, getState) => {
         const state = getState()
         if (state.login.loading) {
             return null
         }
         
-        dispatch(reconnect(state.client.url))
+        dispatch(reconnect(state.client.url, sessionKey))
     }
 }
