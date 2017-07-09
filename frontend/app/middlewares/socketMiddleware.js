@@ -59,8 +59,10 @@ const socketMiddleware = (() => {
 
             case actions.CLIENT_SEND_MESSAGE:
                 socket.send(JSON.stringify({
-                    sessionKey: sessionKey,
-                    message: action.message,
+                    token: sessionKey,
+                    message: {
+                        content: action.message,
+                    },
                 }))
                 break
 
