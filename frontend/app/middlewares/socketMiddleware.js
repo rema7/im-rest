@@ -3,6 +3,7 @@ import * as actions from 'actions/Client'
 const socketMiddleware = (() => {
     let socket = null
     let sessionKey = null
+    let url = null
 
     /* eslint-disable no-unused-vars */
     const onOpen = (ws, store, sessionKey) => (evt) => {
@@ -27,7 +28,6 @@ const socketMiddleware = (() => {
     }
 
     const onError = (ws, store) => (err) => {
-        console.log(`Error ${JSON.stringify(err)}`)
         store.dispatch(actions.connectionError('Connection error'))
     }
 
@@ -41,7 +41,8 @@ const socketMiddleware = (() => {
                 store.dispatch(actions.connecting())
 
                 sessionKey = action.sessionKey
-                socket = new WebSocket(action.url)
+                url = action.url
+                socket = new WebSocket(url)
                 socket.onmessage = onMessage(socket, store)
                 socket.onclose = onClose(socket, store)
                 socket.onopen = onOpen(socket, store, action.sessionKey)

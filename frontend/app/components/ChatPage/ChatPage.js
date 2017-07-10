@@ -1,12 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {
-    SERVER_STATE_CONNECTED,
-    SERVER_STATE_CONNECTING,
-    SERVER_STATE_CONNECTION_ERROR,
-    SERVER_STATE_DISCONNECTED,
-} from './translations'
+import { ConnectionStatus } from 'components'
 
 import classNames from 'classnames'
 import styles from './ChatPage.scss'
@@ -41,7 +36,7 @@ class ChatPage extends React.Component {
 
     componentDidMount() {
         this.nameInput.focus()
-        this.props.wsConnect(this.props.session)
+        this.props.wsConnect()
     }
     
     logout() {
@@ -75,25 +70,17 @@ class ChatPage extends React.Component {
         this.nameInput.focus()
     }
 
-    renderConnectionState() {
-        let message = SERVER_STATE_DISCONNECTED
-        const { connecting, connected, errorMessage } = this.props.ws
-        if (errorMessage) {
-            message = SERVER_STATE_CONNECTION_ERROR
-        } else if (connecting) {
-            message = SERVER_STATE_CONNECTING
-        } else if (connected) {
-            message = SERVER_STATE_CONNECTED
-        }
-        return (
-            <h1>Server status: {message}</h1>
-        )
-    }
-
     render() {
+        const { connecting, connected, errorMessage } = this.props.ws
+
         return (
             <div className={classNames(styles['chat'])}>
-                {this.renderConnectionState()}
+                <ConnectionStatus
+                    connecting={connecting}
+                    connected={connected}
+                    errorMessage={errorMessage}
+                    connect={this.props.wsConnect}
+                />
                 <button onClick={this.logout}>Logout</button>
                 <div className="wrapper">
                     <div className="message">

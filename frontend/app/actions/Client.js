@@ -62,13 +62,16 @@ export function disconnected() {
     }
 }
 
-export function wsConnect(sessionKey) {
+export function wsConnect() {
     return (dispatch, getState) => {
         const state = getState()
         if (state.login.loading) {
             return null
         }
-        
-        dispatch(reconnect(state.client.url, sessionKey))
+        const session = state.login.session
+        if (!session) {
+            return dispatch(connectionError('No session key'))
+        }
+        dispatch(reconnect(state.client.url, session))
     }
 }

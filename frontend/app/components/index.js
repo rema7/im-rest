@@ -1,4 +1,5 @@
 export ChatPage from 'components/ChatPage/ChatPage'
 export LoginPage from 'components/LoginPage/LoginPage'
 export Loader from 'components/Loader/Loader'
+export ConnectionStatus from 'components/ConnectionStatus/ConnectionStatus'
 export MainPage from 'components/MainPage/MainPage'

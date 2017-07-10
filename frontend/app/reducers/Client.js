@@ -13,6 +13,7 @@ const initialState = {
     connecting: false,
     connected: false,
     messages: [],
+    reconnecting: true,
     url: 'ws://localhost:8100/ws',
 }
 
