@@ -12,14 +12,17 @@ const propTypes = {
     messages: React.PropTypes.array.isRequired,  
 
     logout: PropTypes.func.isRequired, 
-    wsConnect: PropTypes.func.isRequired,
+    connect: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
+    connecting: PropTypes.func.isRequired,
     disconnect: PropTypes.func.isRequired,
     ws: React.PropTypes.shape({
         errorMessage: PropTypes.string,
         connecting: PropTypes.bool.isRequired,
         connected: PropTypes.bool.isRequired,
     }),
+
+    connectionStatus: PropTypes.string.isRequired,
 }
 
 class ChatPage extends React.Component {
@@ -36,7 +39,7 @@ class ChatPage extends React.Component {
 
     componentDidMount() {
         this.nameInput.focus()
-        this.props.wsConnect()
+        // this.props.connect()
     }
     
     logout() {
@@ -71,15 +74,12 @@ class ChatPage extends React.Component {
     }
 
     render() {
-        const { connecting, connected, errorMessage } = this.props.ws
-
         return (
             <div className={classNames(styles['chat'])}>
                 <ConnectionStatus
-                    connecting={connecting}
-                    connected={connected}
-                    errorMessage={errorMessage}
-                    connect={this.props.wsConnect}
+                    connectionStatus={this.props.connectionStatus}
+                    connect={this.props.connect}
+                    connecting={this.props.connecting}
                 />
                 <button onClick={this.logout}>Logout</button>
                 <div className="wrapper">

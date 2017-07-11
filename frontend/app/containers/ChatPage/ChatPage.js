@@ -1,8 +1,9 @@
 import { connect } from 'react-redux'
 
 import { logout } from 'actions/Login'
-import { wsConnect, send, disconnect } from 'actions/Client'
+import { wsConnect, send, disconnect, connecting } from 'actions/Client'
 import { ChatPage } from 'components'
+import { connectionStatus } from 'selectors'
 
 const mapStateToProps = (state) => {
     return {
@@ -13,9 +14,29 @@ const mapStateToProps = (state) => {
             connecting: state.client.connecting,
             connected: state.client.connected,
         },
+        connectionStatus: connectionStatus(state),
     }
 }
 
-const mapDispatchToProps = { logout, wsConnect, send, disconnect }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logout:() => {
+            dispatch(logout())
+        },
+        send:(message) => {
+            dispatch(send(message))
+        },
+        disconnect:() => {
+            dispatch(disconnect())
+        },
+        connect:() => {
+            dispatch(connecting())
+            dispatch(wsConnect())
+        },
+        connecting:() => {
+            dispatch(connecting())
+        },
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatPage)

@@ -1,6 +1,6 @@
 version: '2'
 services:
-  db:
+  im_db:
     image: postgres:9.5
     environment:
       POSTGRES_PASSWORD: 'db_pwd'
@@ -13,7 +13,7 @@ services:
       - "6000:5432"
   im_rest_backend:
     environment:
-      DB_CONNECTION: postgresql+psycopg2://db_user:db_pwd@db/im_docker
+      DB_CONNECTION: postgresql+psycopg2://db_user:db_pwd@im_db/im_docker
     build: ./backend
     ports: 
       - "9000:8000"
@@ -21,7 +21,7 @@ services:
     volumes:
       - ../.:/app
     depends_on:
-      - db
+      - im_db
     command: ["./wait-for-it.sh", "db:6000"]
   im_rest_frontend:
     build: ./frontend
