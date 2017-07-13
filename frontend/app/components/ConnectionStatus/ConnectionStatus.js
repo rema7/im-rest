@@ -17,6 +17,9 @@ const propTypes = {
 class ConnectionStatus extends React.PureComponent {
     constructor(props) {
         super(props)
+        this.state = {
+            reconnect: false,
+        }
     }
 
     componentDidMount() {
@@ -24,16 +27,26 @@ class ConnectionStatus extends React.PureComponent {
     }
 
     reconnect() {
-        setTimeout(() => {
-            this.props.connect()
-        }, 2000)
+        if (this.state.reconnect && this.props.connectionStatus === 'disconnected') {
+            this.props.connecting()
+            setTimeout(() => {
+                this.props.connect()
+            }, 2000)
+        }
     }
     
     componentWillReceiveProps(nextProps) {
-        if (nextProps.connectionStatus === 'disconnected') {
-            this.props.connecting()
-            this.reconnect()
-        }
+        this.reconnect()
+    }
+
+    handleInputChange(event) {
+        const target = event.target
+        const value = target.type === 'checkbox' ? target.checked : target.value
+        const name = target.name
+
+        this.setState({
+            [name]: value,
+        }, this.reconnect)
     }
 
     renderConnectionState() {
@@ -45,7 +58,17 @@ class ConnectionStatus extends React.PureComponent {
             message = SERVER_STATE_CONNECTED
         }
         return (
-            <h1>Server status: {message}</h1>
+            <div className="checkbox">
+                <span>Server status: {message}</span>
+                <label>
+                    <input type="checkbox" 
+                           value={this.state.reconnect} 
+                           name="reconnect"
+                           onChange={::this.handleInputChange}
+                    />
+                           Reconnect
+                    </label>
+            </div>
         )
     }
 

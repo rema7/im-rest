@@ -75,15 +75,21 @@ class ChatPage extends React.Component {
 
     render() {
         return (
-            <div className={classNames(styles['chat'])}>
-                <ConnectionStatus
-                    connectionStatus={this.props.connectionStatus}
-                    connect={this.props.connect}
-                    connecting={this.props.connecting}
-                />
-                <button onClick={this.logout}>Logout</button>
-                <div className="wrapper">
-                    <div className="message">
+            <div className={classNames(styles['chat-page'])}>
+                <div className={classNames(styles['sidebar'])}>
+                    <div className={classNames(styles['top-bar'])}>
+                    </div>
+                </div>
+                <div className={classNames(styles['chat-wrapper'])}>
+                    <div className={classNames(styles['top-bar'])}>
+                        <ConnectionStatus
+                            connectionStatus={this.props.connectionStatus}
+                            connect={this.props.connect}
+                            connecting={this.props.connecting}
+                        />
+                        <button onClick={this.logout} className="btn btn-sm">Logout</button>
+                    </div>
+                    <div className={classNames(styles['messages'])}>
                         {this.props.messages.map((value) => {
                             return (
                                 <div>
@@ -92,11 +98,12 @@ class ChatPage extends React.Component {
                             )
                         })}
                     </div>
-                    <div className="toolbar">
+                    <div className={classNames(styles['bottom-bar'])}>
                         <div className="input-group">
                             <input className="form-control"
                                 name="message"
                                 type="text"
+                                placeholder="Write a message..."
                                 value={this.state.message}
                                 onChange={this.handleMessageChange}
                                 onKeyPress={this.handleInputKeyPress}

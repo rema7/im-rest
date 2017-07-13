@@ -1,8 +1,38 @@
-.chat {
-    // display: flex;
+.chat-page {
+    display: flex;
+    flex: 1;
 
-    .wrapper {
-        display: flex;
+    .sidebar {
+        min-width: 240px;
+        border-right: 1px solid #ccc;
+
+        .top-bar {
+            height: 50px;
+            width: 100%;
+            background: #ececec;
+            border-bottom: 1px solid #ccc;
+        }
+    }
+
+    .chat-wrapper {
+        flex: 1;
+        display: inherit;
         flex-direction: column;
+
+        .top-bar {
+            height: 50px;
+            width: 100%;
+            background: #ececec;
+            border-bottom: 1px solid #ccc;
+            display: inherit;
+        }
+
+        .messages {
+            flex-grow: 1;
+        }
+
+        .bottom-bar {
+            border-top: 1px solid #ccc;
+        }
     }
 }

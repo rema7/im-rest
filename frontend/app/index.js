@@ -28,12 +28,10 @@ const store = createStore(rootReducer, {}, enhancer)
 const app = (store) => (
     <Provider store={store}>
         <Router history={history}>
-            <div className={classNames(styles['wrapper'])}>
-                <Switch>
-                    <Route exact path="/" component={MainPage}/>
-                    <Redirect to="/"/>
-                </Switch>
-            </div>
+            <Switch>
+                <Route exact path="/" component={MainPage}/>
+                <Redirect to="/"/>
+            </Switch>
         </Router>
     </Provider>
 )
