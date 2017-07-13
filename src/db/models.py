@@ -30,13 +30,6 @@ class BaseInfo:
     updated_at = Column(TIMESTAMP, default=datetime.utcnow, nullable=False)
     created_at = Column(TIMESTAMP, default=datetime.utcnow, nullable=False)
 
-    def as_dict(self):
-        return {
-            'id': self._id,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
-        }
-
 
 class User(BaseInfo, Base):
     __tablename__ = 'user'
@@ -44,9 +37,10 @@ class User(BaseInfo, Base):
     email = Column(String, nullable=False, primary_key=True)
 
     def as_dict(self):
-        return super.as_dict().update({
+        return {
+            'id': self.id,
             'email': self.email,
-        })
+        }
 
 
 class AuthCode(Base):
@@ -79,4 +73,18 @@ class Session(Base):
     user_id = Column(BigInteger, nullable=False, primary_key=True)
     session = Column(String, nullable=False)
     valid_to = Column(TIMESTAMP, nullable=False)
-    
+
+
+class Chat(BaseInfo):
+    __tablename__ = 'chat'
+
+    owner_id = Column(BigInteger, nullable=False)
+    title = Column(String, nullable=False)
+
+
+class ChatMember(Base):
+    __tablename__ = 'chat_member'
+
+    chat_id = Column(BigInteger, nullable=False, primary_key=True)
+    user_id = Column(BigInteger, nullable=False)
+

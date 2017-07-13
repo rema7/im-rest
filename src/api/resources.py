@@ -2,6 +2,8 @@ import uuid
 
 from validate_email import validate_email
 from helpers import date
+from webargs import fields
+from webargs.falconparser import use_args
 
 import settings as app_settings
 from db.session import open_db_session
@@ -149,3 +151,22 @@ class SettingsResource:
         )
         resp.body = {key: getattr(app_settings, key.upper())
                      for key in business_logic_keys}
+
+class SearchResource:
+    @staticmethod
+    def get_body(search_string):
+        with open_db_session() as session:
+            search = '%{}%'.format(search_string)
+            result = session.query(User).filter(
+                User.email.like(search)
+            ).all()
+        return [u.as_dict() for u in result]
+
+    @use_args({
+        's': fields.Str(required=True),
+    })
+    def on_get(self, req, resp, args):
+        result = self.get_body(args['s'])
+        resp.body = {
+            'result': result,
+        }

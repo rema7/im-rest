@@ -6,6 +6,7 @@ SQLAlchemy
 speaklater
 PyJWT
 validate_email
+webargs==1.7.0
 
 yoyo-migrations
 requests
