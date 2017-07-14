@@ -35,7 +35,7 @@ class ConnectionStatus extends React.PureComponent {
         }
     }
     
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps() {
         this.reconnect()
     }
 

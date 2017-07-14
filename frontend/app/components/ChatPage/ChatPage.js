@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { ConnectionStatus } from 'components'
+import { ConnectionStatus, Sidebar } from 'components'
 
 import classNames from 'classnames'
 import styles from './ChatPage.scss'
@@ -35,11 +35,11 @@ class ChatPage extends React.Component {
         this.sendMessage = this.sendMessage.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
         this.handleInputKeyPress = this.handleInputKeyPress.bind(this)
+        this.leftFocus = this.leftFocus.bind(this)
     }
 
     componentDidMount() {
         this.nameInput.focus()
-        // this.props.connect()
     }
     
     logout() {
@@ -73,12 +73,17 @@ class ChatPage extends React.Component {
         this.nameInput.focus()
     }
 
+    leftFocus() {
+        this.nameInput.focus()
+    }
+
     render() {
         return (
             <div className={classNames(styles['chat-page'])}>
                 <div className={classNames(styles['sidebar'])}>
-                    <div className={classNames(styles['top-bar'])}>
-                    </div>
+                    <Sidebar
+                        leftFocus={this.leftFocus}
+                    />
                 </div>
                 <div className={classNames(styles['chat-wrapper'])}>
                     <div className={classNames(styles['top-bar'])}>
@@ -87,7 +92,7 @@ class ChatPage extends React.Component {
                             connect={this.props.connect}
                             connecting={this.props.connecting}
                         />
-                        <button onClick={this.logout} className="btn btn-sm">Logout</button>
+                        <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
                     </div>
                     <div className={classNames(styles['messages'])}>
                         {this.props.messages.map((value) => {

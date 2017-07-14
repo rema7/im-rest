@@ -26,3 +26,11 @@ export const fetchWrapper = (url, options) => {
         throw response
     })
 }
+
+export const onAbort = (req, callback) => {
+    req.on('abort', () => {
+        if (req.xhr.readyState !== 4) {
+            callback()
+        }
+    })
+}

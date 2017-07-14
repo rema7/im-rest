@@ -12,7 +12,6 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom'
-import classNames from 'classnames'
 import createBrowserHistory from 'history/createBrowserHistory'
 
 const history = createBrowserHistory()
@@ -21,7 +20,7 @@ const enhancer = compose(
     applyMiddleware(...middlewares),
 )
 
-import styles from './index.scss'
+import './index.scss'
 
 const store = createStore(rootReducer, {}, enhancer)
 
