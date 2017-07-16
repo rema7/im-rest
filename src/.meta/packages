@@ -2,7 +2,7 @@ falcon
 gunicorn
 invoke
 psycopg2
-SQLAlchemy==1.2.0
+SQLAlchemy==1.2.0b1
 speaklater
 PyJWT
 validate_email

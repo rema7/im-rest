@@ -16,6 +16,7 @@ from db.models import (
     UserToken,
     Session,
     Contact,
+    Chat,
 )
 from api.logic import (
     generate_auth_code,
@@ -187,10 +188,23 @@ class ContactsResource:
     @staticmethod
     @with_db_session
     def get_body(uid, db_session=None):
-        contacts = db_session.query(Contact).filter(
-            Contact.user_id == uid).all()
-        logger.info(uid)
+        contacts = db_session.query(Contact).filter(Contact.user_id == uid).all()
         return [c.as_dict() for c in contacts]
+
+    def on_get(self, req, resp):
+        result = self.get_body(req.context['uid'])
+        resp.body = {
+            'result': result,
+        }
+
+
+@falcon.before(validate_auth)
+class ChatResource:
+    @staticmethod
+    @with_db_session
+    def get_body(uid, db_session=None):
+        chats = db_session.query(Chat).filter(Chat.owner_id == uid).all()
+        return [c.as_dict() for c in chats]
 
     def on_get(self, req, resp):
         result = self.get_body(req.context['uid'])
