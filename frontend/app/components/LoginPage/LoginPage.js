@@ -1,6 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import {
+    getToken,
+    getSession,
+    setToken,
+    setSession,
+} from 'helpers/auth'
 
 const propTypes = {
     loading: PropTypes.bool.isRequired,
@@ -20,8 +25,8 @@ class LoginPage extends React.PureComponent {
     constructor(props) {
         super(props)
 
-        let token = localStorage.getItem('token')
-        let session = localStorage.getItem('session')
+        let token = getToken()
+        let session = getSession()
         this.state = {
             email: '',
             code: 0,
@@ -57,14 +62,14 @@ class LoginPage extends React.PureComponent {
                 token: nextProps.token,
             })
 
-            localStorage.setItem('token', nextProps.token)
+            setToken(nextProps.token)
         }
         if (nextProps.session) {
             this.setState({
                 session: nextProps.session,
             })
 
-            localStorage.setItem('session', nextProps.session)
+            setSession(nextProps.session)
         }
 
     }

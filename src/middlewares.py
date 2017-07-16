@@ -1,9 +1,12 @@
 import json
+import logging
 from datetime import date, datetime
 
 import falcon
 
 from speaklater import _LazyString
+
+logger = logging.getLogger('im-rest.' + __name__)
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -41,3 +44,7 @@ class ContentEncodingMiddleware(object):
                                    'Could not decode the request body. The '
                                    'JSON was incorrect or not encoded as '
                                    'UTF-8.')
+
+class SecureMiddleware(object):
+    def process_request(self, req, resp):
+        req.context['Token'] = req.headers.get('AUTHORIZATION')
