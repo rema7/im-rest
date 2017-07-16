@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Contacts } from 'components'
+import { Contacts, Chats } from 'components'
 
 const propTypes = {
     leftFocus: PropTypes.func.isRequired,
@@ -18,6 +18,7 @@ class Sidebar extends React.PureComponent {
             <div>
                 <span>Sidebar</span>
                 <Contacts />
+                <Chats />
             </div>
         )
     }
