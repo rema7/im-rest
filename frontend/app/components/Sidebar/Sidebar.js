@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import {
     SidebarTopbar,
     Contacts,
-    Chats,
 } from 'components'
+import { ChatList } from 'containers'
 import classNames from 'classnames'
 import styles from './Sidebar.scss'
 
@@ -28,7 +28,7 @@ class Sidebar extends React.PureComponent {
                 </div>
                 <div className={classNames(styles['contacts'])}>
                     <Contacts />
-                    <Chats />
+                    <ChatList />
                 </div>
             </div>
         )

@@ -1,13 +1,13 @@
-import { fetchWrapper as fetch } from 'helpers/fetch'
+import { fetchWrapper as fetch } from 'helpers/requests'
 
-export const CHATS_START_REQUEST = 'CHATS_RESPONSE_OK'
+export const CHATS_START_REQUEST = 'CHATS_START_REQUEST'
 export const CHATS_RESPONSE_OK = 'CONTACTS_RESPONSE_OK'
 export const CHATS_RESPONSE_ERROR = 'CHATS_RESPONSE_ERROR'
 
 
 export function startRequest() {
     return {
-        type: CHATS_RESPONSE_OK,
+        type: CHATS_START_REQUEST,
     }
 }
 

@@ -24,7 +24,7 @@ export const chats = (state = initialState, action = {}) => {
                 ...state,
                 errorMessage: null,
                 loading: false,
-                items: [],
+                items: action.data.result,
             }
         case CHATS_RESPONSE_ERROR:
             return {

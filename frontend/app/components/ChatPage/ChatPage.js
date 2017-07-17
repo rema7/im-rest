@@ -10,19 +10,19 @@ import styles from './ChatPage.scss'
 const propTypes = {
     session: PropTypes.string,
     messages: React.PropTypes.array.isRequired,  
+    ws: React.PropTypes.shape({
+        errorMessage: PropTypes.string,
+        connecting: PropTypes.bool.isRequired,
+        connected: PropTypes.bool.isRequired,
+    }),
+    connectionStatus: PropTypes.string.isRequired,
 
     logout: PropTypes.func.isRequired, 
     connect: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
     connecting: PropTypes.func.isRequired,
     disconnect: PropTypes.func.isRequired,
-    ws: React.PropTypes.shape({
-        errorMessage: PropTypes.string,
-        connecting: PropTypes.bool.isRequired,
-        connected: PropTypes.bool.isRequired,
-    }),
-
-    connectionStatus: PropTypes.string.isRequired,
+    fetchChats: PropTypes.func.isRequired,
 }
 
 class ChatPage extends React.Component {
@@ -40,6 +40,7 @@ class ChatPage extends React.Component {
 
     componentDidMount() {
         this.nameInput.focus()
+        this.props.fetchChats()
     }
     
     logout() {

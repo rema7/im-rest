@@ -1,0 +1,31 @@
+.chat-list-item {
+    display: flex;
+    flex-direction: row;
+    height: 60px;
+    padding: 3px;
+
+    &:hover {
+        background-color: #ececec;
+        cursor: pointer;
+    }
+
+    .image {
+        width: 45px;
+        height: 45px;
+        background-color: #c3c3c3;
+        border-radius: 50%;
+        margin: auto;
+    }
+
+    .info-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding-left: 10px;
+        flex: 1;
+
+        .title {
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+    }
+}

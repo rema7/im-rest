@@ -34,7 +34,7 @@ def clean_test_data(db_session):
 @task(help={
     'account_number': 'Number of generated account'
 })
-def generate_data(ctx, account_number=10):
+def generate_data(ctx, account_number=10, chat_numbers=3):
     """
     Fill data in DataBase
     """
@@ -66,19 +66,20 @@ def generate_data(ctx, account_number=10):
             )
             db_session.add(contact)
 
-        chatUser = users[1]
-        chat = Chat(
-            owner_id=user.id,
-            title='{} {}'.format(chatUser.first_name, chatUser.last_name),
-        )
-        db_session.add(chat)
-        db_session.flush()
+        chat_numbers = account_number if chat_numbers > account_number else chat_numbers+1
+        for chatUser in users[1:chat_numbers]:
+            chat = Chat(
+                owner_id=user.id,
+                title='{} {}'.format(chatUser.first_name, chatUser.last_name),
+            )
+            db_session.add(chat)
+            db_session.flush()
 
-        chatMember = ChatMember(
-            chat_id=chat.id,
-            user_id=chatUser.id,
-        )
-        db_session.add(chatMember)
+            chatMember = ChatMember(
+                chat_id=chat.id,
+                user_id=chatUser.id,
+            )
+            db_session.add(chatMember)
 
         db_session.commit()
     flush_cache()

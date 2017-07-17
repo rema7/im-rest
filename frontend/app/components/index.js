@@ -1,5 +1,6 @@
 export Contacts from 'components/Contacts/Contacts'
-export Chats from 'components/Chats/Chats'
+export ChatList from 'components/ChatList/ChatList'
+export ChatListItem from 'components/ChatListItem/ChatListItem'
 export ChatPage from 'components/ChatPage/ChatPage'
 export ConnectionStatus from 'components/ConnectionStatus/ConnectionStatus'
 export LoginPage from 'components/LoginPage/LoginPage'

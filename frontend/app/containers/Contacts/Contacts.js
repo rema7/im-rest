@@ -3,21 +3,21 @@ import PropTypes from 'prop-types'
 
 
 const propTypes = {
-    chats: PropTypes.array.isRequired,
+    contacts: PropTypes.array.isRequired,
 }
 
-class Chats extends React.PureComponent {
+class Contacts extends React.PureComponent {
     constructor(props) {
         super(props)
     }
 
     render() {
         return (
-            <div>Chats</div>
+            <div>Contacts</div>
         )
     }
 }
 
-Chats.propTypes = propTypes
+Contacts.propTypes = propTypes
 
-export default Chats
+export default Contacts
