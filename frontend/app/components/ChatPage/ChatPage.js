@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { ConnectionStatus } from 'components'
+import { ConnectionStatus, Sidebar } from 'components'
 
 import classNames from 'classnames'
 import styles from './ChatPage.scss'
@@ -10,19 +10,19 @@ import styles from './ChatPage.scss'
 const propTypes = {
     session: PropTypes.string,
     messages: React.PropTypes.array.isRequired,  
+    ws: React.PropTypes.shape({
+        errorMessage: PropTypes.string,
+        connecting: PropTypes.bool.isRequired,
+        connected: PropTypes.bool.isRequired,
+    }),
+    connectionStatus: PropTypes.string.isRequired,
 
     logout: PropTypes.func.isRequired, 
     connect: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
     connecting: PropTypes.func.isRequired,
     disconnect: PropTypes.func.isRequired,
-    ws: React.PropTypes.shape({
-        errorMessage: PropTypes.string,
-        connecting: PropTypes.bool.isRequired,
-        connected: PropTypes.bool.isRequired,
-    }),
-
-    connectionStatus: PropTypes.string.isRequired,
+    fetchChats: PropTypes.func.isRequired,
 }
 
 class ChatPage extends React.Component {
@@ -35,11 +35,12 @@ class ChatPage extends React.Component {
         this.sendMessage = this.sendMessage.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
         this.handleInputKeyPress = this.handleInputKeyPress.bind(this)
+        this.leftFocus = this.leftFocus.bind(this)
     }
 
     componentDidMount() {
         this.nameInput.focus()
-        // this.props.connect()
+        this.props.fetchChats()
     }
     
     logout() {
@@ -73,17 +74,26 @@ class ChatPage extends React.Component {
         this.nameInput.focus()
     }
 
+    leftFocus() {
+        this.nameInput.focus()
+    }
+
     render() {
         return (
-            <div className={classNames(styles['chat'])}>
-                <ConnectionStatus
-                    connectionStatus={this.props.connectionStatus}
-                    connect={this.props.connect}
-                    connecting={this.props.connecting}
-                />
-                <button onClick={this.logout}>Logout</button>
-                <div className="wrapper">
-                    <div className="message">
+            <div className={classNames(styles['chat-page'])}>
+                    <Sidebar
+                        leftFocus={this.leftFocus}
+                    />
+                <div className={classNames(styles['chat-wrapper'])}>
+                    <div className={classNames(styles['top-bar'])}>
+                        <ConnectionStatus
+                            connectionStatus={this.props.connectionStatus}
+                            connect={this.props.connect}
+                            connecting={this.props.connecting}
+                        />
+                        <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
+                    </div>
+                    <div className={classNames(styles['messages'])}>
                         {this.props.messages.map((value) => {
                             return (
                                 <div>
@@ -92,11 +102,12 @@ class ChatPage extends React.Component {
                             )
                         })}
                     </div>
-                    <div className="toolbar">
+                    <div className={classNames(styles['bottom-bar'])}>
                         <div className="input-group">
                             <input className="form-control"
                                 name="message"
                                 type="text"
+                                placeholder="Write a message..."
                                 value={this.state.message}
                                 onChange={this.handleMessageChange}
                                 onKeyPress={this.handleInputKeyPress}

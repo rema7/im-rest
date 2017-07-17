@@ -2,12 +2,13 @@ falcon
 gunicorn
 invoke
 psycopg2
-SQLAlchemy
+SQLAlchemy==1.2.0b1
 speaklater
 PyJWT
 validate_email
+webargs==1.7.0
+redis==2.10.5
 
-yoyo-migrations
+yoyo-migrations==5.0.5
 requests
 jsonschema
-M2Crypto

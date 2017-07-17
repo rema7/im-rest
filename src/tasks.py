@@ -4,6 +4,8 @@ from invoke import task, Collection
 
 import settings as app_settings
 from db import tasks as db_tasks
+from qa import tasks as qa_tasks
+from cache import tasks as cache_tasks
 
 LOCAL_SETTINGS = 'settings_local.py'
 
@@ -40,5 +42,7 @@ dictConfig(app_settings.LOGGING)
 
 ns = Collection()
 ns.add_collection(Collection.from_module(db_tasks), name='db')
+ns.add_collection(Collection.from_module(qa_tasks), name='qa')
+ns.add_collection(Collection.from_module(cache_tasks), name='cache')
 ns.add_task(runtests)
 ns.add_task(init_config)

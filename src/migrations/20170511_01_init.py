@@ -7,9 +7,11 @@ from yoyo import step
 __depends__ = {}
 
 CREATE_TABLE = '''
-CREATE TABLE IF NOT EXISTS "user" (
+CREATE TABLE IF NOT EXISTS account (
     id SERIAL PRIMARY KEY,
     email varchar not null,
+    first_name varchar not null,
+    last_name varchar not null,
     created_at timestamp not null,
     updated_at timestamp not null
 );
@@ -22,7 +24,7 @@ CREATE TABLE IF NOT EXISTS auth_code (
 '''
 
 DROP_TABLE = '''
-DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS account;
 DROP TABLE IF EXISTS auth_code;
 '''
 

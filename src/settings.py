@@ -7,11 +7,6 @@ LOG_LEVEL = 'ERROR'
 
 DB_CONNECTION = 'postgresql+psycopg2://localhost/im'
 
-try:
-    from settings_local import *  # noqa
-except ModuleNotFoundError:
-    pass
-
 REDIS_CONNECTION = 'redis://localhost:6379/0'
 
 DB_CONNECTION_YOYO = DB_CONNECTION.replace('+psycopg2', '')
@@ -21,6 +16,12 @@ OFFSET = 100
 AUTH_CODE_VALID_DURATION = 300
 
 SESSION_DURATION = 3600
+
+try:
+    from settings_local import *  # noqa
+except ModuleNotFoundError:
+    pass
+
 
 LOGGING = {
     'version': 1,
@@ -63,7 +64,7 @@ LOGGING = {
             'level': LOG_LEVEL,
             'handlers': ['stream'],
         },
-        'rblb': {
+        'im-rest': {
             'level': LOG_LEVEL,
             'handlers': ['error_file', 'debug_file'],
             'propagate': False,

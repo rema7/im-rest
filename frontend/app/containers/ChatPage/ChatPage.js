@@ -1,7 +1,13 @@
 import { connect } from 'react-redux'
 
+import { 
+    wsConnect,
+    send,
+    disconnect,
+    connecting,
+} from 'actions/Client'
+import { fetchChats } from 'actions/Chats'
 import { logout } from 'actions/Login'
-import { wsConnect, send, disconnect, connecting } from 'actions/Client'
 import { ChatPage } from 'components'
 import { connectionStatus } from 'selectors'
 
@@ -35,6 +41,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         connecting:() => {
             dispatch(connecting())
+        },
+        fetchChats:() => {
+            dispatch(fetchChats())
         },
     }
 }
