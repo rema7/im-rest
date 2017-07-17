@@ -2,18 +2,6 @@
     display: flex;
     flex: 1;
 
-    .sidebar {
-        min-width: 240px;
-        border-right: 1px solid #ccc;
-
-        .top-bar {
-            height: 50px;
-            width: 100%;
-            background: #ececec;
-            border-bottom: 1px solid #ccc;
-        }
-    }
-
     .chat-wrapper {
         flex: 1;
         display: inherit;

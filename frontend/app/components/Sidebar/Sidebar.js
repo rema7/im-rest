@@ -1,7 +1,11 @@
 import React from 'react'
-import { SidebarTopbar } from 'components'
 import PropTypes from 'prop-types'
 
+import {
+    SidebarTopbar,
+    Contacts,
+    Chats,
+} from 'components'
 import classNames from 'classnames'
 import styles from './Sidebar.scss'
 
@@ -16,10 +20,16 @@ class Sidebar extends React.PureComponent {
 
     render() {
         return (
-            <div className={classNames(styles['top-bar'])}>
-                <SidebarTopbar
-                    leftFocus={this.props.leftFocus}
-                />
+            <div className={classNames(styles['sidebar'])}>
+                <div className={classNames(styles['topbar'])}>
+                    <SidebarTopbar
+                        leftFocus={this.props.leftFocus}
+                    />
+                </div>
+                <div className={classNames(styles['contacts'])}>
+                    <Contacts />
+                    <Chats />
+                </div>
             </div>
         )
     }

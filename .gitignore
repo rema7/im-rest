@@ -8,3 +8,4 @@ settings_local.py
 src/logs
 docker/dbdata
 package-lock.json
+yoyo.ini

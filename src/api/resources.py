@@ -1,4 +1,6 @@
 import uuid
+import falcon
+import logging
 
 from validate_email import validate_email
 from helpers import date
@@ -6,22 +8,28 @@ from webargs import fields
 from webargs.falconparser import use_args
 
 import settings as app_settings
+from decorators import with_db_session
 from db.session import open_db_session
 from db.models import (
     AuthCode,
     User,
     UserToken,
     Session,
+    Contact,
+    Chat,
 )
 from api.logic import (
     generate_auth_code,
     generate_token,
     generate_session_id,
+    validate_auth,
 )
 from api.helpers import (
     validate_schema,
     raise_400,
 )
+
+logger = logging.getLogger('im-rest.' + __name__)
 
 code_post = open("api/schemas/code-post.json").read()
 auth_post = open("api/schemas/auth-post.json").read()
@@ -119,7 +127,8 @@ class SessionResource:
     @staticmethod
     def post_body(token):
         with open_db_session() as session:
-            token = session.query(UserToken).filter(UserToken.token == token).first()
+            token = session.query(UserToken).filter(
+                UserToken.token == token).first()
             if not token:
                 raise_400('Invalid token')
 
@@ -152,6 +161,8 @@ class SettingsResource:
         resp.body = {key: getattr(app_settings, key.upper())
                      for key in business_logic_keys}
 
+
+@falcon.before(validate_auth)
 class SearchResource:
     @staticmethod
     def get_body(search_string):
@@ -167,6 +178,36 @@ class SearchResource:
     })
     def on_get(self, req, resp, args):
         result = self.get_body(args['s'])
+        resp.body = {
+            'result': result,
+        }
+
+
+@falcon.before(validate_auth)
+class ContactsResource:
+    @staticmethod
+    @with_db_session
+    def get_body(uid, db_session=None):
+        contacts = db_session.query(Contact).filter(Contact.user_id == uid).all()
+        return [c.as_dict() for c in contacts]
+
+    def on_get(self, req, resp):
+        result = self.get_body(req.context['uid'])
+        resp.body = {
+            'result': result,
+        }
+
+
+@falcon.before(validate_auth)
+class ChatResource:
+    @staticmethod
+    @with_db_session
+    def get_body(uid, db_session=None):
+        chats = db_session.query(Chat).filter(Chat.owner_id == uid).all()
+        return [c.as_dict() for c in chats]
+
+    def on_get(self, req, resp):
+        result = self.get_body(req.context['uid'])
         resp.body = {
             'result': result,
         }

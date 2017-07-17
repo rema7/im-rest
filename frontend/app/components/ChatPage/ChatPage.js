@@ -80,11 +80,9 @@ class ChatPage extends React.Component {
     render() {
         return (
             <div className={classNames(styles['chat-page'])}>
-                <div className={classNames(styles['sidebar'])}>
                     <Sidebar
                         leftFocus={this.leftFocus}
                     />
-                </div>
                 <div className={classNames(styles['chat-wrapper'])}>
                     <div className={classNames(styles['top-bar'])}>
                         <ConnectionStatus

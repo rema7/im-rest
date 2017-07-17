@@ -11,9 +11,14 @@ services:
       - ./dbdata:/data/pgdata
     ports:
       - "6000:5432"
+  im_redis:
+    image: redis
+    ports:
+      - "6379:6379"
   im_rest_backend:
     environment:
       DB_CONNECTION: postgresql+psycopg2://db_user:db_pwd@im_db/im_docker
+      REDIS_CONNECTION: redis://im_redis      
     build: ./backend
     ports: 
       - "9000:8000"
@@ -22,6 +27,7 @@ services:
       - ../.:/app
     depends_on:
       - im_db
+      - im_redis
     command: ["./wait-for-it.sh", "db:6000"]
   im_rest_frontend:
     build: ./frontend

@@ -6,7 +6,6 @@ from jsonschema import validate, exceptions
 BAD_REQUEST = 'BAD_REQUEST'
 NOT_FOUND = 'NOT_FOUND'
 
-
 def raise_http_error(status, title, description):
     raise falcon.HTTPError(
         status=status,

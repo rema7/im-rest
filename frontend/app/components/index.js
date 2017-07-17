@@ -1,3 +1,5 @@
+export Contacts from 'components/Contacts/Contacts'
+export Chats from 'components/Chats/Chats'
 export ChatPage from 'components/ChatPage/ChatPage'
 export ConnectionStatus from 'components/ConnectionStatus/ConnectionStatus'
 export LoginPage from 'components/LoginPage/LoginPage'

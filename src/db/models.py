@@ -7,6 +7,7 @@ from sqlalchemy import (
     TIMESTAMP,
     JSON,
     Integer,
+    ForeignKey,
 )
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -32,14 +33,18 @@ class BaseInfo:
 
 
 class User(BaseInfo, Base):
-    __tablename__ = 'user'
+    __tablename__ = 'account'
 
-    email = Column(String, nullable=False, primary_key=True)
+    email = Column(String, nullable=False, unique=True)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
 
     def as_dict(self):
         return {
             'id': self.id,
             'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
         }
 
 
@@ -72,14 +77,21 @@ class Session(Base):
 
     user_id = Column(BigInteger, nullable=False, primary_key=True)
     session = Column(String, nullable=False)
-    valid_to = Column(TIMESTAMP, nullable=False)
+    valid_to = Column(TIMESTAMP, nullable=False, default=datetime.utcnow)
 
 
-class Chat(BaseInfo):
+class Chat(Base):
     __tablename__ = 'chat'
 
+    id = Column("id", BigInteger, primary_key=True, autoincrement=True)
     owner_id = Column(BigInteger, nullable=False)
     title = Column(String, nullable=False)
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+        }
 
 
 class ChatMember(Base):
@@ -88,3 +100,15 @@ class ChatMember(Base):
     chat_id = Column(BigInteger, nullable=False, primary_key=True)
     user_id = Column(BigInteger, nullable=False)
 
+
+class Contact(Base):
+    __tablename__ = 'contact'
+
+    id = Column("id", BigInteger, primary_key=True, autoincrement=True)
+    user_id = Column(BigInteger, ForeignKey('account.id'), nullable=False)
+    contact_id = Column(BigInteger, ForeignKey('account.id'), nullable=False)
+
+    def as_dict(self):
+        return {
+            'user_id': self.contact_id,
+        }
