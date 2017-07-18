@@ -7,16 +7,32 @@ import styles from './ChatListItem.scss'
 
 const propTypes = {
     chatItem: PropTypes.object.isRequired,
+    isSelected: PropTypes.bool.isRequired,
+
+    clickHandler: PropTypes.func.isRequired,
 }
 
 class ChatListItem extends React.PureComponent {
     constructor(props) {
         super(props)
+        this.clickHandler = this.clickHandler.bind(this)
+    }
+
+    clickHandler() {
+        this.props.clickHandler(this.props.chatItem)
+    }
+
+    setStyles() {
+        let result = [styles['chat-list-item']]
+        if (this.props.isSelected) {
+            result.push(styles['selected'])
+        }
+        return result
     }
 
     render() {
         return (
-            <div className={classNames(styles['chat-list-item'])}>
+            <div onClick={this.clickHandler} className={classNames(this.setStyles())}>
                 <div className={classNames(styles['image'])}>
                 </div>
                 <div className={classNames(styles['info-wrapper'])}>

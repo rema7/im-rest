@@ -1,31 +1,42 @@
+@import '~coreStyles';
+
 .chat-list-item {
     display: flex;
     flex-direction: row;
     height: 60px;
     padding: 3px;
 
+    &.selected {
+        background-color: $primary_selected_background_color;
+        .title {
+            color: $primary_selected_text_color;
+        }
+    }
+
     &:hover {
-        background-color: #ececec;
+        &.selected {
+            background-color: $primary_selected_background_color;
+        }
+        background-color: $primary_hover_color;
         cursor: pointer;
     }
 
     .image {
         width: 45px;
         height: 45px;
-        background-color: #c3c3c3;
-        border-radius: 50%;
         margin: auto;
+        border-radius: 50%;
+        background-color: #c3c3c3;
     }
 
     .info-wrapper {
         display: flex;
+        flex: 1;
         flex-direction: column;
         padding-left: 10px;
-        flex: 1;
 
         .title {
-            font-size: 0.8em;
-            font-weight: 600;
+            @include chat-title;
         }
     }
 }

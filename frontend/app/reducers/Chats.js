@@ -2,12 +2,14 @@ import {
     CHATS_START_REQUEST,
     CHATS_RESPONSE_OK,
     CHATS_RESPONSE_ERROR,
+    CHATS_SELECT_CHAT,
 } from 'actions/Chats'
 
 const initialState = {
     errorMessage: null,
     loading: false,
     items: [],
+    currentChat: null,
     url: '/api/chats',
 }
 
@@ -32,6 +34,11 @@ export const chats = (state = initialState, action = {}) => {
                 errorMessage: action.errorMessage,
                 loading: false,
                 items: state.items,
+            }
+        case CHATS_SELECT_CHAT:
+            return {
+                ...state,
+                currentChat: action.chat,
             }
         default:
             return state

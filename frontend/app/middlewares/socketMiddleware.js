@@ -31,6 +31,17 @@ const socketMiddleware = (() => {
         store.dispatch(actions.connectionError('Connection error'))
     }
 
+    const createMessage = (action) => {
+        const { chatId, message } = action.message
+        return JSON.stringify({
+            token: sessionKey,
+            message: {
+                chat_id: chatId,
+                content: message,
+            },
+        })
+    }
+
     return (store) => (next) => (action) => {
         switch(action.type) {
             case actions.CLIENT_CONNECT:
@@ -58,13 +69,8 @@ const socketMiddleware = (() => {
                 store.dispatch(actions.disconnected())
                 break
 
-            case actions.CLIENT_SEND_MESSAGE:
-                socket.send(JSON.stringify({
-                    token: sessionKey,
-                    message: {
-                        content: action.message,
-                    },
-                }))
+            case actions.CLIENT_SEND_MESSAGE: 
+                socket.send(createMessage(action))
                 break
 
             default:

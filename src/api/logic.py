@@ -29,12 +29,12 @@ def generate_session_id(num_bytes=16):
 def validate_auth(req, resp, resource, params, db_session=None):
     token = req.context['Token']
     if not token:
-        raise_401('Not authorized')
+        raise_401()
     user_id = get_from_cache(token)
     if user_id is None:
         session = db_session.query(Session).filter(Session.session == token).first()
         if session is None:
-            raise_401('Not authorized')
+            raise_401()
         set_to_cache(session.session, session.user_id)
         req.context['uid'] = session.user_id
     else:

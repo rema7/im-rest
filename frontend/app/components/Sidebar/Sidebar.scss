@@ -1,14 +1,14 @@
 .sidebar {
-    min-width: 240px;
-    border-right: 1px solid #ccc;
     display: flex;
     flex-direction: column;
+    min-width: 240px;
+    border-right: 1px solid #ccc;
 
     .topbar {
-        height: 50px;
         width: 100%;
-        background: #ececec;
+        height: 50px;
         border-bottom: 1px solid #ccc;
+        background: #ececec;
     }
 
     .contacts {

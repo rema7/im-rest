@@ -27,7 +27,7 @@ class Sidebar extends React.PureComponent {
                     />
                 </div>
                 <div className={classNames(styles['contacts'])}>
-                    <Contacts />
+                    <Contacts contacts={[]}/>
                     <ChatList />
                 </div>
             </div>

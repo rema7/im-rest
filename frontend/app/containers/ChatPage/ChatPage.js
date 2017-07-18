@@ -21,6 +21,7 @@ const mapStateToProps = (state) => {
             connected: state.client.connected,
         },
         connectionStatus: connectionStatus(state),
+        currentChat: state.chats.currentChat,
     }
 }
 

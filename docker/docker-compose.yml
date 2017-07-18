@@ -10,11 +10,11 @@ services:
     volumes:
       - ./dbdata:/data/pgdata
     ports:
-      - "6000:5432"
+      - "6100:5432"
   im_redis:
     image: redis
     ports:
-      - "6379:6379"
+      - "7379:6379"
   im_rest_backend:
     environment:
       DB_CONNECTION: postgresql+psycopg2://db_user:db_pwd@im_db/im_docker
@@ -22,7 +22,7 @@ services:
     build: ./backend
     ports: 
       - "9000:8000"
-      - "2222:22"
+      - "2022:22"
     volumes:
       - ../.:/app
     depends_on:

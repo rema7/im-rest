@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import classNames from 'classnames'
+import styles from './Search.scss'
 
 const propTypes = {
     leftFocus: PropTypes.func.isRequired,
@@ -16,7 +18,7 @@ class Search extends React.PureComponent {
 
         this.handleSearchChange = this.handleSearchChange.bind(this)
         this.handleInputKeyDown = this.handleInputKeyDown.bind(this)
-        this.handleBlur = this.handleBlur.bind(this)
+        this.clickHandler = this.clickHandler.bind(this)
     }
 
     handleSearchChange(event) {
@@ -38,21 +40,22 @@ class Search extends React.PureComponent {
         }
     }
 
-    handleBlur() {
-        this.props.leftFocus()
+    clickHandler(e) {
+        e.stopPropagation()
+        e.preventDefault()
     }
 
     render() {
         return (
-            <div>
+            <div className={classNames(styles['search-form'])}>
                 <input className="form-control"
                     name="search"
                     type="text"
                     placeholder="Search"
                     value={this.state.search}
+                    onClick={this.clickHandler}
                     onChange={this.handleSearchChange}
                     onKeyDown={this.handleInputKeyDown}
-                    onBlur={this.handleBlur}
                 />
             </div>
         )

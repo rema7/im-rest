@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 
+import { changeChat } from 'actions/Chats'
 import { ChatList } from 'components'
 
 const mapStateToProps = (state) => {
@@ -10,6 +11,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        changeChat:(selectedChat) => {
+            dispatch(changeChat(selectedChat))
+        },
     }
 }
 

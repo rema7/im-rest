@@ -1,5 +1,5 @@
 import logging
-import pickle
+import json
 
 from redis import (
     Redis,
@@ -28,7 +28,7 @@ def redis_decorator(func):
 def get_from_cache(key):
     value = im_redis.get(key)
     if value is not None:
-        value = pickle.loads(value)
+        value = json.loads(value)
     return value
 
 
@@ -40,7 +40,7 @@ def get_keys(pattern):
 @redis_decorator
 def set_to_cache(key, value):
     if value is not None:
-        value = pickle.dumps(value)
+        value = json.dumps(value)
     im_redis.set(key, value)
 
 
@@ -52,4 +52,3 @@ def delete(*keys):
 @redis_decorator
 def flushdb():
     im_redis.flushdb()
-

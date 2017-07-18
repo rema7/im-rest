@@ -94,7 +94,7 @@ export default (env = {}) => {
                 'node_modules',
             ],
             alias: {
-                coreStyles: path.join(repoRoot, 'node_modules/react-datepicker/dist/react-datepicker.css'),
+                coreStyles: path.join(repoRoot, 'app/index.scss'),
                 stylesheets: path.join(appRoot, 'assets', 'stylesheets'),
             },
         },

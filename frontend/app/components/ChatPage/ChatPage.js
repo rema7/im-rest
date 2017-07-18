@@ -16,6 +16,12 @@ const propTypes = {
         connected: PropTypes.bool.isRequired,
     }),
     connectionStatus: PropTypes.string.isRequired,
+    currentChat: PropTypes.shape({
+        id: React.PropTypes.number,
+        title: React.PropTypes.string,
+        messages: React.PropTypes.array,
+
+    }),
 
     logout: PropTypes.func.isRequired, 
     connect: PropTypes.func.isRequired,
@@ -39,10 +45,15 @@ class ChatPage extends React.Component {
     }
 
     componentDidMount() {
-        this.nameInput.focus()
         this.props.fetchChats()
     }
     
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.currentChat) {
+            this.nameInput.focus()
+        }
+    }
+
     logout() {
         localStorage.removeItem('token')
         localStorage.removeItem('session')
@@ -67,7 +78,10 @@ class ChatPage extends React.Component {
     }
 
     sendMessage() {
-        this.props.send(this.state.message)
+        this.props.send({
+            chatId: this.props.currentChat.id,
+            message: this.state.message,
+        })
         this.setState({
             message: '',
         })
@@ -78,48 +92,58 @@ class ChatPage extends React.Component {
         this.nameInput.focus()
     }
 
+    renderChat() {
+        return (
+            <div className={classNames(styles['chat-wrapper'])}>
+                <div className={classNames(styles['top-bar'])}>
+                    <div className={classNames(styles['chat-info'])}>
+                        <div className={classNames(styles['title'])}>
+                            {this.props.currentChat ? this.props.currentChat.title : null}
+                        </div>
+                    </div>
+                    <ConnectionStatus
+                        connectionStatus={this.props.connectionStatus}
+                        connect={this.props.connect}
+                        connecting={this.props.connecting}
+                    />
+                    <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
+                </div>
+                <div className={classNames(styles['messages'])}>
+                    {this.props.messages.map((value) => {
+                        return (
+                            <div>
+                                {value.content}
+                            </div>
+                        )
+                    })}
+                </div>
+                <div className={classNames(styles['bottom-bar'])}>
+                    <div className="input-group">
+                        <input className="form-control"
+                            name="message"
+                            type="text"
+                            placeholder="Write a message..."
+                            value={this.state.message}
+                            onChange={this.handleMessageChange}
+                            onKeyPress={this.handleInputKeyPress}
+                            ref={(input) => { this.nameInput = input }} 
+                        />
+                        <span className="input-group-btn">
+                            <button className="btn btn-secondary" type="button" onClick={this.sendMessage}>Send</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     render() {
         return (
-            <div className={classNames(styles['chat-page'])}>
+            <div className={classNames(styles['chat-page'])} onClick={this.leftFocus}>
                     <Sidebar
                         leftFocus={this.leftFocus}
                     />
-                <div className={classNames(styles['chat-wrapper'])}>
-                    <div className={classNames(styles['top-bar'])}>
-                        <ConnectionStatus
-                            connectionStatus={this.props.connectionStatus}
-                            connect={this.props.connect}
-                            connecting={this.props.connecting}
-                        />
-                        <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
-                    </div>
-                    <div className={classNames(styles['messages'])}>
-                        {this.props.messages.map((value) => {
-                            return (
-                                <div>
-                                    {value.content}
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <div className={classNames(styles['bottom-bar'])}>
-                        <div className="input-group">
-                            <input className="form-control"
-                                name="message"
-                                type="text"
-                                placeholder="Write a message..."
-                                value={this.state.message}
-                                onChange={this.handleMessageChange}
-                                onKeyPress={this.handleInputKeyPress}
-                                ref={(input) => { this.nameInput = input }} 
-                            />
-                            <span className="input-group-btn">
-                                <button className="btn btn-secondary" type="button" onClick={this.sendMessage}>Send</button>
-                            </span>
-                        </div>
-
-                    </div>
-                </div>
+                    {this.renderChat()}
             </div>
         )
     }

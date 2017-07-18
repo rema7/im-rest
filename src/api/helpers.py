@@ -14,8 +14,8 @@ def raise_http_error(status, title, description):
     )
 
 
-def raise_401(title, description=None):
-    raise falcon.HTTPForbidden(
+def raise_401(title='Not authorized', description=None):
+    raise falcon.HTTPUnauthorized(
         title=title,
         description=description
     )
