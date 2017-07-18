@@ -84,13 +84,10 @@ class Chat(Base):
     __tablename__ = 'chat'
 
     id = Column("id", BigInteger, primary_key=True, autoincrement=True)
-    owner_id = Column(BigInteger, nullable=False)
-    title = Column(String, nullable=False)
 
     def as_dict(self):
         return {
             'id': self.id,
-            'title': self.title,
         }
 
 

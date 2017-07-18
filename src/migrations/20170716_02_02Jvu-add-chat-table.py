@@ -8,9 +8,7 @@ __depends__ = {'20170716_01_N2FGs-add-contact-table'}
 
 CREATE_TABLE = '''
 CREATE TABLE IF NOT EXISTS chat (
-    id SERIAL PRIMARY KEY,
-    owner_id bigint not null,
-    title varchar not null
+    id SERIAL PRIMARY KEY
 );
 CREATE TABLE IF NOT EXISTS chat_member (
     id SERIAL PRIMARY KEY,

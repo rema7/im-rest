@@ -17,6 +17,7 @@ from db.models import (
     Session,
     Contact,
     Chat,
+    ChatMember,
 )
 from api.logic import (
     generate_auth_code,
@@ -188,7 +189,8 @@ class ContactsResource:
     @staticmethod
     @with_db_session
     def get_body(uid, db_session=None):
-        contacts = db_session.query(Contact).filter(Contact.user_id == uid).all()
+        contacts = db_session.query(Contact).filter(
+            Contact.user_id == uid).all()
         return [c.as_dict() for c in contacts]
 
     def on_get(self, req, resp):
@@ -203,8 +205,18 @@ class ChatResource:
     @staticmethod
     @with_db_session
     def get_body(uid, db_session=None):
-        chats = db_session.query(Chat).filter(Chat.owner_id == uid).all()
-        return [c.as_dict() for c in chats]
+        chat_ids = db_session.query(ChatMember.chat_id).filter(
+            ChatMember.user_id == uid).all()
+        result = []
+        for chat_id in [r for r, in chat_ids]:
+            members = db_session.query(ChatMember.user_id).filter(
+                ChatMember.chat_id == chat_id, ChatMember.user_id != uid
+            ).all()
+            result.append({
+                'id': chat_id,
+                'members': [r for r, in members],
+            })
+        return result
 
     def on_get(self, req, resp):
         result = self.get_body(req.context['uid'])
