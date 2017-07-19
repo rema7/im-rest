@@ -23,7 +23,7 @@ def clear_data(db_session):
     users_query = db_session.query(User.id).filter(User.email.like('%@im.im%'))
 
     user_ids = users_query.all()
-    db_session.query(Contact).filter(Contact.user_id.in_(user_ids)).delete(synchronize_session='fetch')
+    db_session.query(Contact).filter(Contact.owner_id.in_(user_ids)).delete(synchronize_session='fetch')
     db_session.query(Session).filter(Session.user_id.in_(user_ids)).delete(synchronize_session='fetch')
 
     members_query = db_session.query(ChatMember.chat_id)
@@ -35,19 +35,25 @@ def clear_data(db_session):
     users_query.delete(synchronize_session='fetch')
 
 
-def generate_contacts(db_session, user, users):
+def generate_contacts(db_session, user, interlocutors):
     db_session.add(Session(
         user_id=user.id,
         session='fake_session',
     ))
-    for u in users:
+    for interlocutor in interlocutors:
         contact = Contact(
-            user_id=user.id,
-            contact_id=u.id,
+            owner_id=user.id,
+            email=interlocutor.email,
+            first_name=interlocutor.first_name,
+            last_name=interlocutor.last_name,
+            contact_id=interlocutor.id,
         )
         db_session.add(contact)
         contact = Contact(
-            user_id=u.id,
+            owner_id=interlocutor.id,
+            email=user.email,
+            first_name=user.first_name,
+            last_name=user.last_name,
             contact_id=user.id,
         )
         db_session.add(contact)

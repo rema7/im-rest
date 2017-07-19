@@ -31,13 +31,13 @@ class ChatList extends React.PureComponent {
     render() {
         return (
             <div>
-                {this.props.chats.map((chatItem) => {
+                {this.props.chats.map((chat) => {
                     return (
                         <ChatListItem
-                            key={chatItem.id}
+                            key={chat.chatId}
                             clickHandler={this.onClickHandler}
-                            chatItem={chatItem}
-                            isSelected={this.state.currentChat === chatItem}
+                            chatItem={chat}
+                            isSelected={this.state.currentChat === chat}
                         />
                     )
                 })}

@@ -4,11 +4,15 @@ import {
     CHATS_RESPONSE_ERROR,
     CHATS_SELECT_CHAT,
 } from 'actions/Chats'
+import {
+    keysSnakeToCamel,
+} from 'helpers/strings'
 
 const initialState = {
     errorMessage: null,
     loading: false,
     items: [],
+    contacts: [],
     currentChat: null,
     url: '/api/chats',
 }
@@ -26,7 +30,8 @@ export const chats = (state = initialState, action = {}) => {
                 ...state,
                 errorMessage: null,
                 loading: false,
-                items: action.data.result,
+                items: keysSnakeToCamel(action.data.result.chats),
+                contacts: keysSnakeToCamel(action.data.result.contacts),
             }
         case CHATS_RESPONSE_ERROR:
             return {

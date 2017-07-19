@@ -17,10 +17,13 @@ const propTypes = {
     }),
     connectionStatus: PropTypes.string.isRequired,
     currentChat: PropTypes.shape({
-        id: React.PropTypes.number,
-        title: React.PropTypes.string,
-        messages: React.PropTypes.array,
-
+        chatId: PropTypes.number.isRequired,
+        title: PropTypes.string,
+        members: PropTypes.arrayOf(PropTypes.shape({
+            id: PropTypes.number,
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+        })).isRequired,
     }),
 
     logout: PropTypes.func.isRequired, 
@@ -50,7 +53,7 @@ class ChatPage extends React.Component {
     
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentChat) {
-            this.nameInput.focus()
+            this.setInputFocus()
         }
     }
 
@@ -79,17 +82,28 @@ class ChatPage extends React.Component {
 
     sendMessage() {
         this.props.send({
-            chatId: this.props.currentChat.id,
+            chatId: this.props.currentChat.chatId,
             message: this.state.message,
         })
         this.setState({
             message: '',
         })
-        this.nameInput.focus()
+        this.setInputFocus()
+    }
+
+    setInputFocus() {
+        if (this.props.currentChat) {
+            this.nameInput.focus()
+        }
     }
 
     leftFocus() {
-        this.nameInput.focus()
+        this.setInputFocus()
+    }
+
+    renderChatTitle() {
+        const { title, members } = this.props.currentChat
+        return title || `${members[0].firstName} ${members[0].lastName}`
     }
 
     renderChat() {
@@ -98,7 +112,7 @@ class ChatPage extends React.Component {
                 <div className={classNames(styles['top-bar'])}>
                     <div className={classNames(styles['chat-info'])}>
                         <div className={classNames(styles['title'])}>
-                            {this.props.currentChat ? this.props.currentChat.title : null}
+                            {this.renderChatTitle()}
                         </div>
                     </div>
                     <ConnectionStatus
@@ -143,7 +157,7 @@ class ChatPage extends React.Component {
                     <Sidebar
                         leftFocus={this.leftFocus}
                     />
-                    {this.renderChat()}
+                    {this.props.currentChat ? this.renderChat() : null}
             </div>
         )
     }

@@ -14,8 +14,8 @@ def generate_data(ctx, account_number=10, chat_numbers=3):
     Fill data in DataBase
     """
     print('Start filling...')
-    
+
     generate_test_data(account_number, chat_numbers)
     flush_cache()
-    
+
     print('Success')

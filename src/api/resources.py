@@ -202,21 +202,38 @@ class ContactsResource:
 
 @falcon.before(validate_auth)
 class ChatResource:
-    @staticmethod
-    @with_db_session
-    def get_body(uid, db_session=None):
+    def get_chats(self, db_session, uid):
         chat_ids = db_session.query(ChatMember.chat_id).filter(
             ChatMember.user_id == uid).all()
-        result = []
+        chats = []
         for chat_id in [r for r, in chat_ids]:
-            members = db_session.query(ChatMember.user_id).filter(
+            member_ids = db_session.query(ChatMember.user_id).filter(
                 ChatMember.chat_id == chat_id, ChatMember.user_id != uid
             ).all()
-            result.append({
-                'id': chat_id,
-                'members': [r for r, in members],
+            users = db_session.query(User).filter(User.id.in_(member_ids)).all()
+            chats.append({
+                'chat_id': chat_id,
+                'members': [{
+                    'id': u.id,
+                    'first_name': u.first_name,
+                    'last_name': u.last_name,
+                } for u in users],
             })
-        return result
+        return chats
+
+    def get_contacts(self, db_session, uid):
+        contacts = db_session.query(Contact).filter(
+            Contact.owner_id == uid).all()
+        return [c.as_dict() for c in contacts]
+
+    @with_db_session
+    def get_body(self, uid, db_session=None):
+        chats = self.get_chats(db_session, uid)
+        contacts = self.get_contacts(db_session, uid)
+        return {
+            'chats': chats,
+            'contacts': contacts,
+        }
 
     def on_get(self, req, resp):
         result = self.get_body(req.context['uid'])
