@@ -1,15 +1,80 @@
 import * as actions from 'actions/Chats'
 import { chats } from 'reducers/Chats'
 
+const initialState = {
+    errorMessage: null,
+    loading: false,
+    chats: [],
+    contacts: [],
+    currentChat: null,
+}
+
+const initialChats = [
+    {
+        chatId: 1,
+        members: [
+            {
+                firstName: 'First_Name_1',
+                id: 1,
+                lastName: 'Last_Name_1',
+            },
+        ], 
+        messages: [],
+    },
+    {
+        chatId: 2,
+        members: [
+            {
+                firstName: 'First_Name_2',
+                id: 2,
+                lastName: 'Last_Name_2',
+            }, {
+                firstName: 'First_Name_3',
+                id: 3, 
+                lastName: 'Last_Name_3',
+            },
+        ], 
+        messages: [],
+    }
+]
+
 describe('Chats reducer', () => {
     it('should return the initial state', () => {
-        expect(chats(void 0, {})).toEqual({
-            errorMessage: null,
-            loading: false,
-            chats: [],
-            contacts: [],
-            currentChat: null,
-        })
+        expect(chats(void 0, {})).toEqual(initialState)
+    })
+
+    it('should update chats messages on "receivedNewMessages" action', () => {
+        const action = {
+            type: actions.CHATS_RECEIVED_NEW_MESSAGES,
+            messages: [
+                {
+                    chatId: 1,
+                    sender: 1,
+                    type: 'CHAT_MESSAGE',
+                    content: 'Text1',
+                },
+                {
+                    chatId: 1,
+                    sender: 1,
+                    type: 'CHAT_MESSAGE',
+                    content: 'Text1.1',
+                },
+                {
+                    chatId: 2,
+                    sender: 2,
+                    type: 'CHAT_MESSAGE',
+                    content: 'Text2',
+                },
+            ]
+        }
+        const state = {
+            ...initialState,
+            chats: initialChats,
+        }
+        const newState = chats(state, action)
+        expect(newState.chats[0].messages.length).toEqual(2)
+        expect(newState.chats[0].messages.map((value) => value.content)).toEqual(['Text1', 'Text1.1'])
+        expect(newState.chats[1].messages.map((value) => value.content)).toEqual(['Text2'])
     })
 
     it('should update "chats" on "responseOk" action', () => {
