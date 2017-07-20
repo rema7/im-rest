@@ -5,5 +5,9 @@ node_js:
 python:
   - "3.6"
 
+before_install:
+  - chmod +x scripts/testing_frontend.sh
+  - chmod +x scripts/testing_backend.sh
+
 script: 
   - scripts/testing_frontend.sh
