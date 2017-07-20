@@ -6,4 +6,4 @@ python:
   - "3.6"
 
 script: 
-  - scripts/testing_backend.sh
+  - scripts/testing_frontend.sh
