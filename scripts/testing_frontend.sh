@@ -1,27 +1,23 @@
 #!/usr/bin/env bash
 
 # Step 1 - Prepare venv
-VENV_PATH=$CHECKOUT_DIR/../venv
+VENV_PATH=./venv
 
-if [[ $CLEAR_ENV == "True" ]]
-then
-  rm -rf $VENV_PATH
-fi
-virtualenv --python=python3.6 $VENV_PATH
+python3.6 -m venv $VENV_PATH
 
 source $VENV_PATH/bin/activate
-pip install --upgrade pip==9.0.1
+pip3 install --upgrade pip==9.0.1
 
 # Step 3 - Run js tests
-pip install nodeenv
+pip3 install nodeenv
 nodeenv --node=6.9.1 --python-virtualenv --prebuilt
 
 deactivate
 . $VENV_PATH/bin/activate
 
-cd $CHECKOUT_DIR/frontend
+cd ./frontend
 
-npm set registry $SINOPIA_URL --always-auth
+# npm set registry $SINOPIA_URL --always-auth
 npm install -g npm-cache
 npm-cache install
 
