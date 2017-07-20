@@ -3,7 +3,7 @@
 # Step 1 - Prepare venv
 VENV_PATH=./venv
 
-python3.6 -m venv $VENV_PATH
+python3 -m venv $VENV_PATH
 
 source $VENV_PATH/bin/activate
 pip3 install --upgrade pip==9.0.1

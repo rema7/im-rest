@@ -7,6 +7,9 @@
     "dev": "webpack --progress --watch --env.useNotifier",
     "dev:server": "./node_modules/.bin/webpack-dev-server --env.isDevServer --env.useNotifier",
     "dev:prod": "webpack --env.isProduction",
+    "eslint": "eslint app webpack.config.babel.js",
+    "eslint:ci": "eslint app webpack.config.babel.js --format './node_modules/eslint-formatter-pretty/index.js'",
+    "stylelint:ci": "stylelint **/*.scss --config ./.stylelintrc --custom-formatter './node_modules/stylelint-formatter-pretty/index.js'",
     "test": "TZ='Europe/Moscow' NODE_ENV=test jest",
     "test:dev": "TZ='Europe/Moscow' NODE_ENV=test jest --watch"
   },
@@ -79,6 +82,7 @@
     "sass-loader": "3.2.3",
     "style-loader": "0.17.0",
     "stylelint": "7.10.1",
+    "stylelint-formatter-pretty": "^1.0.3",
     "stylelint-order": "0.4.4",
     "stylelint-scss": "1.4.4",
     "stylelint-teamcity-formatter": "0.0.3",
