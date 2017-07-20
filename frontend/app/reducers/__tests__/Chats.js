@@ -49,7 +49,33 @@ describe('Chats reducer', () => {
         }
         const newState = chats(void 0, action)
         expect(newState.errorMessage).toBeNull()
-        expect(newState.chats).toEqual([1, 2, 3])
+        expect(newState.chats).toEqual([
+            {
+                chatId: 1,
+                members: [
+                    {
+                        firstName: 'First_Name_1',
+                        id: 1,
+                        lastName: 'Last_Name_1',
+                    },
+                ], 
+                messages: [],
+            }, {
+                chatId: 2,
+                members: [
+                    {
+                        firstName: 'First_Name_2',
+                        id: 2,
+                        lastName: 'Last_Name_2',
+                    }, {
+                        firstName: 'First_Name_3',
+                        id: 3, 
+                        lastName: 'Last_Name_3',
+                    },
+                ], 
+                messages: [],
+            },
+        ])
         expect(newState.loading).toBeFalsy()
     })
 })
