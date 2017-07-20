@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "webpack --progress --watch --env.useNotifier",
     "dev:server": "./node_modules/.bin/webpack-dev-server --env.isDevServer --env.useNotifier",
-    "dev:prod": "webpack --env.isProduction"
+    "dev:prod": "webpack --env.isProduction",
+    "test": "TZ='Europe/Moscow' NODE_ENV=test jest",
+    "test:dev": "TZ='Europe/Moscow' NODE_ENV=test jest --watch"
   },
   "files": [
     "app",
@@ -43,7 +45,8 @@
     "clean-webpack-plugin": "0.1.15",
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.23.1",
-    "enzyme": "2.7.1",
+    "enzyme": "^2.9.1",
+    "enzyme-to-json": "^1.5.1",
     "eslint": "3.16.1",
     "eslint-loader": "1.6.1",
     "eslint-plugin-jest": "19.0.1",
@@ -54,8 +57,9 @@
     "fbjs-scripts": "0.7.1",
     "file-loader": "0.8.5",
     "html-webpack-plugin": "2.28.0",
+    "jest": "^20.0.4",
     "mockdate": "2.0.1",
-    "nock": "9.0.9",
+    "nock": "^9.0.9",
     "node-sass": "3.12.5",
     "postcss": "5.2.16",
     "postcss-loader": "1.2.2",
@@ -86,5 +90,25 @@
   "devEngines": {
     "node": "7.x",
     "npm": "4.x"
+  },
+  "jest": {
+    "moduleDirectories": [
+      "node_modules",
+      "app"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(css|less|scss)$": "<rootDir>/test/styleMock.js",
+      "^.+\\.(gif|ttf|eot|svg)$": "<rootDir>/test/emptyMock.js"
+    },
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/enzyme-to-json/serializer"
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/test/framework-setup.js",
+    "transformIgnorePatterns": [],
+    "coverageThreshold": {
+      "global": {
+        "statements": 100
+      }
+    }
   }
 }

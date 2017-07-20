@@ -1,0 +1,9 @@
+language: node_js
+
+node_js:
+  - "7"
+python:
+  - "3.6"
+
+script: 
+  - scripts/testing_backend.sh

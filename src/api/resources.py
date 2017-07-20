@@ -213,6 +213,7 @@ class ChatResource:
             users = db_session.query(User).filter(User.id.in_(member_ids)).all()
             chats.append({
                 'chat_id': chat_id,
+                'messages': [],
                 'members': [{
                     'id': u.id,
                     'first_name': u.first_name,
@@ -237,6 +238,4 @@ class ChatResource:
 
     def on_get(self, req, resp):
         result = self.get_body(req.context['uid'])
-        resp.body = {
-            'result': result,
-        }
+        resp.body = result

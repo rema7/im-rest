@@ -3,6 +3,8 @@ import {
     CHATS_RESPONSE_OK,
     CHATS_RESPONSE_ERROR,
     CHATS_SELECT_CHAT,
+    CHATS_SEND_MESSAGE_TO_CHAT,
+    CHATS_RECEIVED_NEW_MESSAGES,
 } from 'actions/Chats'
 import {
     keysSnakeToCamel,
@@ -11,13 +13,22 @@ import {
 const initialState = {
     errorMessage: null,
     loading: false,
-    items: [],
+    chats: [],
     contacts: [],
     currentChat: null,
-    url: '/api/chats',
 }
 
 export const chats = (state = initialState, action = {}) => {
+    const handleMessage = (chats, newMessages) => {
+        newMessages.forEach((newMessage) => {
+            const {chatId, content} = newMessage
+            let chat = chats.find((chat) => {return chat.chatId === chatId}) 
+            chat.messages.push({
+                content: content,
+            })
+        })
+        return chats
+    }
     switch (action.type) {
         case CHATS_START_REQUEST:
             return {
@@ -30,20 +41,30 @@ export const chats = (state = initialState, action = {}) => {
                 ...state,
                 errorMessage: null,
                 loading: false,
-                items: keysSnakeToCamel(action.data.result.chats),
-                contacts: keysSnakeToCamel(action.data.result.contacts),
+                chats: keysSnakeToCamel(action.data.chats),
+                contacts: keysSnakeToCamel(action.data.contacts),
             }
         case CHATS_RESPONSE_ERROR:
             return {
                 ...state,
                 errorMessage: action.errorMessage,
                 loading: false,
-                items: state.items,
+                chats: state.items,
             }
         case CHATS_SELECT_CHAT:
             return {
                 ...state,
                 currentChat: action.chat,
+            }
+        case CHATS_RECEIVED_NEW_MESSAGES:
+            return {
+                ...state,
+                chats: handleMessage(state.chats, keysSnakeToCamel(action.messages)),
+            }
+        case CHATS_SEND_MESSAGE_TO_CHAT:
+            return {
+                ...state,
+                chats: handleMessage(state.chats, [action.message]),
             }
         default:
             return state

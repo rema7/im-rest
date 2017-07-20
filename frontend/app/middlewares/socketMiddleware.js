@@ -32,12 +32,13 @@ const socketMiddleware = (() => {
     }
 
     const createMessage = (action) => {
-        const { chatId, message } = action.message
+        const { chatId, content } = action.message
         return JSON.stringify({
             token: sessionKey,
-            message: {
+            type: 'CHAT_MESSAGE',
+            payload: {
                 chat_id: chatId,
-                content: message,
+                content: content,
             },
         })
     }

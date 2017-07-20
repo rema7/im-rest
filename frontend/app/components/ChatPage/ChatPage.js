@@ -9,7 +9,6 @@ import styles from './ChatPage.scss'
 
 const propTypes = {
     session: PropTypes.string,
-    messages: React.PropTypes.array.isRequired,  
     ws: React.PropTypes.shape({
         errorMessage: PropTypes.string,
         connecting: PropTypes.bool.isRequired,
@@ -24,7 +23,11 @@ const propTypes = {
             firstName: PropTypes.string,
             lastName: PropTypes.string,
         })).isRequired,
+        messages: PropTypes.arrayOf(PropTypes.shape({
+            content: PropTypes.string.isRequired,
+        })),
     }),
+    newMessages:PropTypes.array,
 
     logout: PropTypes.func.isRequired, 
     connect: PropTypes.func.isRequired,
@@ -32,9 +35,10 @@ const propTypes = {
     connecting: PropTypes.func.isRequired,
     disconnect: PropTypes.func.isRequired,
     fetchChats: PropTypes.func.isRequired,
+    updateMessages: PropTypes.func.isRequired,
 }
 
-class ChatPage extends React.Component {
+class ChatPage extends React.PureComponent {
     constructor(props) {
         super(props)
         this.state = {
@@ -54,6 +58,13 @@ class ChatPage extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentChat) {
             this.setInputFocus()
+        }
+        if (nextProps.newMessages && nextProps.newMessages !== this.state.newMessages) {
+            const messages = nextProps.newMessages
+            this.setState({
+                newMessages: messages,
+            })
+            this.props.updateMessages(messages)
         }
     }
 
@@ -83,7 +94,7 @@ class ChatPage extends React.Component {
     sendMessage() {
         this.props.send({
             chatId: this.props.currentChat.chatId,
-            message: this.state.message,
+            content: this.state.message,
         })
         this.setState({
             message: '',
@@ -123,9 +134,9 @@ class ChatPage extends React.Component {
                     <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
                 </div>
                 <div className={classNames(styles['messages'])}>
-                    {this.props.messages.map((value) => {
+                    {this.props.currentChat.messages.map((value, index) => {
                         return (
-                            <div>
+                            <div key={index}>
                                 {value.content}
                             </div>
                         )

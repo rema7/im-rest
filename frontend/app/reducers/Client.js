@@ -4,20 +4,26 @@ import {
     CLIENT_CONNECTED,
     CLIENT_DISCONNECT,
     CLIENT_DISCONNECTED,
-    SEND_CHAT_MESSAGE,
     CLIENT_MESSAGE_RECEIVED,
 } from 'actions/Client'
+import {
+    keysSnakeToCamel,
+} from 'helpers/strings'
 
 const initialState = {
     errorMessage: null,
     connecting: false,
     connected: false,
-    messages: [],
+    messages: null,
     reconnecting: true,
     url: 'ws://localhost:8100/ws',
 }
 
 export const client = (state = initialState, action = {}) => {
+    const handleMessage = (message) => {
+        const { payload } = message
+        return payload
+    }
     switch (action.type) {
         case CLIENT_CONNECTING:
             return {
@@ -25,6 +31,7 @@ export const client = (state = initialState, action = {}) => {
                 errorMessage: null,
                 connected: false,
                 connecting: true,
+                messages: null,
             }
         case CLIENT_CONNECTION_ERROR:
             return {
@@ -39,6 +46,7 @@ export const client = (state = initialState, action = {}) => {
                 errorMessage: null,
                 connecting: false,
                 connected: true,
+                messages: null,
             }
         }
         case CLIENT_DISCONNECT:
@@ -51,14 +59,10 @@ export const client = (state = initialState, action = {}) => {
                 ...state,
                 connected: false,
             }        
-        case SEND_CHAT_MESSAGE:
-            return {
-                ...state,
-            }
         case CLIENT_MESSAGE_RECEIVED:
             return {
                 ...state,
-                messages: [...state.messages, action.message],
+                messages: [handleMessage(keysSnakeToCamel(action.message))],
             }
         default:
             return state
