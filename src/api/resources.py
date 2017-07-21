@@ -230,10 +230,9 @@ class ChatResource:
     @with_db_session
     def get_body(self, uid, db_session=None):
         chats = self.get_chats(db_session, uid)
-        contacts = self.get_contacts(db_session, uid)
+        # contacts = self.get_contacts(db_session, uid)
         return {
             'chats': chats,
-            'contacts': contacts,
         }
 
     def on_get(self, req, resp):
