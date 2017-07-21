@@ -13,7 +13,7 @@ const propTypes = {
     leftFocus: PropTypes.func.isRequired,
 }
 
-class Sidebar extends React.Component {
+class Sidebar extends React.PureComponent {
     constructor(props) {
         super(props)
     }
