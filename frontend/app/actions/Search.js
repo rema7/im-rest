@@ -51,8 +51,7 @@ export function fetchSearchResult() {
             } else {
                 dispatch(updateSearchResult(json))
             }
-        })
-        .catch(() => {
+        }).catch(() => {
             dispatch(updateError({ error: 'Произошла ошибка. Повторите попытку позже'}))
         })
         return req

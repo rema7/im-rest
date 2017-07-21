@@ -112,12 +112,13 @@ class LoginPage extends React.PureComponent {
                     <h3>Login</h3>
                     <form >
                         <label>
-                        Email:
-                        <input
-                            name="email"
-                            type="email"
-                            value={this.state.email}
-                            onChange={this.handleChange} />
+                            Email:
+                            <input
+                                name="email"
+                                type="email"
+                                value={this.state.email}
+                                onChange={this.handleChange}
+                            />
                         </label>
                     </form>
                     <button onClick={this.handleSubmit}>Login</button>
@@ -126,12 +127,13 @@ class LoginPage extends React.PureComponent {
                     <h3>Complete</h3>
                     <form>
                         <label>
-                        Code:
-                        <input
-                            name="code"
-                            type="number"
-                            value={this.state.code}
-                            onChange={this.handleChange} />
+                            Code:
+                            <input
+                                name="code"
+                                type="number"
+                                value={this.state.code}
+                                onChange={this.handleChange}
+                            />
                         </label>
                     </form>
                     <button onClick={this.handleAuth}>Auth</button>

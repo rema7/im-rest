@@ -9,7 +9,7 @@ import styles from './ChatPage.scss'
 
 const propTypes = {
     session: PropTypes.string,
-    ws: React.PropTypes.shape({
+    ws: PropTypes.shape({
         errorMessage: PropTypes.string,
         connecting: PropTypes.bool.isRequired,
         connected: PropTypes.bool.isRequired,
@@ -38,7 +38,7 @@ const propTypes = {
     updateMessages: PropTypes.func.isRequired,
 }
 
-class ChatPage extends React.PureComponent {
+class ChatPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -57,7 +57,7 @@ class ChatPage extends React.PureComponent {
     
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentChat) {
-            this.setInputFocus()
+            this.setInputFocus()            
         }
         if (nextProps.newMessages && nextProps.newMessages !== this.state.newMessages) {
             const messages = nextProps.newMessages
@@ -165,10 +165,10 @@ class ChatPage extends React.PureComponent {
     render() {
         return (
             <div className={classNames(styles['chat-page'])} onClick={this.leftFocus}>
-                    <Sidebar
-                        leftFocus={this.leftFocus}
-                    />
-                    {this.props.currentChat ? this.renderChat() : null}
+                <Sidebar
+                    leftFocus={this.leftFocus}
+                />
+                {this.props.currentChat ? this.renderChat() : null}
             </div>
         )
     }

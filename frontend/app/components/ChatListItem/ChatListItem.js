@@ -14,6 +14,7 @@ const propTypes = {
             firstName: PropTypes.string,
             lastName: PropTypes.string,
         })).isRequired,
+        newMessages: PropTypes.number.isRequired,
     }).isRequired,
     isSelected: PropTypes.bool.isRequired,
 
@@ -47,6 +48,7 @@ class ChatListItem extends React.PureComponent {
         return (
             <div onClick={this.clickHandler} className={classNames(this.setStyles())}>
                 <div className={classNames(styles['image'])}>
+                    {this.props.chatItem.newMessages}
                 </div>
                 <div className={classNames(styles['info-wrapper'])}>
                     <div className={classNames(styles['title'])}>

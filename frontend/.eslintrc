@@ -34,6 +34,7 @@
     "quotes": ["error", "single"],
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
+    "jest/valid-expect": "error",
     "semi": ["error", "never"],
     "variables/only-ascii-variables": ["error"]
   },

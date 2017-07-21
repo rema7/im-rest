@@ -62,12 +62,12 @@ class ConnectionStatus extends React.PureComponent {
                 <span>Server status: {message}</span>
                 <label>
                     <input type="checkbox" 
-                           value={this.state.reconnect} 
-                           name="reconnect"
-                           onChange={::this.handleInputChange}
+                        value={this.state.reconnect} 
+                        name="reconnect"
+                        onChange={::this.handleInputChange}
                     />
-                           Reconnect
-                    </label>
+                    Reconnect
+                </label>
             </div>
         )
     }

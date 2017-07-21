@@ -1,7 +1,7 @@
 import { forEach } from 'lodash'
 
 export const snakeToCamel = (string) => {
-    return string.replace(/(\_[a-z])/g, (item) => item.toUpperCase().replace('_', ''))
+    return string.replace(/(_[a-z])/g, (item) => item.toUpperCase().replace('_', ''))
 }
 
 export const camelToSnake = (string) => {

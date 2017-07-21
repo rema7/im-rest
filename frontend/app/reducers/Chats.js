@@ -5,6 +5,7 @@ import {
     CHATS_SELECT_CHAT,
     CHATS_SEND_MESSAGE_TO_CHAT,
     CHATS_RECEIVED_NEW_MESSAGES,
+    CHATS_NEW_MESSAGES_READ,
 } from 'actions/Chats'
 import {
     keysSnakeToCamel,
@@ -14,7 +15,6 @@ const initialState = {
     errorMessage: null,
     loading: false,
     chats: [],
-    contacts: [],
     currentChat: null,
 }
 
@@ -26,6 +26,7 @@ export const chats = (state = initialState, action = {}) => {
             chat.messages.push({
                 content: content,
             })
+            chat.newMessages += 1
         })
         return chats
     }
@@ -41,8 +42,12 @@ export const chats = (state = initialState, action = {}) => {
                 ...state,
                 errorMessage: null,
                 loading: false,
-                chats: keysSnakeToCamel(action.data.chats),
-                contacts: keysSnakeToCamel(action.data.contacts),
+                chats: keysSnakeToCamel(
+                    action.data.chats.map((chat) => {
+                        chat.newMessages=0
+                        return chat
+                    })
+                ),
             }
         case CHATS_RESPONSE_ERROR:
             return {
@@ -65,6 +70,16 @@ export const chats = (state = initialState, action = {}) => {
             return {
                 ...state,
                 chats: handleMessage(state.chats, [action.message]),
+            }
+        case CHATS_NEW_MESSAGES_READ:
+            return {
+                ...state,
+                chats: state.chats.map((chat) => {
+                    if (chat.chatId === action.chatId) {
+                        chat.newMessages = 0
+                    }
+                    return chat
+                }),
             }
         default:
             return state
