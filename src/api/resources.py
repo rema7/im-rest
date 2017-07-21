@@ -1,24 +1,13 @@
 import uuid
-import falcon
 import logging
+
+import falcon
 
 from validate_email import validate_email
 from helpers import date
 from webargs import fields
 from webargs.falconparser import use_args
 
-import settings as app_settings
-from decorators import with_db_session
-from db.session import open_db_session
-from db.models import (
-    AuthCode,
-    User,
-    UserToken,
-    Session,
-    Contact,
-    Chat,
-    ChatMember,
-)
 from api.logic import (
     generate_auth_code,
     generate_token,
@@ -29,6 +18,18 @@ from api.helpers import (
     validate_schema,
     raise_400,
 )
+from cache.cache import set_to_cache
+from decorators import with_db_session
+from db.session import open_db_session
+from db.models import (
+    AuthCode,
+    User,
+    UserToken,
+    Session,
+    Contact,
+    ChatMember,
+)
+import settings as app_settings
 
 logger = logging.getLogger('im-rest.' + __name__)
 
@@ -205,6 +206,11 @@ class ChatResource:
     def get_chats(self, db_session, uid):
         chat_ids = db_session.query(ChatMember.chat_id).filter(
             ChatMember.user_id == uid).all()
+
+        set_to_cache(
+            app_settings.REDIS_USER_KEY_PATTERN.format(user_id=uid), 
+            [x for xs in chat_ids for x in xs]
+        )
         chats = []
         for chat_id in [r for r, in chat_ids]:
             member_ids = db_session.query(ChatMember.user_id).filter(

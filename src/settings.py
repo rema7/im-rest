@@ -17,6 +17,8 @@ AUTH_CODE_VALID_DURATION = 300
 
 SESSION_DURATION = 3600
 
+REDIS_USER_KEY_PATTERN = 'user_{user_id}'
+
 try:
     from settings_local import *  # noqa
 except ModuleNotFoundError:
