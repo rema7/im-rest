@@ -26,6 +26,10 @@ const initialState = {
 }
 
 export const login = (state = initialState, action = {}) => {
+    const cleanStorage = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('session')
+    }
     switch (action.type) {
         case LOGIN_START_REQUEST:
             return {
@@ -72,6 +76,7 @@ export const login = (state = initialState, action = {}) => {
                 session: null,
             }
         case LOGIN_LOGOUT:
+            cleanStorage()
             return {
                 ...state,
                 errorMessage: null,

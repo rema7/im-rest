@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
+import { enableBatching } from 'redux-batched-actions'
 import { createStore, applyMiddleware, compose } from 'redux'
 
 import { MainPage } from 'containers'
@@ -22,7 +23,11 @@ const enhancer = compose(
 
 import './index.scss'
 
-const store = createStore(rootReducer, {}, enhancer)
+const store = createStore(
+    enableBatching(rootReducer),
+    {},
+    enhancer
+)
 
 const app = (store) => (
     <Provider store={store}>

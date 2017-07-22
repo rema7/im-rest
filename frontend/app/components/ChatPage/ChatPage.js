@@ -69,9 +69,6 @@ class ChatPage extends React.Component {
     }
 
     logout() {
-        localStorage.removeItem('token')
-        localStorage.removeItem('session')
-        this.props.disconnect()
         this.props.logout()
     }
     

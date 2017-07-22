@@ -1,5 +1,8 @@
+// import { batchActions } from 'redux-batched-actions'
+
 import { postWrapper as post } from 'helpers/post'
 import { keysCamelToSnake } from 'helpers/strings'
+import { disconnect } from 'actions/Client'
 
 export const LOGIN_START_REQUEST = 'LOGIN_START_REQUEST'
 export const LOGIN_RESPONSE_OK = 'LOGIN_RESPONSE_OK'
@@ -50,9 +53,23 @@ export function responseError(errorMessage) {
     }
 }
 
-export function logout() {
+export function logoutAction() {
     return {
         type: LOGIN_LOGOUT,
+    }
+}
+
+export const logout = () => {
+    return (dispatch) => {
+        let promise = new Promise((resolve) => resolve())
+
+        dispatch(logoutAction())
+        dispatch(disconnect())
+        // dispatch(batchActions([
+        //     logoutAction(),
+        //     disconnect(),
+        // ]))
+        return promise
     }
 }
 
