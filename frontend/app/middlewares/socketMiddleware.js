@@ -34,7 +34,6 @@ const socketMiddleware = (() => {
     const createMessage = (action) => {
         const { chatId, content } = action.message
         return JSON.stringify({
-            token: sessionKey,
             type: 'CHAT_MESSAGE',
             payload: {
                 chat_id: chatId,
@@ -54,7 +53,7 @@ const socketMiddleware = (() => {
 
                 sessionKey = action.sessionKey
                 url = action.url
-                socket = new WebSocket(url)
+                socket = new WebSocket(url+`?token=${sessionKey}`)
                 socket.onmessage = onMessage(socket, store)
                 socket.onclose = onClose(socket, store)
                 socket.onopen = onOpen(socket, store, action.sessionKey)
