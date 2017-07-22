@@ -5,6 +5,7 @@
     flex-direction: row;
     height: 60px;
     padding: 3px;
+    transition: background-color .2s ease;
 
     &.selected {
         background-color: $primary_selected_background_color;
@@ -33,7 +34,7 @@
         display: flex;
         flex: 1;
         flex-direction: column;
-        padding-left: 10px;
+        padding: 10px 5px;
 
         .title {
             @include chat-title;

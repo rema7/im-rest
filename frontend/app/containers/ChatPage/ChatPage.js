@@ -6,7 +6,11 @@ import {
     disconnect,
     connecting,
 } from 'actions/Client'
-import { fetchChats } from 'actions/Chats'
+import { 
+    fetchChats,
+    sendMessage,
+    receivedNewMessages,
+} from 'actions/Chats'
 import { logout } from 'actions/Login'
 import { ChatPage } from 'components'
 import { connectionStatus } from 'selectors'
@@ -14,7 +18,6 @@ import { connectionStatus } from 'selectors'
 const mapStateToProps = (state) => {
     return {
         session: state.login.session,
-        messages: state.client.messages,
         ws: {
             errorMessage: state.client.errorMessage,
             connecting: state.client.connecting,
@@ -22,6 +25,8 @@ const mapStateToProps = (state) => {
         },
         connectionStatus: connectionStatus(state),
         currentChat: state.chats.currentChat,
+        chats: state.chats.chats,
+        newMessages: state.client.messages,
     }
 }
 
@@ -31,6 +36,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(logout())
         },
         send:(message) => {
+            dispatch(sendMessage(message))
             dispatch(send(message))
         },
         disconnect:() => {
@@ -45,6 +51,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchChats:() => {
             dispatch(fetchChats())
+        },
+        updateMessages:(messages) => {
+            dispatch(receivedNewMessages(messages))
         },
     }
 }

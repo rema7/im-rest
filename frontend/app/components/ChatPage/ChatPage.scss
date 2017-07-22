@@ -24,6 +24,8 @@
         }
 
         .messages {
+            display: flex;
+            flex-direction: column-reverse;
             flex-grow: 1;
         }
 

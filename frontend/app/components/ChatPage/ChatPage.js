@@ -9,19 +9,25 @@ import styles from './ChatPage.scss'
 
 const propTypes = {
     session: PropTypes.string,
-    messages: React.PropTypes.array.isRequired,  
-    ws: React.PropTypes.shape({
+    ws: PropTypes.shape({
         errorMessage: PropTypes.string,
         connecting: PropTypes.bool.isRequired,
         connected: PropTypes.bool.isRequired,
     }),
     connectionStatus: PropTypes.string.isRequired,
     currentChat: PropTypes.shape({
-        id: React.PropTypes.number,
-        title: React.PropTypes.string,
-        messages: React.PropTypes.array,
-
+        chatId: PropTypes.number.isRequired,
+        title: PropTypes.string,
+        members: PropTypes.arrayOf(PropTypes.shape({
+            id: PropTypes.number,
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+        })).isRequired,
+        messages: PropTypes.arrayOf(PropTypes.shape({
+            content: PropTypes.string.isRequired,
+        })),
     }),
+    newMessages:PropTypes.array,
 
     logout: PropTypes.func.isRequired, 
     connect: PropTypes.func.isRequired,
@@ -29,6 +35,7 @@ const propTypes = {
     connecting: PropTypes.func.isRequired,
     disconnect: PropTypes.func.isRequired,
     fetchChats: PropTypes.func.isRequired,
+    updateMessages: PropTypes.func.isRequired,
 }
 
 class ChatPage extends React.Component {
@@ -50,7 +57,14 @@ class ChatPage extends React.Component {
     
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentChat) {
-            this.nameInput.focus()
+            this.setInputFocus()            
+        }
+        if (nextProps.newMessages && nextProps.newMessages !== this.state.newMessages) {
+            const messages = nextProps.newMessages
+            this.setState({
+                newMessages: messages,
+            })
+            this.props.updateMessages(messages)
         }
     }
 
@@ -79,17 +93,28 @@ class ChatPage extends React.Component {
 
     sendMessage() {
         this.props.send({
-            chatId: this.props.currentChat.id,
-            message: this.state.message,
+            chatId: this.props.currentChat.chatId,
+            content: this.state.message,
         })
         this.setState({
             message: '',
         })
-        this.nameInput.focus()
+        this.setInputFocus()
+    }
+
+    setInputFocus() {
+        if (this.props.currentChat) {
+            this.nameInput.focus()
+        }
     }
 
     leftFocus() {
-        this.nameInput.focus()
+        this.setInputFocus()
+    }
+
+    renderChatTitle() {
+        const { title, members } = this.props.currentChat
+        return title || `${members[0].firstName} ${members[0].lastName}`
     }
 
     renderChat() {
@@ -98,7 +123,7 @@ class ChatPage extends React.Component {
                 <div className={classNames(styles['top-bar'])}>
                     <div className={classNames(styles['chat-info'])}>
                         <div className={classNames(styles['title'])}>
-                            {this.props.currentChat ? this.props.currentChat.title : null}
+                            {this.renderChatTitle()}
                         </div>
                     </div>
                     <ConnectionStatus
@@ -109,9 +134,9 @@ class ChatPage extends React.Component {
                     <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
                 </div>
                 <div className={classNames(styles['messages'])}>
-                    {this.props.messages.map((value) => {
+                    {this.props.currentChat.messages.map((value, index) => {
                         return (
-                            <div>
+                            <div key={index}>
                                 {value.content}
                             </div>
                         )
@@ -140,10 +165,10 @@ class ChatPage extends React.Component {
     render() {
         return (
             <div className={classNames(styles['chat-page'])} onClick={this.leftFocus}>
-                    <Sidebar
-                        leftFocus={this.leftFocus}
-                    />
-                    {this.renderChat()}
+                <Sidebar
+                    leftFocus={this.leftFocus}
+                />
+                {this.props.currentChat ? this.renderChat() : null}
             </div>
         )
     }

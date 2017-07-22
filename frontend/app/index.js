@@ -7,10 +7,10 @@ import { MainPage } from 'containers'
 import middlewares from 'middlewares'
 import rootReducer from 'reducers'
 import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    Redirect,
 } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
 

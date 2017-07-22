@@ -5,7 +5,7 @@ import { ChatList } from 'components'
 
 const mapStateToProps = (state) => {
     return {
-        chats: state.chats.items,
+        chats: state.chats.chats,
     }
 }
 

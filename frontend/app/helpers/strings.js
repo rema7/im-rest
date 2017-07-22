@@ -1,7 +1,7 @@
-import { mapKeys } from 'lodash'
+import { forEach } from 'lodash'
 
 export const snakeToCamel = (string) => {
-    return string.replace(/(\_[a-z])/g, (item) => item.toUpperCase().replace('_', ''))
+    return string.replace(/(_[a-z])/g, (item) => item.toUpperCase().replace('_', ''))
 }
 
 export const camelToSnake = (string) => {
@@ -9,9 +9,34 @@ export const camelToSnake = (string) => {
 }
 
 export const keysSnakeToCamel = function(obj) {
-    return mapKeys(obj, (value, key) => (snakeToCamel(key)))
+    if(obj instanceof Array) {
+        const res = obj.map((value) => keysSnakeToCamel(value))
+        return res 
+    } else {
+        let result = {}
+        forEach(obj, (value, key) => {
+            if (value instanceof Array) {
+                value = keysSnakeToCamel(obj[key])
+            }
+            result[snakeToCamel(key)] = value 
+        })
+
+        return result
+    }
 }
 
 export const keysCamelToSnake = function(obj) {
-    return mapKeys(obj, (value, key) => (camelToSnake(key)))
+    if(obj instanceof Array) {
+        return obj.map((value) => keysCamelToSnake(value)) 
+    } else {
+        let result = {}
+        forEach(obj, (value, key) => {
+            if (value instanceof Array) {
+                value = keysCamelToSnake(obj[key])
+            }
+            result[camelToSnake(key)] = value 
+        })
+
+        return result
+    }
 }

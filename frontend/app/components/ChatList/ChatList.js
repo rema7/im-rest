@@ -10,7 +10,7 @@ const propTypes = {
     changeChat: PropTypes.func.isRequired,
 }
 
-class ChatList extends React.PureComponent {
+class ChatList extends React.Component {
     constructor(props) {
         super(props)
 
@@ -20,6 +20,12 @@ class ChatList extends React.PureComponent {
 
         this.onClickHandler = this.onClickHandler.bind(this)
     }
+
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.chats) {
+    //         console.log(nextProps.chats)
+    //     }
+    // }
 
     onClickHandler(chat) {
         this.setState({
@@ -31,13 +37,13 @@ class ChatList extends React.PureComponent {
     render() {
         return (
             <div>
-                {this.props.chats.map((chatItem) => {
+                {this.props.chats.map((chat) => {
                     return (
                         <ChatListItem
-                            key={chatItem.id}
+                            key={chat.chatId}
                             clickHandler={this.onClickHandler}
-                            chatItem={chatItem}
-                            isSelected={this.state.currentChat === chatItem}
+                            chatItem={chat}
+                            isSelected={this.state.currentChat === chat}
                         />
                     )
                 })}

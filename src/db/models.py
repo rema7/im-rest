@@ -9,6 +9,7 @@ from sqlalchemy import (
     Integer,
     ForeignKey,
 )
+from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -84,13 +85,10 @@ class Chat(Base):
     __tablename__ = 'chat'
 
     id = Column("id", BigInteger, primary_key=True, autoincrement=True)
-    owner_id = Column(BigInteger, nullable=False)
-    title = Column(String, nullable=False)
 
     def as_dict(self):
         return {
             'id': self.id,
-            'title': self.title,
         }
 
 
@@ -105,10 +103,19 @@ class Contact(Base):
     __tablename__ = 'contact'
 
     id = Column("id", BigInteger, primary_key=True, autoincrement=True)
-    user_id = Column(BigInteger, ForeignKey('account.id'), nullable=False)
-    contact_id = Column(BigInteger, ForeignKey('account.id'), nullable=False)
+    owner_id = Column(BigInteger, ForeignKey('account.id'), nullable=False)
+    email = Column(String, nullable=False)
+    UniqueConstraint('owner_id', 'email')
+
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+
+    contact_id = Column(BigInteger, ForeignKey('account.id'), nullable=True)
 
     def as_dict(self):
         return {
-            'user_id': self.contact_id,
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'contact_id': self.contact_id,
         }

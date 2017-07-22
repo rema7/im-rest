@@ -1,23 +1,13 @@
 import uuid
-import falcon
 import logging
+
+import falcon
 
 from validate_email import validate_email
 from helpers import date
 from webargs import fields
 from webargs.falconparser import use_args
 
-import settings as app_settings
-from decorators import with_db_session
-from db.session import open_db_session
-from db.models import (
-    AuthCode,
-    User,
-    UserToken,
-    Session,
-    Contact,
-    Chat,
-)
 from api.logic import (
     generate_auth_code,
     generate_token,
@@ -28,6 +18,18 @@ from api.helpers import (
     validate_schema,
     raise_400,
 )
+from cache.cache import set_to_cache
+from decorators import with_db_session
+from db.session import open_db_session
+from db.models import (
+    AuthCode,
+    User,
+    UserToken,
+    Session,
+    Contact,
+    ChatMember,
+)
+import settings as app_settings
 
 logger = logging.getLogger('im-rest.' + __name__)
 
@@ -188,7 +190,8 @@ class ContactsResource:
     @staticmethod
     @with_db_session
     def get_body(uid, db_session=None):
-        contacts = db_session.query(Contact).filter(Contact.user_id == uid).all()
+        contacts = db_session.query(Contact).filter(
+            Contact.user_id == uid).all()
         return [c.as_dict() for c in contacts]
 
     def on_get(self, req, resp):
@@ -200,14 +203,44 @@ class ContactsResource:
 
 @falcon.before(validate_auth)
 class ChatResource:
-    @staticmethod
+    def get_chats(self, db_session, uid):
+        chat_ids = db_session.query(ChatMember.chat_id).filter(
+            ChatMember.user_id == uid).all()
+
+        set_to_cache(
+            app_settings.REDIS_USER_KEY_PATTERN.format(user_id=uid), 
+            [x for xs in chat_ids for x in xs]
+        )
+        chats = []
+        for chat_id in [r for r, in chat_ids]:
+            member_ids = db_session.query(ChatMember.user_id).filter(
+                ChatMember.chat_id == chat_id, ChatMember.user_id != uid
+            ).all()
+            users = db_session.query(User).filter(User.id.in_(member_ids)).all()
+            chats.append({
+                'chat_id': chat_id,
+                'messages': [],
+                'members': [{
+                    'id': u.id,
+                    'first_name': u.first_name,
+                    'last_name': u.last_name,
+                } for u in users],
+            })
+        return chats
+
+    def get_contacts(self, db_session, uid):
+        contacts = db_session.query(Contact).filter(
+            Contact.owner_id == uid).all()
+        return [c.as_dict() for c in contacts]
+
     @with_db_session
-    def get_body(uid, db_session=None):
-        chats = db_session.query(Chat).filter(Chat.owner_id == uid).all()
-        return [c.as_dict() for c in chats]
+    def get_body(self, uid, db_session=None):
+        chats = self.get_chats(db_session, uid)
+        # contacts = self.get_contacts(db_session, uid)
+        return {
+            'chats': chats,
+        }
 
     def on_get(self, req, resp):
         result = self.get_body(req.context['uid'])
-        resp.body = {
-            'result': result,
-        }
+        resp.body = result

@@ -5,7 +5,7 @@ const getConnecting = (state) => state.client.connecting
 const getErrorMessage = (state) => state.client.errorMessage
 
 export const connectionStatus = createSelector(
-  [getConnected, getConnecting, getErrorMessage],
+    [getConnected, getConnecting, getErrorMessage],
     (connected, connecting, errorMessage) => {
         if (connected) return 'connected'
         if (connecting) return 'connecting'
