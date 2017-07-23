@@ -8,11 +8,11 @@ export const CLIENT_MESSAGE_RECEIVED = 'CLIENT_MESSAGE_RECEIVED'
 export const CLIENT_DISCONNECTED = 'CLIENT_DISCONNECTED'
 
 
-export function reconnect(url, sessionKey) {
+export function connect(url, token) {
     return {
         type: CLIENT_CONNECT,
         url,
-        sessionKey,
+        token,
     }
 }
 
@@ -68,10 +68,11 @@ export function wsConnect() {
         if (state.login.loading) {
             return null
         }
-        const session = state.login.session
-        if (!session) {
-            return dispatch(connectionError('No session key'))
+        const token = state.login.token
+        if (!token) {
+            return dispatch(connectionError('No token key'))
         }
-        dispatch(reconnect(state.client.url, session))
+        const url = state.settings.urls.ws
+        dispatch(connect(url, token))
     }
 }

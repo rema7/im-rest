@@ -7,7 +7,7 @@
       "type": "string"
     },
     "code": {
-      "type": "integer"
+      "type": "string"
     }
   },
   "required": [
