@@ -4,7 +4,7 @@ Add contact table
 
 from yoyo import step
 
-__depends__ = {'20170627_01_cbc6C-session-table'}
+__depends__ = {'20170622_01_3flQw-add-tokens-table'}
 
 CREATE_TABLE = '''
 CREATE TABLE IF NOT EXISTS contact (

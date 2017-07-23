@@ -11,7 +11,6 @@ from webargs.falconparser import use_args
 from api.logic import (
     generate_auth_code,
     generate_token,
-    generate_session_id,
     validate_auth,
 )
 from api.helpers import (
@@ -25,7 +24,6 @@ from db.models import (
     AuthCode,
     User,
     UserToken,
-    Session,
     Contact,
     ChatMember,
 )
@@ -44,37 +42,36 @@ class LoginResource:
         return date.is_valid(date)
 
     @staticmethod
-    def post_body(email):
+    @with_db_session
+    def post_body(email, db_session=None):
         if validate_email(email) is not True:
             raise_400("Invalid email {}".format(email))
 
-        with open_db_session() as session:
-            user = session.query(User).filter(User.email == email).first()
-            if user is None:
-                user = User(
-                    email=email
-                )
-                session.add(user)
-                session.flush()
+        user = db_session.query(User).filter(User.email == email).first()
+        if user is None:
+            user = User(
+                email=email
+            )
+            db_session.add(user)
+            db_session.flush()
 
-            code = session.query(AuthCode).filter(
-                AuthCode.user_id == user.id).first()
-            if code is None:
-                valid_to = date.valid_to(app_settings.AUTH_CODE_VALID_DURATION)
-                code = AuthCode(
-                    token=uuid.uuid4().hex,
-                    user_id=user.id,
-                    code=generate_auth_code(),
-                    valid_to=valid_to
-                )
-                session.add(code)
-                session.flush()
+        code = db_session.query(AuthCode).filter(AuthCode.user_id == user.id).first()
+        if code is None:
+            valid_to = date.valid_to(app_settings.AUTH_CODE_VALID_DURATION)
+            code = AuthCode(
+                token=uuid.uuid4().hex,
+                user_id=user.id,
+                code=generate_auth_code(),
+                valid_to=valid_to
+            )
+            db_session.add(code)
+            db_session.flush()
 
-            result = {
-                'code': code.code,
-                'auth_key': code.token
-            }
-            session.commit()
+        result = {
+            'code': code.code,
+            'key': code.token
+        }
+        db_session.commit()
         return result
 
     def on_post(self, req, resp):
@@ -88,10 +85,10 @@ class LoginResource:
 
 class AuthResource:
     @staticmethod
-    def post_body(auth_key, code):
+    def post_body(key, code):
         with open_db_session() as session:
             auth_code = session.query(AuthCode).filter(
-                AuthCode.token == auth_key, AuthCode.code == code)
+                AuthCode.token == key, AuthCode.code == code)
             row = auth_code.first()
             if row is None:
                 raise_400("Invalid code")
@@ -100,19 +97,12 @@ class AuthResource:
                 user_id=row.user_id,
                 token=token,
             )
-            new_session = generate_session_id()
-            user_session = Session(
-                user_id=row.user_id,
-                session=new_session,
-                valid_to=date.valid_to(app_settings.SESSION_DURATION)
-            )
             auth_code.delete()
             session.add(user_token)
-            session.add(user_session)
             session.commit()
+
         return {
             'token': token,
-            'session': new_session,
         }
 
     def on_post(self, req, resp):
@@ -120,7 +110,7 @@ class AuthResource:
         validate_schema(body, code_post)
 
         resp.body = self.post_body(
-            auth_key=body['auth_key'],
+            key=body['key'],
             code=body['code']
         )
 
@@ -208,7 +198,7 @@ class ChatResource:
             ChatMember.user_id == uid).all()
 
         set_to_cache(
-            app_settings.REDIS_USER_KEY_PATTERN.format(user_id=uid), 
+            app_settings.REDIS_USER_KEY_PATTERN.format(user_id=uid),
             [x for xs in chat_ids for x in xs]
         )
         chats = []

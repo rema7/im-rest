@@ -2,11 +2,11 @@ import logging
 
 from db.session import open_db_session
 from db.models import (
-    User,
     Contact,
-    Session,
     Chat,
     ChatMember,
+    User,
+    UserToken,
 )
 
 logger = logging.getLogger('im-rest.' + __name__)
@@ -24,7 +24,6 @@ def clear_data(db_session):
 
     user_ids = users_query.all()
     db_session.query(Contact).filter(Contact.owner_id.in_(user_ids)).delete(synchronize_session='fetch')
-    db_session.query(Session).filter(Session.user_id.in_(user_ids)).delete(synchronize_session='fetch')
 
     members_query = db_session.query(ChatMember.chat_id)
     chat_ids = members_query.all()
@@ -36,9 +35,9 @@ def clear_data(db_session):
 
 
 def generate_contacts(db_session, user, interlocutors):
-    db_session.add(Session(
+    db_session.add(UserToken(
         user_id=user.id,
-        session='fake_session',
+        token='fake_token',
     ))
     for interlocutor in interlocutors:
         contact = Contact(

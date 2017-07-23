@@ -1,18 +1,17 @@
 import { connect } from 'react-redux'
 
-import { login, sendCode, auth, authorised } from 'actions/Login'
+import { login, sendCode } from 'actions/Login'
 import { LoginPage } from 'components'
 
 const mapStateToProps = (state) => {
+    const { code, key } = state.login.auth || {}
     return {
         loading: state.login.loading,
-        code: state.login.result.code,
-        authKey: state.login.result.authKey,
-        token: state.login.token,
-        session: state.login.session,
+        authCode: code,
+        authKey: key,
     }
 }
 
-const mapDispatchToProps = { login, sendCode, auth, authorised }
+const mapDispatchToProps = { login, sendCode }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)

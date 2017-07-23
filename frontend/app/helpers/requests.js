@@ -1,12 +1,12 @@
 import { get } from 'lodash'
 import request from 'superagent'
-import { getSession } from 'helpers/auth'
+import { getToken } from 'helpers/storage'
 
 export const fetchWrapper = (url, options) => {
     const params = Object.assign({}, options)
     const headers = Object.assign({}, {
         Accept: 'application/json',
-        Authorization: getSession(),
+        Authorization: getToken(),
     }, params.headers)
 
     const method = get(params, 'method', 'GET')
@@ -35,7 +35,7 @@ export const fetchWrapper = (url, options) => {
 export const postWrapper = (url, body) => {
     const headers = Object.assign({}, {
         Accept: 'application/json',
-        Authorization: getSession(),
+        Authorization: getToken(),
     })
 
     let req = request('POST', url).set(headers).send(body)

@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS account (
 CREATE TABLE IF NOT EXISTS auth_code (
     token varchar not null PRIMARY KEY,
     user_id bigint not null,
-    code INTEGER not null,
+    code varchar not null,
     valid_to timestamp not null
 );
 '''
