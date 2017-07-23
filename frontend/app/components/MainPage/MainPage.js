@@ -2,11 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { IntlProvider, addLocaleData } from 'react-intl'
 
-import {LoginPage, ChatPage} from 'containers'
+import { Loader } from 'components'
+import { LoginPage, ChatPage } from 'containers'
 import { accidentMessages, getCurrentLanguage, localeDataHash } from 'helpers/locale'
 
 const propTypes = {
     session: PropTypes.string,
+    loading: PropTypes.bool.isRequired,
+    
+    init: PropTypes.func.isRequired,
 }
 
 class MainPage extends React.Component {
@@ -17,9 +21,12 @@ class MainPage extends React.Component {
     
     componentWillMount() {
         addLocaleData(localeDataHash[this.language])
+        this.props.init()
     }
 
     renderPage() {
+        if (this.props.loading)
+            return <Loader />
         if (this.props.session === null)
             return <LoginPage/>
         else

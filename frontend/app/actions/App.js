@@ -1,15 +1,36 @@
-export const APP_LOADING = 'APP_LOADING'
-export const APP_LOADED = 'APP_LOADED'
+import { initFromStorage } from 'actions/Login'
+
+export const APP_START_INIT = 'APP_START_INIT'
+export const APP_FINISH_INIT = 'APP_FINISH_INIT'
 
 
-export function loading() {
+export function startInit() {
     return {
-        type: CHATS_START_REQUEST,
+        type: APP_START_INIT,
     }
 }
 
-export function loaded() {
+export function finishInit() {
     return {
-        type: CHATS_START_REQUEST,
+        type: APP_FINISH_INIT,
+    }
+}
+
+export const init = () => {
+    return (dispatch, getState) => {
+        const state = getState()
+        if (state.app.loading) {
+            return null
+        }
+        dispatch(startInit())
+        const promise = new Promise((resolve) => {
+            dispatch(initFromStorage())
+            resolve()
+        }).then((json) => {
+            return dispatch(finishInit(json))
+        }).catch((e) => {
+            throw e
+        })
+        return promise
     }
 }

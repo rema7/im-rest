@@ -3,6 +3,14 @@
 import { postWrapper as post } from 'helpers/post'
 import { keysCamelToSnake } from 'helpers/strings'
 import { disconnect } from 'actions/Client'
+import {
+    getSession,
+    getToken,
+    setSession,
+    setToken,
+    removeSession,
+    removeToken,
+} from 'helpers/auth'
 
 export const LOGIN_START_REQUEST = 'LOGIN_START_REQUEST'
 export const LOGIN_RESPONSE_OK = 'LOGIN_RESPONSE_OK'
@@ -10,7 +18,19 @@ export const LOGIN_RESPONSE_ERROR = 'LOGIN_RESPONSE_ERROR'
 export const LOGIN_SEND_CODE_RESPONSE_OK = 'LOGIN_SEND_CODE_RESPONSE_OK'
 export const LOGIN_AUTH_RESPONSE_OK = 'LOGIN_AUTH_RESPONSE_OK'
 export const LOGIN_LOGOUT = 'LOGIN_LOGOUT'
+export const LOGIN_INITIALIZE = 'LOGIN_INITIALIZE'
 export const LOGIN_AUTHORISED_OK = 'LOGIN_AUTHORISED_OK'
+
+export function initFromStorage() {
+    const data = {
+        token: getToken(),
+        session: getSession(),
+    }
+    return {
+        type: LOGIN_INITIALIZE,
+        data,
+    }
+}
 
 export function startRequest() {
     return {
@@ -54,6 +74,8 @@ export function responseError(errorMessage) {
 }
 
 export function logoutAction() {
+    removeToken()
+    removeSession()
     return {
         type: LOGIN_LOGOUT,
     }
@@ -102,6 +124,9 @@ export const sendCode = (obj) => {
         obj = keysCamelToSnake(obj)
         const promise = post(state.login.url.code, obj)
             .then((json) => {
+                const { token, session } = json
+                setToken(token)
+                setSession(session)
                 return dispatch(codeResponseOk(json))
             })
             .catch((e) => {
