@@ -18,7 +18,7 @@ describe('App actions', () => {
         const expectedActions = [
             appActions.startInit(),
             loginActions.initFromStorage(),
-            appActions.finishInit()
+            appActions.finishInit(),
         ]
         const store = mockStore(initialStore)
         return (store.dispatch(appActions.init()))
