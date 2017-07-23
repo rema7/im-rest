@@ -73,14 +73,6 @@ class UserToken(Base):
     info = Column(JSON, nullable=False, default='{}')
 
 
-class Session(Base):
-    __tablename__ = 'session'
-
-    user_id = Column(BigInteger, nullable=False, primary_key=True)
-    session = Column(String, nullable=False)
-    valid_to = Column(TIMESTAMP, nullable=False, default=datetime.utcnow)
-
-
 class Chat(Base):
     __tablename__ = 'chat'
 

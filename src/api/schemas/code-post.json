@@ -3,7 +3,7 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "auth_key": {
+    "key": {
       "type": "string"
     },
     "code": {
@@ -11,7 +11,7 @@
     }
   },
   "required": [
-      "auth_key",
+      "key",
       "code"
   ]
 }

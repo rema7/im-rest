@@ -1,23 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-    getToken,
-    getSession,
-    setToken,
-    setSession,
-} from 'helpers/auth'
 
 const propTypes = {
     loading: PropTypes.bool.isRequired,
-    code: PropTypes.number,
+    authCode: PropTypes.string,
     authKey: PropTypes.string,
-    token: PropTypes.string,
-    session: PropTypes.string,
 
     login: PropTypes.func.isRequired,
     sendCode: PropTypes.func.isRequired,
-    auth: PropTypes.func.isRequired,
-    authorised: PropTypes.func.isRequired,
 }
 
 
@@ -25,13 +15,10 @@ class LoginPage extends React.PureComponent {
     constructor(props) {
         super(props)
 
-        let token = getToken()
-        let session = getSession()
         this.state = {
             email: '',
-            code: 0,
-            token: token,
-            session: session,
+            authCode: '',
+            authKey: '',
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -40,38 +27,19 @@ class LoginPage extends React.PureComponent {
     }
 
     componentWillMount() {
-        if (this.state.token) {
-            if (this.state.session) {
-                this.props.authorised(this.state.session)
-            } else {
-                this.props.auth({
-                    token: this.state.token,
-                })
-            }
-        }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.code) {
+        if (nextProps.authCode) {
             this.setState({
-                code: nextProps.code,
+                authCode: nextProps.authCode,
             })
         }
-        if (nextProps.token) {
+        if (nextProps.authKey) {
             this.setState({
-                token: nextProps.token,
+                authKey: nextProps.authKey,
             })
-
-            setToken(nextProps.token)
         }
-        if (nextProps.session) {
-            this.setState({
-                session: nextProps.session,
-            })
-
-            setSession(nextProps.session)
-        }
-
     }
 
     handleChange(event) {
@@ -90,8 +58,8 @@ class LoginPage extends React.PureComponent {
 
     handleAuth() {
         this.props.sendCode({
-            authKey : this.props.authKey,
-            code : this.props.code,
+            key : this.state.authKey,
+            code : this.state.authCode,
         })
     }
 
@@ -99,15 +67,6 @@ class LoginPage extends React.PureComponent {
 
         return (
             <div>
-                <div>
-                    Code: {this.props.code}
-                </div>
-                <div>
-                    Token: {this.props.authKey}
-                </div>
-                <div>
-                    JWT: {this.state.token}
-                </div>
                 <div className="container">
                     <h3>Login</h3>
                     <form >
@@ -130,8 +89,8 @@ class LoginPage extends React.PureComponent {
                             Code:
                             <input
                                 name="code"
-                                type="number"
-                                value={this.state.code}
+                                type="text"
+                                value={this.state.authCode}
                                 onChange={this.handleChange}
                             />
                         </label>
