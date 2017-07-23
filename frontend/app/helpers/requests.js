@@ -23,7 +23,10 @@ export const fetchWrapper = (url, options) => {
         return response.body
     }).catch((response) => {
         if ([401, 409].includes(response.status)) {
-            return response.response.body
+            return {
+                status: response.status, 
+                body: response.response.body,
+            }
         }
         throw response
     })

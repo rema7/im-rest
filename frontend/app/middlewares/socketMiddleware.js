@@ -16,15 +16,7 @@ const socketMiddleware = (() => {
 
     const onMessage = (ws, store) => (evt) => {
         const msg = JSON.parse(evt.data)
-        switch(msg.type) {
-            case 'CHAT_MESSAGE':
-                store.dispatch(actions.messageReceived(msg))
-                break
-            default:
-                /* eslint-disable no-console */
-                console.log(`Received unknown message type: ${msg.type}`)
-                break
-        }
+        store.dispatch(actions.messageReceived(msg))
     }
 
     const onError = (ws, store) => (err) => {
