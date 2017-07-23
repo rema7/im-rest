@@ -102,7 +102,8 @@ export const login = (email) => {
             return null
         }
         dispatch(startRequest())
-        const promise = post(state.login.url.login, {email:email})
+
+        const promise = post(state.settings.urls.auth.login, {email:email})
             .then((json) => {
                 return dispatch(responseOk(json))
             })
@@ -122,7 +123,7 @@ export const sendCode = (obj) => {
         }
         dispatch(startRequest())
         obj = keysCamelToSnake(obj)
-        const promise = post(state.login.url.code, obj)
+        const promise = post(state.settings.urls.auth.code, obj)
             .then((json) => {
                 const { token, session } = json
                 setToken(token)
@@ -145,7 +146,7 @@ export const auth = (obj) => {
         }
         dispatch(startRequest())
         obj = keysCamelToSnake(obj)
-        const promise = post(state.login.url.auth, obj)
+        const promise = post(state.settings.urls.auth.auth, obj)
             .then((json) => {
                 return dispatch(authResponseOk(json))
             })

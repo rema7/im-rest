@@ -1,6 +1,11 @@
 const initialState = {
     urls: {
         chats: '/api/chats',
+        auth: {
+            login: '/api/login',
+            auth: '/api/auth',
+            code: '/api/auth/code',
+        },
     },
 }
 

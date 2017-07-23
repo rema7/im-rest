@@ -17,12 +17,7 @@ const initialState = {
     loading: false,
     token: null,
     session: null,
-    result: {},
-    url: {
-        login: '/api/login',
-        auth: '/api/auth',
-        code: '/api/auth/code',
-    },
+    result: null,
 }
 
 export const login = (state = initialState, action = {}) => {
@@ -53,6 +48,7 @@ export const login = (state = initialState, action = {}) => {
                 loading: false,
                 token: action.data.token,
                 session: action.data.session,
+                result: null,
             }
         case LOGIN_AUTH_RESPONSE_OK:
             return {

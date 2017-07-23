@@ -5,6 +5,11 @@ describe('Settings reducer', () => {
         expect(settings(void 0, {})).toEqual({
             urls: {
                 chats: '/api/chats',
+                auth: {
+                    login: '/api/login',
+                    auth: '/api/auth',
+                    code: '/api/auth/code',
+                },
             },
         })
     })
