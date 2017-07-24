@@ -1,20 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { ConnectionStatus, Sidebar } from 'components'
+import { Sidebar } from 'components'
+import { ConnectionStatus } from 'containers'
 
 import classNames from 'classnames'
 import styles from './ChatPage.scss'
 
 
 const propTypes = {
-    session: PropTypes.string,
-    ws: PropTypes.shape({
-        errorMessage: PropTypes.string,
-        connecting: PropTypes.bool.isRequired,
-        connected: PropTypes.bool.isRequired,
-    }),
-    connectionStatus: PropTypes.string.isRequired,
     currentChat: PropTypes.shape({
         chatId: PropTypes.number.isRequired,
         title: PropTypes.string,
@@ -29,11 +23,9 @@ const propTypes = {
     }),
     newMessages:PropTypes.array,
 
-    logout: PropTypes.func.isRequired, 
-    connect: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
-    connecting: PropTypes.func.isRequired,
-    disconnect: PropTypes.func.isRequired,
+
+    logout: PropTypes.func.isRequired,
     fetchChats: PropTypes.func.isRequired,
     updateMessages: PropTypes.func.isRequired,
 }
@@ -123,11 +115,7 @@ class ChatPage extends React.Component {
                             {this.renderChatTitle()}
                         </div>
                     </div>
-                    <ConnectionStatus
-                        connectionStatus={this.props.connectionStatus}
-                        connect={this.props.connect}
-                        connecting={this.props.connecting}
-                    />
+                    <ConnectionStatus />
                     <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
                 </div>
                 <div className={classNames(styles['messages'])}>

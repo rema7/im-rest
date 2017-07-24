@@ -1,7 +1,7 @@
 version: '2'
 services:
   im_db:
-    image: postgres:9.5
+    image: postgres:9.6
     environment:
       POSTGRES_PASSWORD: 'db_pwd'
       POSTGRES_USER: 'db_user'

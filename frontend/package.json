@@ -1,6 +1,6 @@
 {
   "name": "im",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Instant Messager",
   "main": "app/index.js",
   "scripts": {
