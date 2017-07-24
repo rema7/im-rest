@@ -8,6 +8,8 @@ PyJWT
 validate_email
 webargs==1.7.0
 redis==2.10.5
+nodeenv==1.1.4
+Faker==0.7.18
 
 yoyo-migrations==5.0.5
 requests

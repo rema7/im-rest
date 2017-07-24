@@ -1,7 +1,5 @@
 from random import randint
 from uuid import uuid4
-import base64
-import os
 import logging
 
 from cache.cache import set_to_cache, get_from_cache
