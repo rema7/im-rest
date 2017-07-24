@@ -100,7 +100,7 @@ class AuthResource:
             auth_code.delete()
             session.add(user_token)
             session.commit()
-
+            set_to_cache(token, row.user_id)
         return {
             'token': token,
         }
@@ -112,36 +112,6 @@ class AuthResource:
         resp.body = self.post_body(
             key=body['key'],
             code=body['code']
-        )
-
-
-class SessionResource:
-    @staticmethod
-    def post_body(token):
-        with open_db_session() as session:
-            token = session.query(UserToken).filter(
-                UserToken.token == token).first()
-            if not token:
-                raise_400('Invalid token')
-
-            new_session = generate_session_id()
-            user_session = Session(
-                user_id=token.user_id,
-                session=new_session,
-                valid_to=date.valid_to(app_settings.SESSION_DURATION)
-            )
-            session.add(user_session)
-            session.commit()
-            return {
-                'session': new_session,
-            }
-
-    def on_post(self, req, resp):
-        body = req.context['body']
-        validate_schema(body, auth_post)
-
-        resp.body = self.post_body(
-            token=body['token'],
         )
 
 
@@ -197,10 +167,6 @@ class ChatResource:
         chat_ids = db_session.query(ChatMember.chat_id).filter(
             ChatMember.user_id == uid).all()
 
-        set_to_cache(
-            app_settings.REDIS_USER_KEY_PATTERN.format(user_id=uid),
-            [x for xs in chat_ids for x in xs]
-        )
         chats = []
         for chat_id in [r for r, in chat_ids]:
             member_ids = db_session.query(ChatMember.user_id).filter(

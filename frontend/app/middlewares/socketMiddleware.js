@@ -2,16 +2,15 @@ import * as actions from 'actions/Client'
 
 const socketMiddleware = (() => {
     let socket = null
-    let sessionKey = null
-    let url = null
+    let isReconnect = true
 
     /* eslint-disable no-unused-vars */
-    const onOpen = (ws, store, sessionKey) => (evt) => {
+    const onOpen = (ws, store) => (evt) => {
         store.dispatch(actions.connected())
     }
 
     const onClose = (ws, store) => (evt) => {
-        store.dispatch(actions.disconnected())
+        store.dispatch(actions.disconnect())
     }
 
     const onMessage = (ws, store) => (evt) => {
@@ -20,7 +19,13 @@ const socketMiddleware = (() => {
     }
 
     const onError = (ws, store) => (err) => {
-        store.dispatch(actions.connectionError('Connection error'))
+        store.dispatch(actions.catchError(err))
+    }
+
+    const onReconnect = (store) => {
+        setTimeout(() => {
+            store.dispatch(actions.wsConnect())
+        }, 2000)
     }
 
     const createMessage = (action) => {
@@ -43,9 +48,7 @@ const socketMiddleware = (() => {
 
                 store.dispatch(actions.connecting())
 
-                sessionKey = action.sessionKey
-                url = action.url
-                socket = new WebSocket(url+`?token=${sessionKey}`)
+                socket = new WebSocket(action.url+`?token=${action.token}`)
                 socket.onmessage = onMessage(socket, store)
                 socket.onclose = onClose(socket, store)
                 socket.onopen = onOpen(socket, store, action.sessionKey)
@@ -57,14 +60,20 @@ const socketMiddleware = (() => {
                     socket.close()
                 }
                 socket = null
-
                 store.dispatch(actions.disconnected())
                 break
-
+            case actions.CLIENT_SWITCH_RECONNECT: 
+                isReconnect = !isReconnect
+                break
             case actions.CLIENT_SEND_MESSAGE: 
                 socket.send(createMessage(action))
                 break
-
+            case actions.CLIENT_DISCONNECTED:
+                if (isReconnect) {
+                    store.dispatch(actions.connecting())
+                    onReconnect(store)
+                }
+                return next(action)
             default:
                 return next(action)
         }

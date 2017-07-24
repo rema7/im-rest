@@ -9,7 +9,6 @@ from api.resources import (
     ContactsResource,
     LoginResource,
     SearchResource,
-    SessionResource,
     SettingsResource,
 )
 from middlewares import (
@@ -27,7 +26,6 @@ app = falcon.API(middleware=[
 ])
 
 app.add_route('/login', LoginResource())
-app.add_route('/auth', SessionResource())
 app.add_route('/auth/code', AuthResource())
 app.add_route('/contacts', ContactsResource())
 app.add_route('/chats', ChatResource())

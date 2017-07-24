@@ -1,8 +1,7 @@
 import {
     CLIENT_CONNECTING,
-    CLIENT_CONNECTION_ERROR,
+    CLIENT_CATCH_ERROR,
     CLIENT_CONNECTED,
-    CLIENT_DISCONNECT,
     CLIENT_DISCONNECTED,
     CLIENT_MESSAGE_RECEIVED,
 } from 'actions/Client'
@@ -15,8 +14,6 @@ const initialState = {
     connecting: false,
     connected: false,
     messages: null,
-    reconnecting: true,
-    url: 'ws://localhost:8100/ws',
 }
 
 export const client = (state = initialState, action = {}) => {
@@ -33,7 +30,7 @@ export const client = (state = initialState, action = {}) => {
                 connecting: true,
                 messages: null,
             }
-        case CLIENT_CONNECTION_ERROR:
+        case CLIENT_CATCH_ERROR:
             return {
                 ...state,
                 errorMessage: action.errorMessage,
@@ -49,14 +46,10 @@ export const client = (state = initialState, action = {}) => {
                 messages: null,
             }
         }
-        case CLIENT_DISCONNECT:
-            return {
-                ...state,
-                errorMessage: null,
-            }
         case CLIENT_DISCONNECTED:
             return {
                 ...state,
+                connecting: false,
                 connected: false,
             }        
         case CLIENT_MESSAGE_RECEIVED:

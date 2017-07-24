@@ -1,24 +1,32 @@
 export const CLIENT_CONNECT = 'CLIENT_CONNECT'
-export const CLIENT_CONNECTION_ERROR = 'CLIENT_CONNECTION_ERROR'
-export const CLIENT_DISCONNECT = 'CLIENT_DISCONNECT'
-export const CLIENT_SEND_MESSAGE = 'CLIENT_SEND_MESSAGE'
+export const CLIENT_CATCH_ERROR = 'CLIENT_CATCH_ERROR'
 export const CLIENT_CONNECTING = 'CLIENT_CONNECTING'
 export const CLIENT_CONNECTED = 'CLIENT_CONNECTED'
-export const CLIENT_MESSAGE_RECEIVED = 'CLIENT_MESSAGE_RECEIVED'
+export const CLIENT_DISCONNECT = 'CLIENT_DISCONNECT'
 export const CLIENT_DISCONNECTED = 'CLIENT_DISCONNECTED'
+export const CLIENT_MESSAGE_RECEIVED = 'CLIENT_MESSAGE_RECEIVED'
+export const CLIENT_SEND_MESSAGE = 'CLIENT_SEND_MESSAGE'
+export const CLIENT_SWITCH_RECONNECT = 'CLIENT_SWITCH_RECONNECT'
 
 
-export function reconnect(url, sessionKey) {
+export function connect(url, token) {
     return {
         type: CLIENT_CONNECT,
         url,
-        sessionKey,
+        token,
     }
 }
 
-export function connectionError(errorMessage) {
+export function switchReconnect() {
     return {
-        type: CLIENT_CONNECTION_ERROR,
+        type: CLIENT_SWITCH_RECONNECT,
+    }
+}
+
+
+export function catchError(errorMessage) {
+    return {
+        type: CLIENT_CATCH_ERROR,
         errorMessage,
     }
 }
@@ -68,10 +76,11 @@ export function wsConnect() {
         if (state.login.loading) {
             return null
         }
-        const session = state.login.session
-        if (!session) {
-            return dispatch(connectionError('No session key'))
+        const token = state.login.token
+        if (!token) {
+            return dispatch(catchError('No token key'))
         }
-        dispatch(reconnect(state.client.url, session))
+        const url = state.settings.urls.ws
+        dispatch(connect(url, token))
     }
 }
