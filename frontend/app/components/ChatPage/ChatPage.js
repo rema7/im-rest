@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Sidebar } from 'components'
-import { ConnectionStatus } from 'containers'
+import { Sidebar, ConnectionStatus } from 'components'
 
 import classNames from 'classnames'
 import styles from './ChatPage.scss'
@@ -22,11 +21,12 @@ const propTypes = {
         })),
     }),
     newMessages:PropTypes.array,
-
-    send: PropTypes.func.isRequired,
-
-    logout: PropTypes.func.isRequired,
+    connectionStatus: PropTypes.string.isRequired,
+    
+    connect: PropTypes.func.isRequired,
     fetchChats: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    send: PropTypes.func.isRequired,
     updateMessages: PropTypes.func.isRequired,
 }
 
@@ -45,6 +45,7 @@ class ChatPage extends React.Component {
 
     componentDidMount() {
         this.props.fetchChats()
+        this.props.connect()
     }
     
     componentWillReceiveProps(nextProps) {
@@ -105,6 +106,16 @@ class ChatPage extends React.Component {
         const { title, members } = this.props.currentChat
         return title || `${members[0].firstName} ${members[0].lastName}`
     }
+    
+    renderConnectionStatus() {
+        if (this.props.connectionStatus !== 'connected') {
+            return (
+                <ConnectionStatus
+                    status={this.props.connectionStatus}
+                />
+            )
+        }
+    }
 
     renderChat() {
         return (
@@ -115,7 +126,6 @@ class ChatPage extends React.Component {
                             {this.renderChatTitle()}
                         </div>
                     </div>
-                    <ConnectionStatus />
                     <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
                 </div>
                 <div className={classNames(styles['messages'])}>
@@ -150,10 +160,15 @@ class ChatPage extends React.Component {
     render() {
         return (
             <div className={classNames(styles['chat-page'])} onClick={this.leftFocus}>
-                <Sidebar
-                    leftFocus={this.leftFocus}
-                />
-                {this.props.currentChat ? this.renderChat() : null}
+                <div className={classNames(styles['notification-bar'])}>
+                    {this.renderConnectionStatus()}
+                </div>
+                <div className={classNames(styles['page-wrapper'])}>
+                    <Sidebar
+                        leftFocus={this.leftFocus}
+                    />
+                    {this.props.currentChat ? this.renderChat() : null}
+                </div>
             </div>
         )
     }

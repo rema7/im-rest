@@ -1,5 +1,5 @@
 export const CLIENT_CONNECT = 'CLIENT_CONNECT'
-export const CLIENT_CONNECTION_ERROR = 'CLIENT_CONNECTION_ERROR'
+export const CLIENT_CATCH_ERROR = 'CLIENT_CATCH_ERROR'
 export const CLIENT_CONNECTING = 'CLIENT_CONNECTING'
 export const CLIENT_CONNECTED = 'CLIENT_CONNECTED'
 export const CLIENT_DISCONNECT = 'CLIENT_DISCONNECT'
@@ -24,9 +24,9 @@ export function switchReconnect() {
 }
 
 
-export function connectionError(errorMessage) {
+export function catchError(errorMessage) {
     return {
-        type: CLIENT_CONNECTION_ERROR,
+        type: CLIENT_CATCH_ERROR,
         errorMessage,
     }
 }
@@ -78,7 +78,7 @@ export function wsConnect() {
         }
         const token = state.login.token
         if (!token) {
-            return dispatch(connectionError('No token key'))
+            return dispatch(catchError('No token key'))
         }
         const url = state.settings.urls.ws
         dispatch(connect(url, token))

@@ -18,7 +18,7 @@ class MainPage extends React.Component {
         super(props)
         this.language = getCurrentLanguage()
     }
-    
+
     componentWillMount() {
         addLocaleData(localeDataHash[this.language])
         this.props.init()

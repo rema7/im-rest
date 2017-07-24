@@ -27,23 +27,6 @@ describe('Client reducer', () => {
         })
     })
 
-    it('should change connecting and errorMessage state after connectionError action', () => {
-        const action = {
-            type: actions.CLIENT_CONNECTION_ERROR,
-            errorMessage: 'Error happened',
-        }
-        const state = client({
-            ...initialState,
-            connecting: true,
-        }, action)
-        expect(state).toEqual({
-            errorMessage: 'Error happened',
-            connecting: false,
-            connected: false,
-            messages: null,
-        })
-    })
-
     it('should change connecting state after connected action', () => {
         const action = {
             type: actions.CLIENT_CONNECTED,
@@ -98,4 +81,49 @@ describe('Client reducer', () => {
             }],
         })
     })
+
+    it('should change connecting and errorMessage state after connectionError action', () => {
+        const action = {
+            type: actions.CLIENT_CATCH_ERROR,
+            errorMessage: 'Error happened',
+        }
+        const state = client({
+            ...initialState,
+            connecting: true,
+            messages:[{
+                content: '1',
+            }],
+        }, action)
+        expect(state).toEqual({
+            errorMessage: 'Error happened',
+            connecting: false,
+            connected: false,
+            messages:[{
+                content: '1',
+            }],
+        })
+    })
+
+    it('should change connected and errorMessage state after error action', () => {
+        const action = {
+            type: actions.CLIENT_CATCH_ERROR,
+            errorMessage: 'Catch Error',
+        }
+        const state = client({
+            ...initialState,
+            connected: true,
+            messages:[{
+                content: '1',
+            }],
+        }, action)
+        expect(state).toEqual({
+            errorMessage: 'Catch Error',
+            connecting: false,
+            connected: false,
+            messages: [{
+                content: '1',
+            }],
+        })
+    })
+
 })

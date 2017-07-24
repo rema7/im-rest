@@ -2,7 +2,7 @@ import * as actions from 'actions/Client'
 
 const socketMiddleware = (() => {
     let socket = null
-    let isReconnect = false
+    let isReconnect = true
 
     /* eslint-disable no-unused-vars */
     const onOpen = (ws, store) => (evt) => {
@@ -19,12 +19,10 @@ const socketMiddleware = (() => {
     }
 
     const onError = (ws, store) => (err) => {
-        // store.dispatch(actions.connectionError('Connection error'))
-        store.dispatch(actions.disconnect())
+        store.dispatch(actions.catchError(err))
     }
 
     const onReconnect = (store) => {
-        store.dispatch(actions.connecting())
         setTimeout(() => {
             store.dispatch(actions.wsConnect())
         }, 2000)
@@ -62,11 +60,7 @@ const socketMiddleware = (() => {
                     socket.close()
                 }
                 socket = null
-                if (isReconnect) {
-                    store.dispatch(actions.disconnected())
-                } else {
-                    store.dispatch(actions.disconnected())
-                }
+                store.dispatch(actions.disconnected())
                 break
             case actions.CLIENT_SWITCH_RECONNECT: 
                 isReconnect = !isReconnect
@@ -74,7 +68,12 @@ const socketMiddleware = (() => {
             case actions.CLIENT_SEND_MESSAGE: 
                 socket.send(createMessage(action))
                 break
-
+            case actions.CLIENT_DISCONNECTED:
+                if (isReconnect) {
+                    store.dispatch(actions.connecting())
+                    onReconnect(store)
+                }
+                return next(action)
             default:
                 return next(action)
         }

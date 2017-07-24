@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 
-import { 
+import {
+    wsConnect,
     send,
 } from 'actions/Client'
 import { 
@@ -8,14 +9,17 @@ import {
     sendMessage,
     receivedNewMessages,
 } from 'actions/Chats'
+
 import { logout } from 'actions/Login'
 import { ChatPage } from 'components'
+import { connectionStatus } from 'selectors'
 
 const mapStateToProps = (state) => {
     return {
         currentChat: state.chats.currentChat,
         chats: state.chats.chats,
         newMessages: state.client.messages,
+        connectionStatus: connectionStatus(state),
     }
 }
 
@@ -33,6 +37,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         updateMessages:(messages) => {
             dispatch(receivedNewMessages(messages))
+        },
+        connect:() => {
+            dispatch(wsConnect())
         },
     }
 }

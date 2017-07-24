@@ -1,6 +1,6 @@
 import {
     CLIENT_CONNECTING,
-    CLIENT_CONNECTION_ERROR,
+    CLIENT_CATCH_ERROR,
     CLIENT_CONNECTED,
     CLIENT_DISCONNECTED,
     CLIENT_MESSAGE_RECEIVED,
@@ -30,7 +30,7 @@ export const client = (state = initialState, action = {}) => {
                 connecting: true,
                 messages: null,
             }
-        case CLIENT_CONNECTION_ERROR:
+        case CLIENT_CATCH_ERROR:
             return {
                 ...state,
                 errorMessage: action.errorMessage,
