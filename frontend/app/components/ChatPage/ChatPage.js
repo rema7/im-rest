@@ -167,6 +167,34 @@ class ChatPage extends React.Component {
                     <Sidebar
                         leftFocus={this.leftFocus}
                     />
+                    <span
+                        className={classNames(styles['divider'])}
+                        onMouseDown={(event) => {
+                            console.log(`clientX: ${event.clientX}, clientY: ${event.clientY}` )
+                            {/* onMouseDown(event) */}
+                        }}
+                        onTouchStart={(event) => {
+                            event.preventDefault();
+                            console.log(`clientX: ${event.clientX}, clientY: ${event.clientY}` )
+                            {/* onTouchStart(event); */}
+                        }}
+                        onTouchEnd={(event) => {
+                            event.preventDefault();
+                            {/* onTouchEnd(event); */}
+                        }}
+                        onClick={(event) => {
+                            {/* if (onClick) {
+                                event.preventDefault();
+                                 onClick(event); 
+                            } */}
+                        }}
+                        onDoubleClick={(event) => {
+                            {/* if (onDoubleClick) {
+                                event.preventDefault();
+                                 onDoubleClick(event); 
+                            } */}
+                        }}
+                    />
                     {this.props.currentChat ? this.renderChat() : null}
                 </div>
             </div>
