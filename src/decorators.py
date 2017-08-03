@@ -32,4 +32,3 @@ def cached_call(key):
             return value
         return wrapper
     return decorator
-

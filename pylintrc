@@ -69,7 +69,9 @@ disable=missing-docstring,
     no-name-in-module,
     logging-format-interpolation,
     unused-argument,
-    no-member
+    no-member,
+    too-many-arguments,
+    too-many-instance-attributes
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

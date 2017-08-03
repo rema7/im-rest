@@ -15,7 +15,7 @@ class JSONEncoder(json.JSONEncoder):
             return str(obj)
         if isinstance(obj, bytes):
             return obj.decode("utf-8")
-        if isinstance(obj, date) or isinstance(obj, datetime):
+        if isinstance(obj, date, datetime):
             return str(obj.isoformat())
         return super(JSONEncoder, self).default(obj)
 
