@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import SplitPane from 'react-split-pane'
+
 import { Sidebar, ConnectionStatus } from 'components'
 
 import classNames from 'classnames'
@@ -159,15 +161,18 @@ class ChatPage extends React.Component {
 
     render() {
         return (
+
             <div className={classNames(styles['chat-page'])} onClick={this.leftFocus}>
                 <div className={classNames(styles['notification-bar'])}>
                     {this.renderConnectionStatus()}
                 </div>
                 <div className={classNames(styles['page-wrapper'])}>
-                    <Sidebar
-                        leftFocus={this.leftFocus}
-                    />
-                    {this.props.currentChat ? this.renderChat() : null}
+                    <SplitPane split="vertical" minSize={250} maxSize={500} defaultSize={300} className="primary">
+                        <Sidebar
+                            leftFocus={this.leftFocus}
+                        />
+                        {this.props.currentChat ? this.renderChat() : null} 
+                    </SplitPane>
                 </div>
             </div>
         )

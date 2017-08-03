@@ -13,6 +13,12 @@
         display: flex;
         flex: 1;
         flex-direction: row;
+
+        .divider {
+            width: 4px;
+            background: #000;
+        }
+
         .chat-wrapper {
             display: inherit;
             flex: 1;

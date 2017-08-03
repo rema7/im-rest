@@ -1,8 +1,7 @@
 .sidebar {
     display: flex;
     flex-direction: column;
-    min-width: 240px;
-    border-right: 1px solid #ccc;
+    flex: 1;
 
     .topbar {
         width: 100%;
