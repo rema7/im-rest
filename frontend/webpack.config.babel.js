@@ -141,6 +141,19 @@ export default (env = {}) => {
                         ],
                     }),
                 },
+                {
+                    test: /\.(png|jpg|gif|svg|ico)$/,
+                    include: [
+                        appRoot,
+                        publicRoot,
+                    ],
+                    use: {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'images/[name].[ext]',
+                        },
+                    },
+                },
             ],
         },
 
