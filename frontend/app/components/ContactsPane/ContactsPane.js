@@ -3,31 +3,38 @@ import PropTypes from 'prop-types'
 
 import {
     SidebarTopbar,
-    Contacts,
 } from 'components'
 import { ChatList } from 'containers'
 import classNames from 'classnames'
-import styles from './Sidebar.scss'
+import styles from './ContactsPane.scss'
 
 const propTypes = {
     leftFocus: PropTypes.func.isRequired,
+    onSidebarOpen: PropTypes.func.isRequired,
 }
 
-class Sidebar extends React.PureComponent {
+class ContactsPane extends React.PureComponent {
     constructor(props) {
         super(props)
     }
 
     render() {
         return (
-            <div className={classNames(styles['sidebar'])}>
+            <div className={classNames(styles['contacts-pane'])}>
                 <div className={classNames(styles['topbar'])}>
+                    <div
+                        className={classNames(styles['menu-button'])}
+                        onClick={() => {this.props.onSidebarOpen(true)}}
+                    >
+                        <div/>
+                        <div/>
+                        <div/>
+                    </div>
                     <SidebarTopbar
                         leftFocus={this.props.leftFocus}
                     />
                 </div>
                 <div className={classNames(styles['contacts'])}>
-                    <Contacts contacts={[]}/>
                     <ChatList />
                 </div>
             </div>
@@ -35,6 +42,6 @@ class Sidebar extends React.PureComponent {
     }
 }
 
-Sidebar.propTypes = propTypes
+ContactsPane.propTypes = propTypes
 
-export default Sidebar
+export default ContactsPane

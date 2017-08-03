@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import SplitPane from 'react-split-pane'
+import Sidebar from 'react-sidebar'
 
-import { Sidebar, ConnectionStatus } from 'components'
+import { ContactsPane, ConnectionStatus } from 'components'
 
 import classNames from 'classnames'
 import styles from './ChatPage.scss'
@@ -37,12 +38,14 @@ class ChatPage extends React.Component {
         super(props)
         this.state = {
             message: '',
+            sidebarOpen: false,
         }
         this.logout = this.logout.bind(this)
         this.sendMessage = this.sendMessage.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
         this.handleInputKeyPress = this.handleInputKeyPress.bind(this)
         this.leftFocus = this.leftFocus.bind(this)
+        this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this)
     }
 
     componentDidMount() {
@@ -104,6 +107,9 @@ class ChatPage extends React.Component {
         this.setInputFocus()
     }
 
+    onSetSidebarOpen(open) {
+        this.setState({sidebarOpen: open})
+    }
     renderChatTitle() {
         const { title, members } = this.props.currentChat
         return title || `${members[0].firstName} ${members[0].lastName}`
@@ -160,20 +166,29 @@ class ChatPage extends React.Component {
     }
 
     render() {
+        var sidebarContent = <b>Sidebar content</b>
+        const stls = {overlay: {zIndex: 2}, sidebar: {zIndex: 3, background: '#fff', width: '250px'}}
         return (
-
             <div className={classNames(styles['chat-page'])} onClick={this.leftFocus}>
-                <div className={classNames(styles['notification-bar'])}>
-                    {this.renderConnectionStatus()}
-                </div>
-                <div className={classNames(styles['page-wrapper'])}>
-                    <SplitPane split="vertical" minSize={250} maxSize={500} defaultSize={300} className="primary">
-                        <Sidebar
-                            leftFocus={this.leftFocus}
-                        />
-                        {this.props.currentChat ? this.renderChat() : null} 
-                    </SplitPane>
-                </div>
+                <Sidebar
+                    sidebar={sidebarContent}
+                    open={this.state.sidebarOpen}
+                    onSetOpen={this.onSetSidebarOpen}
+                    styles={stls}
+                >
+                    <div className={classNames(styles['notification-bar'])}>
+                        {this.renderConnectionStatus()}
+                    </div>
+                    <div className={classNames(styles['page-wrapper'])}>
+                        <SplitPane split="vertical" minSize={250} maxSize={500} defaultSize={300} className="primary">
+                            <ContactsPane
+                                leftFocus={this.leftFocus}
+                                onSidebarOpen={this.onSetSidebarOpen}
+                            /> 
+                            {this.props.currentChat ? this.renderChat() : <div/>} 
+                        </SplitPane>
+                    </div>
+                </Sidebar>
             </div>
         )
     }
