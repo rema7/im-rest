@@ -1,15 +1,18 @@
-$primary_selected_background_color: #419fd9;
+$primary_blue_color: #419fd9;
 $primary_selected_text_color: #fff;
 $primary_hover_color: #ececec;
+$topbar_height: 50px;
+$main_font_size: 1em;
 
 @mixin chat-title {
-    font-size: .8em;
+    font-size: $main_font_size;
     font-weight: 600;
 }
 
 html,
 body {
     height: 100%;
+    font: 12px/18px 'Open Sans',"Lucida Grande","Lucida Sans Unicode",Arial,Helvetica,Verdana,sans-serif;
 }
 
 :global .Resizer {

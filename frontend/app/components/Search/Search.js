@@ -48,7 +48,7 @@ class Search extends React.PureComponent {
     render() {
         return (
             <div className={classNames(styles['search-form'])}>
-                <input className="form-control"
+                <input className={classNames('form-control', styles['form-control'])}
                     name="search"
                     type="text"
                     placeholder="Search"

@@ -4,11 +4,11 @@
     display: flex;
     flex-direction: row;
     height: 60px;
-    padding: 3px;
+    padding: 3px 10px;
     transition: background-color .2s ease;
 
     &.selected {
-        background-color: $primary_selected_background_color;
+        background-color: $primary_blue_color;
         .title {
             color: $primary_selected_text_color;
         }
@@ -16,7 +16,7 @@
 
     &:hover {
         &.selected {
-            background-color: $primary_selected_background_color;
+            background-color: $primary_blue_color;
         }
         background-color: $primary_hover_color;
         cursor: pointer;

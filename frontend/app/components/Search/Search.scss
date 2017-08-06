@@ -1,13 +1,23 @@
+@import '~coreStyles';
+
 .search-form {
     flex: 1;
     margin-right: 10px;
     margin-left: 3px;
+
+    .form-control {
+        padding: 8px 10px;
+        font-size: $main_font_size;
+    }
 }
 
 :global .form-control {
+    border-color: transparent;
+    border-radius: .1rem;
     background-color: #f1f1f1;
 
     &:focus {
+        border-color: $primary_blue_color;
         background-color: #fff;
     }
 }

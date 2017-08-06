@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
-    SidebarTopbar,
+    Search,
 } from 'components'
 import { ChatList } from 'containers'
 import classNames from 'classnames'
@@ -30,7 +30,7 @@ class ContactsPane extends React.PureComponent {
                         <div/>
                         <div/>
                     </div>
-                    <SidebarTopbar
+                    <Search
                         leftFocus={this.props.leftFocus}
                     />
                 </div>

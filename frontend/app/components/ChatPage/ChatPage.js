@@ -127,14 +127,13 @@ class ChatPage extends React.Component {
 
     renderChat() {
         return (
-            <div className={classNames(styles['chat-wrapper'])}>
+            <div className={classNames(styles['chat-window'])}>
                 <div className={classNames(styles['top-bar'])}>
                     <div className={classNames(styles['chat-info'])}>
                         <div className={classNames(styles['title'])}>
                             {this.renderChatTitle()}
                         </div>
                     </div>
-                    <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
                 </div>
                 <div className={classNames(styles['messages'])}>
                     {this.props.currentChat.messages.map((value, index) => {
@@ -147,7 +146,7 @@ class ChatPage extends React.Component {
                 </div>
                 <div className={classNames(styles['bottom-bar'])}>
                     <div className="input-group">
-                        <input className="form-control"
+                        <input className={classNames('form-control', styles['form-control'])}
                             name="message"
                             type="text"
                             placeholder="Write a message..."
@@ -166,7 +165,8 @@ class ChatPage extends React.Component {
     }
 
     render() {
-        var sidebarContent = <b>Sidebar content</b>
+        var sidebarContent = <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
+
         const stls = {overlay: {zIndex: 2}, sidebar: {zIndex: 3, background: '#fff', width: '250px'}}
         return (
             <div className={classNames(styles['chat-page'])} onClick={this.leftFocus}>
@@ -185,7 +185,9 @@ class ChatPage extends React.Component {
                                 leftFocus={this.leftFocus}
                                 onSidebarOpen={this.onSetSidebarOpen}
                             /> 
-                            {this.props.currentChat ? this.renderChat() : <div/>} 
+                            <div className={classNames(styles['chat-wrapper'])}>
+                                {this.props.currentChat ? this.renderChat() : <div/>} 
+                            </div>
                         </SplitPane>
                     </div>
                 </Sidebar>
