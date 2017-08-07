@@ -6,7 +6,6 @@ import { ChatListItem } from 'components'
 
 const propTypes = {
     chats: PropTypes.array.isRequired,
-    notifications: PropTypes.object,
     changeChat: PropTypes.func.isRequired,
 }
 
@@ -21,12 +20,12 @@ class ChatList extends React.Component {
         this.onClickHandler = this.onClickHandler.bind(this)
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.notifications) {
-            // eslint-disable-next-line no-console
-            console.log(nextProps.notifications)
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.notifications) {
+    //         // eslint-disable-next-line no-console
+    //         console.log(nextProps.notifications)
+    //     }
+    // }
 
     onClickHandler(chat) {
         this.setState({
