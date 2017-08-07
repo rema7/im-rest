@@ -7,7 +7,7 @@ import {
 import { 
     fetchChats,
     sendMessage,
-    receivedNewMessages,
+    updateChatsMessages,
 } from 'actions/Chats'
 
 import { logout } from 'actions/Login'
@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(fetchChats())
         },
         updateMessages:(messages) => {
-            dispatch(receivedNewMessages(messages))
+            dispatch(updateChatsMessages(messages))
         },
         connect:() => {
             dispatch(wsConnect())

@@ -1,3 +1,4 @@
+import { notifyNewMessages } from 'actions/Notifications'
 import { fetchWrapper as fetch } from 'helpers/requests'
 
 export const CHATS_START_REQUEST = 'CHATS_START_REQUEST'
@@ -75,3 +76,14 @@ export const fetchChats = () => {
         return promise
     }
 }
+
+export const updateChatsMessages = (messages) => {
+    return (dispatch) => {
+        dispatch(receivedNewMessages(messages))
+        messages.forEach((message) => {
+            const { chatId } = message
+            dispatch(notifyNewMessages({chatId}))
+        })
+    }
+}
+

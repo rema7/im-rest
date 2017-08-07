@@ -9,7 +9,7 @@ export const camelToSnake = (string) => {
 }
 
 export const keysSnakeToCamel = function(obj) {
-    if(obj instanceof Array) {
+    if (obj instanceof Array) {
         const res = obj.map((value) => keysSnakeToCamel(value))
         return res 
     } else {

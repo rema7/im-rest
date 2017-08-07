@@ -21,10 +21,12 @@ const initialState = {
 export const chats = (state = initialState, action = {}) => {
     const handleMessage = (chats, newMessages) => {
         newMessages.forEach((newMessage) => {
-            const {chatId, content} = newMessage
+            const {chatId, senderId, content} = newMessage
             let chat = chats.find((chat) => {return chat.chatId === chatId}) 
             chat.messages.push({
-                content: content,
+                senderId,
+                content,
+                status: 'new',
             })
             chat.newMessages += 1
         })

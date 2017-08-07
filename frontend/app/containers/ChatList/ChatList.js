@@ -6,6 +6,7 @@ import { ChatList } from 'components'
 const mapStateToProps = (state) => {
     return {
         chats: state.chats.chats,
+        notifications: state.notifications.notifications,
     }
 }
 
