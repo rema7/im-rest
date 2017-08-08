@@ -4,15 +4,25 @@ import { changeChat } from 'actions/Chats'
 import { ChatList } from 'components'
 
 const mapStateToProps = (state) => {
+    const chats = state.chats.chats.map((chat) => {
+        const { chatId, title, members, newMessagesCount } = chat
+        return {
+            chatId,
+            title,
+            members, 
+            newMessagesCount,
+        }
+    })
+
     return {
-        chats: state.chats.chats,
+        chats: chats,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changeChat:(selectedChat) => {
-            dispatch(changeChat(selectedChat))
+        changeChat:(chatId) => {
+            dispatch(changeChat(chatId))
         },
     }
 }

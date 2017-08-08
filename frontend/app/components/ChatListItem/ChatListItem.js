@@ -14,7 +14,7 @@ const propTypes = {
             firstName: PropTypes.string,
             lastName: PropTypes.string,
         })).isRequired,
-        newMessages: PropTypes.number.isRequired,
+        newMessagesCount: PropTypes.number,
     }).isRequired,
     isSelected: PropTypes.bool.isRequired,
 
@@ -24,7 +24,26 @@ const propTypes = {
 class ChatListItem extends React.PureComponent {
     constructor(props) {
         super(props)
+        this.state = {
+            isSelected: false,
+            newMessages: 0,
+        }
         this.clickHandler = this.clickHandler.bind(this)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { newMessagesCount } = nextProps.chatItem
+        if (nextProps.chatItem) {
+            this.setState({
+                newMessages: newMessagesCount,
+            })
+        }
+        if (nextProps.isSelected) {
+            this.setState({
+                isSelected: nextProps.isSelected,
+                newMessages: 0,
+            })
+        }
     }
 
     clickHandler() {
@@ -44,11 +63,19 @@ class ChatListItem extends React.PureComponent {
         return title || `${members[0].firstName} ${members[0].lastName}`
     }
 
+    renderBadge() {
+        return this.state.newMessages > 0 ? 
+            <div className={classNames(styles['badge'])}>
+                <span>{this.state.newMessages}</span>
+            </div>
+            : null
+    }
+
     render() {
         return (
             <div onClick={this.clickHandler} className={classNames(this.setStyles())}>
+                { this.renderBadge() }
                 <div className={classNames(styles['image'])}>
-                    {this.props.chatItem.newMessages}
                 </div>
                 <div className={classNames(styles['info-wrapper'])}>
                     <div className={classNames(styles['title'])}>

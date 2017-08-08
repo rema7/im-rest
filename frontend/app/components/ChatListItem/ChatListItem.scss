@@ -1,11 +1,26 @@
 @import '~coreStyles';
 
 .chat-list-item {
+    position: relative;
     display: flex;
     flex-direction: row;
     height: 60px;
     padding: 3px 10px;
     transition: background-color .2s ease;
+
+    .badge {
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #ccc;
+        color: #fff;
+        font-weight: 600;
+        line-height: 20px;
+        text-align: center;
+    }
 
     &.selected {
         background-color: $primary_blue_color;

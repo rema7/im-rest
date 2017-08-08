@@ -8,6 +8,7 @@ import {
     fetchChats,
     sendMessage,
     updateChatsMessages,
+    markMessagesAsRead,
 } from 'actions/Chats'
 
 import { logout } from 'actions/Login'
@@ -17,8 +18,8 @@ import { connectionStatus } from 'selectors'
 const mapStateToProps = (state) => {
     return {
         currentChat: state.chats.currentChat,
+        currentChatMesages: state.chats.currentChat ? state.chats.currentChat.messages : [],
         chats: state.chats.chats,
-        newMessages: state.client.messages,
         connectionStatus: connectionStatus(state),
     }
 }
@@ -37,6 +38,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         updateMessages:(messages) => {
             dispatch(updateChatsMessages(messages))
+        },
+        markMessagesAsRead:(chatId) => {
+            dispatch(markMessagesAsRead(chatId))
         },
         connect:() => {
             dispatch(wsConnect())

@@ -9,7 +9,7 @@ const propTypes = {
     changeChat: PropTypes.func.isRequired,
 }
 
-class ChatList extends React.Component {
+class ChatList extends React.PureComponent {
     constructor(props) {
         super(props)
 
@@ -21,17 +21,21 @@ class ChatList extends React.Component {
     }
 
     // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.notifications) {
+    //     if (nextProps.chats) {
     //         // eslint-disable-next-line no-console
-    //         console.log(nextProps.notifications)
     //     }
     // }
 
     onClickHandler(chat) {
+        let { chatId } = chat
         this.setState({
-            currentChat: chat,
+            currentChatId: chatId,
         })
-        this.props.changeChat(chat)
+        this.props.changeChat(chatId)
+    }
+
+    isSelected(chat) {
+        return this.state.currentChatId ? this.state.currentChatId === chat.chatId : false
     }
 
     render() {
@@ -43,7 +47,7 @@ class ChatList extends React.Component {
                             key={chat.chatId}
                             clickHandler={this.onClickHandler}
                             chatItem={chat}
-                            isSelected={this.state.currentChat === chat}
+                            isSelected={this.isSelected(chat)}
                         />
                     )
                 })}
