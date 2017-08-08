@@ -1,4 +1,5 @@
 import * as actions from 'actions/Client'
+import * as chatsActions from 'actions/Chats'
 
 const socketMiddleware = (() => {
     let socket = null
@@ -15,7 +16,7 @@ const socketMiddleware = (() => {
 
     const onMessage = (ws, store) => (evt) => {
         const msg = JSON.parse(evt.data)
-        store.dispatch(actions.messageReceived(msg))
+        store.dispatch(chatsActions.updateChatsMessages(msg.payload))
     }
 
     const onError = (ws, store) => (err) => {

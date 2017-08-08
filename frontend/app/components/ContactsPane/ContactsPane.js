@@ -13,7 +13,7 @@ const propTypes = {
     onSidebarOpen: PropTypes.func.isRequired,
 }
 
-class ContactsPane extends React.PureComponent {
+class ContactsPane extends React.Component {
     constructor(props) {
         super(props)
     }

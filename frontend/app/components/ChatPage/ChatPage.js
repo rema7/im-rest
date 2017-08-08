@@ -21,9 +21,9 @@ const propTypes = {
         })).isRequired,
         messages: PropTypes.arrayOf(PropTypes.shape({
             content: PropTypes.string.isRequired,
+            state: PropTypes.string,
         })),
     }),
-    newMessages:PropTypes.array,
     connectionStatus: PropTypes.string.isRequired,
     
     connect: PropTypes.func.isRequired,
@@ -31,6 +31,7 @@ const propTypes = {
     logout: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
     updateMessages: PropTypes.func.isRequired,
+    markMessagesAsRead: PropTypes.func.isRequired,
 }
 
 class ChatPage extends React.Component {
@@ -39,6 +40,7 @@ class ChatPage extends React.Component {
         this.state = {
             message: '',
             sidebarOpen: false,
+            currentChat: null,
         }
         this.logout = this.logout.bind(this)
         this.sendMessage = this.sendMessage.bind(this)
@@ -55,14 +57,11 @@ class ChatPage extends React.Component {
     
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentChat) {
-            this.setInputFocus()            
-        }
-        if (nextProps.newMessages && nextProps.newMessages !== this.state.newMessages) {
-            const messages = nextProps.newMessages
-            this.setState({
-                newMessages: messages,
-            })
-            this.props.updateMessages(messages)
+            this.setState({ currentChat: nextProps.currentChat })
+
+            if (nextProps.currentChat.messages.find((m) => m.state === 'new')) {
+                this.props.markMessagesAsRead(nextProps.currentChat.chatId)
+            }
         }
     }
 
@@ -98,7 +97,7 @@ class ChatPage extends React.Component {
     }
 
     setInputFocus() {
-        if (this.props.currentChat) {
+        if (this.state.currentChat) {
             this.nameInput.focus()
         }
     }
@@ -136,17 +135,17 @@ class ChatPage extends React.Component {
                     </div>
                 </div>
                 <div className={classNames(styles['messages'])}>
-                    {this.props.currentChat.messages.map((value, index) => {
+                    {this.state.currentChat.messages.map((value, index) => {
                         return (
                             <div key={index}>
-                                {value.content}
+                                {value.content} ({value.state})
                             </div>
                         )
                     })}
                 </div>
                 <div className={classNames(styles['bottom-bar'])}>
                     <div className="input-group">
-                        <input className={classNames('form-control', styles['form-control'])}
+                        <input autoFocus className={classNames('form-control', styles['form-control'])}
                             name="message"
                             type="text"
                             placeholder="Write a message..."

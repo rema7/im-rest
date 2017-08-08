@@ -63,7 +63,7 @@ describe('Chats reducer', () => {
                     },
                 ], 
                 messages: [],
-                newMessages: 0,
+                newMessagesCount: 0,
             }, {
                 chatId: 2,
                 members: [
@@ -78,7 +78,7 @@ describe('Chats reducer', () => {
                     },
                 ], 
                 messages: [],
-                newMessages: 0,
+                newMessagesCount: 0,
             },
         ])
         expect(state.loading).toBeFalsy()
@@ -86,43 +86,27 @@ describe('Chats reducer', () => {
 
     it('should update chats messages on "receivedNewMessages" action', () => {
         const action = {
-            type: actions.CHATS_RECEIVED_NEW_MESSAGES,
-            messages: [
-                {
-                    chatId: 1,
-                    sender: 1,
-                    type: 'CHAT_MESSAGE',
-                    content: 'Text1',
-                },
-                {
-                    chatId: 1,
-                    sender: 1,
-                    type: 'CHAT_MESSAGE',
-                    content: 'Text1.1',
-                },
-                {
-                    chatId: 2,
-                    sender: 2,
-                    type: 'CHAT_MESSAGE',
-                    content: 'Text2',
-                },
-            ],
+            type: actions.CHATS_RECEIVED_NEW_MESSAGE,
+            message: {
+                chatId: 1,
+                sender: 1,
+                type: 'CHAT_MESSAGE',
+                content: 'Text1',
+            },
         }
 
         state = chats(state, action)
+        state = chats(state, action)
         const chat1 = state.chats[0]
-        const chat2 = state.chats[1]
 
         expect(chat1.messages.length).toEqual(2)
-        expect(chat1.newMessages).toEqual(2)
-        expect(chat2.newMessages).toEqual(1)
-        expect(chat1.messages.map((value) => value.content)).toEqual(['Text1', 'Text1.1'])
-        expect(chat2.messages.map((value) => value.content)).toEqual(['Text2'])
+        expect(chat1.newMessagesCount).toEqual(2)
+        expect(chat1.messages.map((value) => value.content)).toEqual(['Text1', 'Text1'])
     })
     
     it('should update drop new messages flag on "newMessagesRead" action', () => {
         const action = {
-            type: actions.CHATS_NEW_MESSAGES_READ,
+            type: actions.CHATS_MARK_MESSAGES_AS_READ,
             chatId: 1,
         }
 
@@ -130,7 +114,7 @@ describe('Chats reducer', () => {
         const chat = state.chats[0]
 
         expect(chat.messages.length).toEqual(2)
-        expect(chat.newMessages).toEqual(0)
-        expect(chat.messages.map((value) => value.content)).toEqual(['Text1', 'Text1.1'])
+        expect(chat.newMessagesCount).toEqual(0)
+        expect(chat.messages.map((value) => value.content)).toEqual(['Text1', 'Text1'])
     })
 })

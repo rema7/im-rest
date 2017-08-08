@@ -24,7 +24,7 @@
             flex: 1;
             flex-direction: column;
             background-image: url('./images/background.jpg');
-            background-size: 35%;
+            background-size: 440px 802px;
 
             .chat-window {
                 display: inherit;
@@ -53,15 +53,15 @@
                 }
 
                 .bottom-bar {
-                    border-top: 1px solid #ccc;
                     padding: 5px;
-                    background-color: white;
+                    border-top: 1px solid #ccc;
+                    background-color: #fff;
 
                     .form-control {
                         padding: 8px 10px;
-                        font-size: $main_font_size;
-                        background-color: #fff;
                         border: none;
+                        background-color: #fff;
+                        font-size: $main_font_size;
 
                         &:focus {
                             border: none;

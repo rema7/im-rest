@@ -19,7 +19,7 @@ const initialState = {
 export const client = (state = initialState, action = {}) => {
     const handleMessage = (message) => {
         const { payload } = message
-        return payload
+        return keysSnakeToCamel(payload)
     }
     switch (action.type) {
         case CLIENT_CONNECTING:
