@@ -9,8 +9,6 @@ DB_CONNECTION = 'postgresql+psycopg2://localhost/im'
 
 REDIS_CONNECTION = 'redis://localhost:6379/0'
 
-DB_CONNECTION_YOYO = DB_CONNECTION.replace('+psycopg2', '')
-
 OFFSET = 100
 
 AUTH_CODE_VALID_DURATION = 300
@@ -24,6 +22,8 @@ try:
 except ModuleNotFoundError:
     pass
 
+
+DB_CONNECTION_YOYO = DB_CONNECTION.replace('+psycopg2', '')
 
 LOGGING = {
     'version': 1,

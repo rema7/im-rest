@@ -1,6 +1,6 @@
 falcon
 gunicorn
-invoke
+invoke==0.20.4
 psycopg2
 SQLAlchemy==1.2.0b1
 speaklater
