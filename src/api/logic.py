@@ -4,7 +4,7 @@ import logging
 
 from cache.cache import set_to_cache, get_from_cache
 from decorators import with_db_session
-from db.models import UserToken
+from db.models import AccountToken
 from api.helpers import raise_401
 
 logger = logging.getLogger('im-rest.' + __name__)
@@ -24,12 +24,12 @@ def validate_auth(req, resp, resource, params, db_session=None):
     token = req.context['Token']
     if not token:
         raise_401()
-    user_id = get_from_cache(token)
-    if user_id is None:
-        userToken = db_session.query(UserToken).filter(UserToken.token == token).first()
-        if userToken is None:
+    account_id = get_from_cache(token)
+    if account_id is None:
+        account_token = db_session.query(AccountToken).filter(AccountToken.token == token).first()
+        if account_token is None:
             raise_401()
-        set_to_cache(userToken.token, userToken.user_id)
-        req.context['uid'] = userToken.user_id
+        set_to_cache(account_token.token, account_token.account_id)
+        req.context['uid'] = account_token.account_id
     else:
-        req.context['uid'] = user_id
+        req.context['uid'] = account_id

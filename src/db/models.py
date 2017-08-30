@@ -11,6 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -33,17 +34,30 @@ class BaseInfo:
     created_at = Column(TIMESTAMP, default=datetime.utcnow, nullable=False)
 
 
-class User(BaseInfo, Base):
+class Account(BaseInfo, Base):
     __tablename__ = 'account'
 
     email = Column(String, nullable=False, unique=True)
+    profile_id = Column(BigInteger, ForeignKey('account_profile.id'), nullable=True)
+
+    profile = relationship('AccountProfile', foreign_keys=[profile_id])
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+        }
+
+
+class AccountProfile(BaseInfo, Base):
+    __tablename__ = 'account_profile'
+
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
 
     def as_dict(self):
         return {
             'id': self.id,
-            'email': self.email,
             'first_name': self.first_name,
             'last_name': self.last_name,
         }
@@ -52,7 +66,7 @@ class User(BaseInfo, Base):
 class AuthCode(Base):
     __tablename__ = 'auth_code'
 
-    user_id = Column(BigInteger, nullable=False, primary_key=True)
+    account_id = Column(BigInteger, nullable=False, primary_key=True)
     token = Column(String, nullable=False)
     code = Column(Integer, nullable=False)
     valid_to = Column(TIMESTAMP, default=datetime.utcnow, nullable=False)
@@ -65,10 +79,10 @@ class AuthCode(Base):
         }
 
 
-class UserToken(Base):
-    __tablename__ = 'user_token'
+class AccountToken(Base):
+    __tablename__ = 'account_token'
 
-    user_id = Column(BigInteger, nullable=False, primary_key=True)
+    account_id = Column(BigInteger, nullable=False, primary_key=True)
     token = Column(String, nullable=False)
     info = Column(JSON, nullable=False, default='{}')
 
@@ -88,7 +102,7 @@ class ChatMember(Base):
     __tablename__ = 'chat_member'
 
     chat_id = Column(BigInteger, nullable=False, primary_key=True)
-    user_id = Column(BigInteger, nullable=False)
+    account_id = Column(BigInteger, nullable=False)
 
 
 class Contact(Base):

@@ -4,10 +4,10 @@ Add contact table
 
 from yoyo import step
 
-__depends__ = {'20170622_01_3flQw-add-tokens-table'}
+__depends__ = {'20170622_01_3flQw'}
 
 CREATE_TABLE = '''
-CREATE TABLE IF NOT EXISTS contact (
+CREATE TABLE contact (
     id SERIAL PRIMARY KEY,
     owner_id bigint not null,
     email varchar not null,
@@ -20,8 +20,8 @@ on contact (owner_id, email);
 '''
 
 DROP_TABLE = '''
-DROP TABLE IF EXISTS contact;
-DROP INDEX IF EXISTS contact_owner_id_email_uindex;
+DROP TABLE contact;
+DROP INDEX contact_owner_id_email_uindex;
 '''
 
 steps = [

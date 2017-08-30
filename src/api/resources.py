@@ -22,8 +22,8 @@ from decorators import with_db_session
 from db.session import open_db_session
 from db.models import (
     AuthCode,
-    User,
-    UserToken,
+    Account,
+    AccountToken,
     Contact,
     ChatMember,
 )
@@ -47,20 +47,20 @@ class LoginResource:
         if validate_email(email) is not True:
             raise_400("Invalid email {}".format(email))
 
-        user = db_session.query(User).filter(User.email == email).first()
+        user = db_session.query(Account).filter(Account.email == email).first()
         if user is None:
-            user = User(
+            user = Account(
                 email=email
             )
             db_session.add(user)
             db_session.flush()
 
-        code = db_session.query(AuthCode).filter(AuthCode.user_id == user.id).first()
+        code = db_session.query(AuthCode).filter(AuthCode.account_id == user.id).first()
         if code is None:
             valid_to = date.valid_to(app_settings.AUTH_CODE_VALID_DURATION)
             code = AuthCode(
                 token=uuid.uuid4().hex,
-                user_id=user.id,
+                account_id=user.id,
                 code=generate_auth_code(),
                 valid_to=valid_to
             )
@@ -93,14 +93,14 @@ class AuthResource:
             if row is None:
                 raise_400("Invalid code")
             token = generate_token()
-            user_token = UserToken(
-                user_id=row.user_id,
+            user_token = AccountToken(
+                account_id=row.account_id,
                 token=token,
             )
             auth_code.delete()
             session.add(user_token)
             session.commit()
-            set_to_cache(token, row.user_id)
+            set_to_cache(token, row.account_id)
         return {
             'token': token,
         }
@@ -151,7 +151,7 @@ class ContactsResource:
     @with_db_session
     def get_body(uid, db_session=None):
         contacts = db_session.query(Contact).filter(
-            Contact.user_id == uid).all()
+            Contact.account_id == uid).all()
         return [c.as_dict() for c in contacts]
 
     def on_get(self, req, resp):
@@ -165,21 +165,21 @@ class ContactsResource:
 class ChatResource:
     def get_chats(self, db_session, uid):
         chat_ids = db_session.query(ChatMember.chat_id).filter(
-            ChatMember.user_id == uid).all()
+            ChatMember.account_id == uid).all()
 
         chats = []
         for chat_id in [r for r, in chat_ids]:
-            member_ids = db_session.query(ChatMember.user_id).filter(
-                ChatMember.chat_id == chat_id, ChatMember.user_id != uid
+            member_ids = db_session.query(ChatMember.account_id).filter(
+                ChatMember.chat_id == chat_id, ChatMember.account_id != uid
             ).all()
-            users = db_session.query(User).filter(User.id.in_(member_ids)).all()
+            users = db_session.query(Account).filter(Account.id.in_(member_ids)).all()
             chats.append({
                 'chat_id': chat_id,
                 'messages': [],
                 'members': [{
                     'id': u.id,
-                    'first_name': u.first_name,
-                    'last_name': u.last_name,
+                    'first_name': u.profile.first_name,
+                    'last_name': u.profile.last_name,
                 } for u in users],
             })
         return chats

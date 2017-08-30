@@ -24,7 +24,7 @@ def init_config(ctx, db_connection, redis_connection, silent=False):
 LOG_LEVEL = 'DEBUG'
 DB_CONNECTION = '{db_connection}'
 REDIS_CONNECTION = '{redis_connection}'
-'''.format(db_connection=db_connection)
+'''.format(db_connection=db_connection, redis_connection=redis_connection)
 
     settings_local_path = os.path.join(
         app_settings.PROJECT_ROOT, LOCAL_SETTINGS)

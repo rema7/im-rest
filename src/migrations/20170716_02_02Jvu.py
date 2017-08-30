@@ -4,22 +4,22 @@ Add chat table
 
 from yoyo import step
 
-__depends__ = {'20170716_01_N2FGs-add-contact-table'}
+__depends__ = {'20170716_01_N2FGs'}
 
 CREATE_TABLE = '''
-CREATE TABLE IF NOT EXISTS chat (
+CREATE TABLE chat (
     id SERIAL PRIMARY KEY
 );
-CREATE TABLE IF NOT EXISTS chat_member (
+CREATE TABLE chat_member (
     id SERIAL PRIMARY KEY,
     chat_id bigint not null,
-    user_id bigint not null
+    account_id bigint not null
 );
 '''
 
 DROP_TABLE = '''
-DROP TABLE IF EXISTS chat;
-DROP TABLE IF EXISTS chat_member;
+DROP TABLE chat;
+DROP TABLE chat_member;
 '''
 
 
