@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import styles from './LoginPage.scss'
 
 const propTypes = {
     loading: PropTypes.bool.isRequired,
@@ -63,39 +65,58 @@ class LoginPage extends React.PureComponent {
         })
     }
 
+    renderSignIn() {
+        return (
+            <div>
+                <h3>Login</h3>
+                <form >
+                    <label>
+                        Email:
+                        <input
+                            name="email"
+                            type="email"
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                        />
+                    </label>
+                </form>
+                <button onClick={this.handleSubmit}>Login</button>
+            </div>
+        )
+    }
+
+    renderLogIn() {
+        return (
+            <div>
+                <h3>Complete</h3>
+                <form>
+                    <label>
+                        Code:
+                        <input
+                            name="code"
+                            type="text"
+                            value={this.state.authCode}
+                            onChange={this.handleChange}
+                        />
+                    </label>
+                </form>
+                <button onClick={this.handleAuth}>Auth</button>
+            </div>
+        )
+    }        
+
     render() {
 
         return (
-            <div>
-                <div className="container">
-                    <h3>Login</h3>
-                    <form >
-                        <label>
-                            Email:
-                            <input
-                                name="email"
-                                type="email"
-                                value={this.state.email}
-                                onChange={this.handleChange}
-                            />
-                        </label>
-                    </form>
-                    <button onClick={this.handleSubmit}>Login</button>
+            <div className={classNames(styles['login-page-wrapper'])}>
+                <div className={classNames(styles['header'])}>
                 </div>
-                <div className="container">
-                    <h3>Complete</h3>
-                    <form>
-                        <label>
-                            Code:
-                            <input
-                                name="code"
-                                type="text"
-                                value={this.state.authCode}
-                                onChange={this.handleChange}
-                            />
-                        </label>
-                    </form>
-                    <button onClick={this.handleAuth}>Auth</button>
+                <div className={classNames(styles['login-page'])}>
+                    <div className={classNames(styles['login-header'])}>
+                    </div>
+                    <div className={classNames(styles['login-form'])}>
+                        {this.renderSignIn()}
+                    </div>
                 </div>
             </div>
         )
