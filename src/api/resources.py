@@ -125,14 +125,27 @@ class SettingsResource:
 
 
 @falcon.before(validate_auth)
+class AccountProfileResource:
+    @staticmethod
+    @with_db_session
+    def get_body(uid, db_session=None):
+        account = db_session.query(Account).filter(Account.id == uid).first()
+        return account
+
+    def on_get(self, req, resp):
+        result = self.get_body(req.context['uid'])
+        resp.body = {
+            'result': result,
+        }
+
+
+@falcon.before(validate_auth)
 class SearchResource:
     @staticmethod
     def get_body(search_string):
         with open_db_session() as session:
             search = '%{}%'.format(search_string)
-            result = session.query(User).filter(
-                User.email.like(search)
-            ).all()
+            result = session.query(Account).filter(Account.email.like(search)).all()
         return [u.as_dict() for u in result]
 
     @use_args({

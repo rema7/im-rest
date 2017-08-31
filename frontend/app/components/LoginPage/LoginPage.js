@@ -1,12 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
+import {
+    LOGIN_PAGE_STATES,
+} from './constants'
+
 import classNames from 'classnames'
 import styles from './LoginPage.scss'
+
 
 const propTypes = {
     loading: PropTypes.bool.isRequired,
     authCode: PropTypes.string,
     authKey: PropTypes.string,
+    token: PropTypes.string,
 
     login: PropTypes.func.isRequired,
     sendCode: PropTypes.func.isRequired,
@@ -21,6 +28,7 @@ class LoginPage extends React.PureComponent {
             email: '',
             authCode: '',
             authKey: '',
+            page: LOGIN_PAGE_STATES.SIGNIN,
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -42,6 +50,11 @@ class LoginPage extends React.PureComponent {
                 authKey: nextProps.authKey,
             })
         }
+        if (nextProps.token) {
+            this.setState({
+                authKey: nextProps.authKey,
+            })
+        }
     }
 
     handleChange(event) {
@@ -56,6 +69,9 @@ class LoginPage extends React.PureComponent {
 
     handleSubmit() {
         this.props.login(this.state.email)
+        this.setState({
+            page: LOGIN_PAGE_STATES.LOGIN,
+        })
     }
 
     handleAuth() {
@@ -70,17 +86,16 @@ class LoginPage extends React.PureComponent {
             <div>
                 <h3>Login</h3>
                 <form >
-                    <label>
-                        Email:
+                    <div className={classNames(styles['input-group'])}>
                         <input
                             name="email"
                             type="email"
                             value={this.state.email}
                             onChange={this.handleChange}
+                            placeholder="Email"
                         />
-                    </label>
+                    </div>
                 </form>
-                <button onClick={this.handleSubmit}>Login</button>
             </div>
         )
     }
@@ -88,22 +103,73 @@ class LoginPage extends React.PureComponent {
     renderLogIn() {
         return (
             <div>
-                <h3>Complete</h3>
+                <h3>{this.state.email}</h3>
                 <form>
-                    <label>
-                        Code:
+                    <div className={classNames(styles['input-group'])}>
                         <input
                             name="code"
                             type="text"
                             value={this.state.authCode}
                             onChange={this.handleChange}
                         />
-                    </label>
+                    </div>
                 </form>
-                <button onClick={this.handleAuth}>Auth</button>
             </div>
         )
     }        
+
+    renderProfile() {
+        return (
+            <div>
+                <h3>Profile</h3>
+                <form>
+                    <div className={classNames(styles['input-group'])}>
+                        <input
+                            name="code"
+                            type="text"
+                            value={this.state.authCode}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                </form>
+            </div>
+        )
+    }        
+
+    renderHeader() {
+        let submit = this.handleSubmit
+        if (this.state.page === LOGIN_PAGE_STATES.LOGIN) {
+            submit = this.handleAuth
+        }
+        // else if (this.state.page === LOGIN_PAGE_STATES.PROFILE) {
+        //     return this.renderProfile()
+        // }
+
+        return (
+            <div className={classNames(styles['login-header'])}>
+                <h2 className={classNames(styles['title'])}>Milligramm</h2>
+                <div className={classNames(styles['submit-button'])}>
+                    <a onClick={submit}>
+                        Next
+                        <i className={classNames(styles['icon-next-submit'])}></i>
+                    </a>
+                </div>
+            </div>
+        )
+    }
+
+    renderPage() {
+        if (this.state.page === LOGIN_PAGE_STATES.SIGNIN) {
+            return this.renderSignIn()
+        } 
+        else if (this.state.page === LOGIN_PAGE_STATES.LOGIN) {
+            return this.renderLogIn()
+        }
+        else if (this.state.page === LOGIN_PAGE_STATES.PROFILE) {
+            return this.renderProfile()
+        }
+
+    }
 
     render() {
 
@@ -112,10 +178,9 @@ class LoginPage extends React.PureComponent {
                 <div className={classNames(styles['header'])}>
                 </div>
                 <div className={classNames(styles['login-page'])}>
-                    <div className={classNames(styles['login-header'])}>
-                    </div>
+                    {this.renderHeader()}
                     <div className={classNames(styles['login-form'])}>
-                        {this.renderSignIn()}
+                        {this.renderPage()}
                     </div>
                 </div>
             </div>

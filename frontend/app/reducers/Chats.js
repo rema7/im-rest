@@ -55,7 +55,7 @@ export const chats = (state = initialState, action = {}) => {
                 ...state,
                 errorMessage: action.errorMessage,
                 loading: false,
-                chats: state.items,
+                chats: state.chats,
             }
         case CHATS_SELECT_CHAT:
             return {

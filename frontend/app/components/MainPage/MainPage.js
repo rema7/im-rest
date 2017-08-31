@@ -7,8 +7,9 @@ import { LoginPage, ChatPage } from 'containers'
 import { accidentMessages, getCurrentLanguage, localeDataHash } from 'helpers/locale'
 
 const propTypes = {
-    token: PropTypes.string,
+    account: PropTypes.object,
     loading: PropTypes.bool.isRequired,
+    token: PropTypes.string,
     
     init: PropTypes.func.isRequired,
 }
@@ -27,7 +28,7 @@ class MainPage extends React.Component {
     renderPage() {
         if (this.props.loading)
             return <Loader />
-        if (this.props.token === null)
+        if (this.props.token === null || this.props.account === null)
             return <LoginPage/>
         else
             return <ChatPage/>

@@ -6,6 +6,7 @@ import { init } from 'actions/App'
 const mapStateToProps = (state) => {
     return {
         token: state.login.token,
+        account: state.account,
         loading: state.app.loading,
     }
 }

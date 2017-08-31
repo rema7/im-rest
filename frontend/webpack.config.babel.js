@@ -68,7 +68,7 @@ export default (env = {}) => {
 
     if (useNotifier) {
         plugins = [...plugins,
-            new WebpackBuildNotifierPlugin({ title: 'CT MOS' }),
+            new WebpackBuildNotifierPlugin({ title: 'Milligramm' }),
         ]
     }
 

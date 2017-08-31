@@ -6,6 +6,7 @@ const initialState = {
             auth: '/api/auth',
             code: '/api/auth/code',
         },
+        profile: '/api/profile',
         ws: 'ws://localhost:8100/ws',
     },
 }
