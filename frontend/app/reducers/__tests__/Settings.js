@@ -8,6 +8,7 @@ const intialState = {
             auth: '/api/auth',
             code: '/api/auth/code',
         },
+        account: '/api/account',
         ws: 'ws://localhost:8100/ws',
     },
 }
