@@ -40,12 +40,14 @@ class Account(BaseInfo, Base):
     email = Column(String, nullable=False, unique=True)
     profile_id = Column(BigInteger, ForeignKey('account_profile.id'), nullable=True)
 
-    profile = relationship('AccountProfile', foreign_keys=[profile_id])
+    profile = relationship('AccountProfile', foreign_keys=[profile_id], lazy='subquery')
 
     def as_dict(self):
         return {
             'id': self.id,
             'email': self.email,
+            'first_name': self.profile.first_name if self.profile is not None else '',
+            'last_name': self.profile.last_name if self.profile is not None else '',
         }
 
 

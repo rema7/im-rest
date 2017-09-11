@@ -31,6 +31,7 @@ CREATE TABLE auth_code (
 
 DROP_TABLE = '''
 DROP TABLE IF EXISTS account;
+DROP TABLE IF EXISTS account_profile;
 DROP TABLE IF EXISTS auth_code;
 '''
 

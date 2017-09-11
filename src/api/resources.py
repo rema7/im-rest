@@ -85,22 +85,22 @@ class LoginResource:
 
 class AuthResource:
     @staticmethod
-    def post_body(key, code):
-        with open_db_session() as session:
-            auth_code = session.query(AuthCode).filter(
-                AuthCode.token == key, AuthCode.code == code)
-            row = auth_code.first()
-            if row is None:
-                raise_400("Invalid code")
-            token = generate_token()
-            user_token = AccountToken(
-                account_id=row.account_id,
-                token=token,
-            )
-            auth_code.delete()
-            session.add(user_token)
-            session.commit()
-            set_to_cache(token, row.account_id)
+    @with_db_session
+    def post_body(key, code, db_session=None):
+        auth_code = db_session.query(AuthCode).filter(
+            AuthCode.token == key, AuthCode.code == code)
+        row = auth_code.first()
+        if row is None:
+            raise_400("Invalid code")
+        token = generate_token()
+        user_token = AccountToken(
+            account_id=row.account_id,
+            token=token,
+        )
+        auth_code.delete()
+        db_session.add(user_token)
+        db_session.commit()
+        set_to_cache(token, row.account_id)
         return {
             'token': token,
         }
@@ -133,9 +133,9 @@ class AccountProfileResource:
         return account
 
     def on_get(self, req, resp):
-        result = self.get_body(req.context['uid'])
+        account = self.get_body(req.context['uid'])
         resp.body = {
-            'result': result,
+            'result': account.as_dict(),
         }
 
 

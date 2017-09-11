@@ -10,7 +10,7 @@ const propTypes = {
     account: PropTypes.object,
     loading: PropTypes.bool.isRequired,
     token: PropTypes.string,
-    
+
     init: PropTypes.func.isRequired,
 }
 
@@ -24,12 +24,12 @@ class MainPage extends React.Component {
         addLocaleData(localeDataHash[this.language])
         this.props.init()
     }
-
+    
     renderPage() {
         if (this.props.loading)
             return <Loader />
         if (this.props.token === null || this.props.account === null)
-            return <LoginPage/>
+            return <LoginPage />
         else
             return <ChatPage/>
     }

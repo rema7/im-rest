@@ -27,6 +27,7 @@ const propTypes = {
     connectionStatus: PropTypes.string.isRequired,
     
     connect: PropTypes.func.isRequired,
+    fetchAccount: PropTypes.func.isRequired,
     fetchChats: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     send: PropTypes.func.isRequired,
@@ -51,6 +52,7 @@ class ChatPage extends React.Component {
     }
 
     componentDidMount() {
+        this.props.fetchAccount()
         this.props.fetchChats()
         this.props.connect()
     }

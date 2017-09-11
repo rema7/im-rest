@@ -1,7 +1,9 @@
 import { 
     postWrapper as post,
-    fetchWrapper as fetch,
 } from 'helpers/post'
+import {
+    fetchWrapper as fetch,
+} from 'helpers/requests'
 
 
 export const ACCOUNT_START_REQUEST = 'ACCOUNT_START_REQUEST'
@@ -36,7 +38,7 @@ export const fetchAccount = () => {
         }
         dispatch(startRequest())
 
-        const promise = fetch(state.settings.urls.profile)
+        const promise = fetch(state.settings.urls.account)
             .then((json) => {
                 return dispatch(responseOk(json))
             })
@@ -56,7 +58,7 @@ export const updateAccount = () => {
         }
         dispatch(startRequest())
 
-        const promise = post(state.settings.urls.profile)
+        const promise = post(state.settings.urls.account)
             .then((json) => {
                 return dispatch(responseOk(json))
             })
