@@ -19,12 +19,18 @@ export const getCurrentLanguage = () => {
 
 export const accidentMessages = {
     en: {
+        'button.logout.title': 'Logout',
+        'sidebar.menu.item.contacts': 'Contacts',
+        'sidebar.menu.item.settings': 'Settings',
         'server.state.connecting': 'Connecting',
         'server.state.connected': 'Connected',
         'server.state.disconnected': 'Disconnected',
         'server.state.connection_error': 'Connection error',
     },
     ru: {
+        'button.logout.title': 'Выйти',
+        'sidebar.menu.item.contacts': 'Контакты',
+        'sidebar.menu.item.settings': 'Настройки',
         'server.state.connecting': 'Устанавливается соединение',
         'server.state.connected': 'Соединение установленно!',
         'server.state.disconnected': 'Нет соединения',

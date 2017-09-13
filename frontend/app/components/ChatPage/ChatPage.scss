@@ -72,3 +72,33 @@
         }
     }
 }
+
+.sidebar {
+    font-size: 13px;
+    font-weight: 700;
+    .header {
+        height: 134px;
+        background-color: $primary_blue_color;
+        color: #fff;
+    }
+
+    .menu {
+        margin: 10px 0;
+        .menu-item {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+
+            i {
+                color: $primary_dark_gray;
+                font-size: 24px;
+                padding-right: 20px;
+            }
+
+            &:hover {
+                background-color: $primary_hover_color;
+                cursor: pointer;
+            }
+        }
+    }
+}

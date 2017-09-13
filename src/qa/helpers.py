@@ -85,8 +85,8 @@ def generate_test_data(account_number, chat_numbers, email_template='test_im{ind
     with open_db_session() as db_session:
         clear_data(db_session)
         for i in range(1, account_number):
-            print(email_template.format(index=i))
             name = fake.name().split()
+            print('{} {}'.format(email_template.format(index=i), name))
             profile = AccountProfile(
                 first_name=name[0],
                 last_name=name[1],

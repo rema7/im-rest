@@ -20,6 +20,7 @@ import { connectionStatus } from 'selectors'
 
 const mapStateToProps = (state) => {
     return {
+        account: state.account.account,
         currentChat: state.chats.currentChat,
         connectionStatus: connectionStatus(state),
     }

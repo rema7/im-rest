@@ -24,7 +24,7 @@ export const account = (state = initialState, action = {}) => {
                 ...state,
                 errorMessage: null,
                 loading: false,
-                chats: keysSnakeToCamel(action.data.result),
+                account: keysSnakeToCamel(action.data.result),
             }
         case ACCOUNT_RESPONSE_ERROR:
             return {

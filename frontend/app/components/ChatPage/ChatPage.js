@@ -4,13 +4,26 @@ import PropTypes from 'prop-types'
 import SplitPane from 'react-split-pane'
 import Sidebar from 'react-sidebar'
 
-import { ContactsPane, ConnectionStatus } from 'components'
+import {
+    ContactsPane,
+    ConnectionStatus,
+} from 'components'
+
+import {
+    SIDEBAR_MENU_ITEM_CONTACTS,
+    SIDEBAR_MENU_ITEM_SETTINGS,
+} from './translations'
 
 import classNames from 'classnames'
 import styles from './ChatPage.scss'
 
 
 const propTypes = {
+    account: PropTypes.shape({
+        email: PropTypes.string.isRequired,
+        firstName: PropTypes.string,
+        lastName: PropTypes.string,
+    }),
     currentChat: PropTypes.shape({
         chatId: PropTypes.number.isRequired,
         title: PropTypes.string,
@@ -40,7 +53,7 @@ class ChatPage extends React.Component {
         super(props)
         this.state = {
             message: '',
-            sidebarOpen: false,
+            sidebarOpen: true,
             currentChat: null,
         }
         this.logout = this.logout.bind(this)
@@ -165,14 +178,39 @@ class ChatPage extends React.Component {
         )
     }
 
-    render() {
-        var sidebarContent = <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
+    renderSidebar() {
+        if (!this.props.account) {
+            return null
+        }
 
-        const stls = {overlay: {zIndex: 2}, sidebar: {zIndex: 3, background: '#fff', width: '250px'}}
+        return (
+            <div className={classNames(styles['sidebar'])}>
+                <div className={classNames(styles['header'])}>
+                    <div>
+                        {this.props.account.firstName} {this.props.account.lastName}
+                    </div>
+                    <div>{this.props.account.email}</div>
+                </div>
+                <div className={classNames(styles['menu'])}>
+                    <div className={classNames(styles['menu-item'])}>
+                        <i className="fa fa-address-book" aria-hidden="true"/> {SIDEBAR_MENU_ITEM_CONTACTS}
+                    </div>
+                    <div className={classNames(styles['menu-item'])}>
+                        <i className="fa fa-cog" aria-hidden="true"/> {SIDEBAR_MENU_ITEM_SETTINGS}
+                    </div>
+                </div>
+                <button onClick={this.logout} className="btn btn-sm btn-primary">Logout</button>
+            </div>
+        )
+    }
+
+    render() {
+
+        const stls = {overlay: {zIndex: 2}, sidebar: {zIndex: 3, background: '#fff', width: '274px'}}
         return (
             <div className={classNames(styles['chat-page'])} onClick={this.leftFocus}>
                 <Sidebar
-                    sidebar={sidebarContent}
+                    sidebar={this.renderSidebar()}
                     open={this.state.sidebarOpen}
                     onSetOpen={this.onSetSidebarOpen}
                     styles={stls}
@@ -181,7 +219,7 @@ class ChatPage extends React.Component {
                         {this.renderConnectionStatus()}
                     </div>
                     <div className={classNames(styles['page-wrapper'])}>
-                        <SplitPane split="vertical" minSize={250} maxSize={500} defaultSize={300} className="primary">
+                        <SplitPane split="vertical" minSize={250} maxSize={800} defaultSize={368} className="primary">
                             <ContactsPane
                                 leftFocus={this.leftFocus}
                                 onSidebarOpen={this.onSetSidebarOpen}
