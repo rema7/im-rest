@@ -8,6 +8,7 @@ import styles from './Dialog.scss'
 const propTypes = {
     children: PropTypes.node.isRequired,
     isOpened: PropTypes.bool.isRequired,
+    onClose: PropTypes.func,
 }
 
 class Dialog extends React.PureComponent {
@@ -32,7 +33,16 @@ class Dialog extends React.PureComponent {
                 <div className={styles.overlay} />
             </div>
         )
-        return <Portal closeOnEsc closeOnOutsideClick isOpened>{dialog}</Portal>
+        return (
+            <Portal
+                closeOnEsc
+                closeOnOutsideClick
+                isOpened
+                onClose={this.props.onClose}
+            >
+                {dialog}
+            </Portal>
+        )
     }
 }
 

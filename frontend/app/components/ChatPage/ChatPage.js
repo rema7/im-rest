@@ -7,7 +7,12 @@ import Sidebar from 'react-sidebar'
 import {
     ContactsPane,
     ConnectionStatus,
+    Dialog,
 } from 'components'
+
+import {
+    SIDEBAR_DIALOG,
+} from './constants'
 
 import {
     SIDEBAR_MENU_ITEM_CONTACTS,
@@ -55,13 +60,16 @@ class ChatPage extends React.Component {
             message: '',
             sidebarOpen: true,
             currentChat: null,
+            dialogOpen: null,
         }
-        this.logout = this.logout.bind(this)
-        this.sendMessage = this.sendMessage.bind(this)
+        this.dialogOnClose = this.dialogOnClose.bind(this)
         this.handleMessageChange = this.handleMessageChange.bind(this)
         this.handleInputKeyPress = this.handleInputKeyPress.bind(this)
         this.leftFocus = this.leftFocus.bind(this)
+        this.logout = this.logout.bind(this)
         this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this)
+        this.onSidebarItemClick = this.onSidebarItemClick.bind(this)
+        this.sendMessage = this.sendMessage.bind(this)
     }
 
     componentDidMount() {
@@ -124,6 +132,7 @@ class ChatPage extends React.Component {
     onSetSidebarOpen(open) {
         this.setState({sidebarOpen: open})
     }
+
     renderChatTitle() {
         const { title, members } = this.props.currentChat
         return title || `${members[0].firstName} ${members[0].lastName}`
@@ -178,6 +187,12 @@ class ChatPage extends React.Component {
         )
     }
 
+    onSidebarItemClick(dialog) {
+        this.setState({
+            dialogOpen: dialog,
+        })
+    }
+
     renderSidebar() {
         if (!this.props.account) {
             return null
@@ -192,10 +207,14 @@ class ChatPage extends React.Component {
                     <div>{this.props.account.email}</div>
                 </div>
                 <div className={classNames(styles['menu'])}>
-                    <div className={classNames(styles['menu-item'])}>
+                    <div className={classNames(styles['menu-item'])}
+                        onClick={() => this.onSidebarItemClick(SIDEBAR_DIALOG.CONTACTS)}
+                    >
                         <i className="fa fa-address-book" aria-hidden="true"/> {SIDEBAR_MENU_ITEM_CONTACTS}
                     </div>
-                    <div className={classNames(styles['menu-item'])}>
+                    <div className={classNames(styles['menu-item'])}
+                        onClick={() => this.onSidebarItemClick(SIDEBAR_DIALOG.SETTINGS)}
+                    >
                         <i className="fa fa-cog" aria-hidden="true"/> {SIDEBAR_MENU_ITEM_SETTINGS}
                     </div>
                 </div>
@@ -204,11 +223,28 @@ class ChatPage extends React.Component {
         )
     }
 
-    render() {
+    dialogOnClose() {
+        this.setState({
+            dialogOpen:null,
+        })
+    }
 
+    renderDialog() {
+        return this.state.dialogOpen ? (
+            <Dialog
+                isOpened={true}
+                onClose={this.dialogOnClose}
+            >
+                <h1>Dialog {this.state.dialogOpen}</h1>
+            </Dialog>
+        ) : null
+    }
+
+    render() {
         const stls = {overlay: {zIndex: 2}, sidebar: {zIndex: 3, background: '#fff', width: '274px'}}
         return (
             <div className={classNames(styles['chat-page'])} onClick={this.leftFocus}>
+                {this.renderDialog()}
                 <Sidebar
                     sidebar={this.renderSidebar()}
                     open={this.state.sidebarOpen}

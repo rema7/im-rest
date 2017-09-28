@@ -26,7 +26,7 @@ const socketMiddleware = (() => {
     const onReconnect = (store) => {
         setTimeout(() => {
             store.dispatch(actions.wsConnect())
-        }, 2000)
+        }, 5000)
     }
 
     const createMessage = (action) => {
