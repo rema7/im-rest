@@ -5,10 +5,12 @@ import SplitPane from 'react-split-pane'
 import Sidebar from 'react-sidebar'
 
 import {
-    ContactsPane,
     ConnectionStatus,
     Dialog,
 } from 'components'
+import {
+    ContactsPane,
+} from 'containers'
 
 import {
     SIDEBAR_DIALOG,
@@ -43,8 +45,10 @@ const propTypes = {
         })),
     }),
     connectionStatus: PropTypes.string.isRequired,
-    
+    isSidebarOpen: PropTypes.bool.isRequired,
+
     connect: PropTypes.func.isRequired,
+    closeSidebar: PropTypes.func.isRequired,
     fetchAccount: PropTypes.func.isRequired,
     fetchChats: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
@@ -58,7 +62,7 @@ class ChatPage extends React.Component {
         super(props)
         this.state = {
             message: '',
-            sidebarOpen: true,
+            sidebarOpen: false,
             currentChat: null,
             dialogOpen: null,
         }
@@ -85,6 +89,11 @@ class ChatPage extends React.Component {
             if (nextProps.currentChat.messages.find((m) => m.state === 'new')) {
                 this.props.markMessagesAsRead(nextProps.currentChat.chatId)
             }
+        }
+        if (nextProps.isSidebarOpen !== this.state.sidebarOpen) {
+            this.setState({
+                sidebarOpen: nextProps.isSidebarOpen,
+            })
         }
     }
 
@@ -129,8 +138,8 @@ class ChatPage extends React.Component {
         this.setInputFocus()
     }
 
-    onSetSidebarOpen(open) {
-        this.setState({sidebarOpen: open})
+    onSetSidebarOpen() {
+        this.props.closeSidebar()
     }
 
     renderChatTitle() {
@@ -191,11 +200,12 @@ class ChatPage extends React.Component {
         this.setState({
             dialogOpen: dialog,
         })
+        this.props.closeSidebar()
     }
 
     renderSidebar() {
         if (!this.props.account) {
-            return null
+            return <div/>
         }
 
         return (
@@ -258,8 +268,7 @@ class ChatPage extends React.Component {
                         <SplitPane split="vertical" minSize={250} maxSize={800} defaultSize={368} className="primary">
                             <ContactsPane
                                 leftFocus={this.leftFocus}
-                                onSidebarOpen={this.onSetSidebarOpen}
-                            /> 
+                            />
                             <div className={classNames(styles['chat-wrapper'])}>
                                 {this.props.currentChat ? this.renderChat() : <div/>} 
                             </div>

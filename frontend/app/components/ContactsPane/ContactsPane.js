@@ -10,7 +10,7 @@ import styles from './ContactsPane.scss'
 
 const propTypes = {
     leftFocus: PropTypes.func.isRequired,
-    onSidebarOpen: PropTypes.func.isRequired,
+    openSidebar: PropTypes.func.isRequired,
 }
 
 class ContactsPane extends React.Component {
@@ -24,7 +24,7 @@ class ContactsPane extends React.Component {
                 <div className={classNames(styles['topbar'])}>
                     <div
                         className={classNames(styles['menu-button'])}
-                        onClick={() => {this.props.onSidebarOpen(true)}}
+                        onClick={this.props.openSidebar}
                     >
                         <div/>
                         <div/>

@@ -1,18 +1,21 @@
 import { connect } from 'react-redux'
 
 import {
-    wsConnect,
-    send,
-} from 'actions/Client'
-import { 
+    fetchAccount,
+} from 'actions/Account'
+import {
     fetchChats,
     sendMessage,
     updateChatsMessages,
     markMessagesAsRead,
 } from 'actions/Chats'
 import {
-    fetchAccount,
-} from 'actions/Account'
+    wsConnect,
+    send,
+} from 'actions/Client'
+import {
+    closeSidebar,
+} from 'actions/Sidebar'
 
 import { logout } from 'actions/Login'
 import { ChatPage } from 'components'
@@ -23,6 +26,7 @@ const mapStateToProps = (state) => {
         account: state.account.account,
         currentChat: state.chats.currentChat,
         connectionStatus: connectionStatus(state),
+        isSidebarOpen: state.sidebar.open,
     }
 }
 
@@ -49,6 +53,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchAccount:() => {
             dispatch(fetchAccount())
+        },
+        closeSidebar:() => {
+            dispatch(closeSidebar())
         },
     }
 }

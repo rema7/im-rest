@@ -1,20 +1,22 @@
 import { combineReducers } from 'redux'
 
 import { app } from 'reducers/App'
-import { contacts } from 'reducers/Contacts'
+import { account } from 'reducers/Account'
 import { chats } from 'reducers/Chats'
+import { contacts } from 'reducers/Contacts'
 import { client } from 'reducers/Client'
 import { login } from 'reducers/Login'
-import { account } from 'reducers/Account'
 import { settings } from 'reducers/Settings'
+import { sidebar } from 'reducers/Sidebar'
 
 export default combineReducers({
+    account,
     app,
-    contacts,
     chats,
     client,
+    contacts,
     login,
-    account,
     settings,
+    sidebar,
 })
 
